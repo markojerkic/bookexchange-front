@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  book-exchange-front:
+    image: markojerkic/book-exchange-front
+    container_name: book-exchange-front
+    build:
+      context: .
+    ports:
+      - 80:80
+    networks:
+      - book-exchange-network
+networks:
+  book-exchange-network:
+    name: book-exchange-network
+    external: true
