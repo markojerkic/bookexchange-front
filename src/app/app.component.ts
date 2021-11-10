@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem} from "primeng/api";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -8,14 +9,25 @@ import {MenuItem} from "primeng/api";
 })
 export class AppComponent implements OnInit{
   title = 'book-exchange-front';
-  menuItems: MenuItem[] = [
-    {
-      label: 'Oglasi'
-    }
-  ];
+  public menuItems!: MenuItem[];
+  public authModelItems!: MenuItem[];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
+    this.menuItems= [
+      {
+        label: 'Oglasi',
+        icon:'pi pi-fw pi-file'
+      }
+    ];
+    this.authModelItems = [
+      {
+        label: 'Registriraj se',
+        icon: 'pi pi-user-plus',
+        command: () => {this.router.navigate(['/register'])}
+      }
+    ]
+
   }
 }

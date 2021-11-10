@@ -1,2 +1,10 @@
-<p-menubar [model]="menuItems"></p-menubar>
-<router-outlet></router-outlet>
+<p-toast></p-toast>
+<p-menubar [model]="menuItems">
+  <ng-template pTemplate="end">
+    <p-button label="Prijavi se" routerLink="/login"></p-button>
+    <p-button label="Registriraj se" routerLink="/register"></p-button>
+  </ng-template>
+</p-menubar>
+<div class="flex justify-content-center m-4">
+  <router-outlet></router-outlet>
+</div>

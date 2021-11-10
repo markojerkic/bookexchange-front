@@ -1,0 +1,44 @@
+<div class="grid flex justify-content-center p-m-4">
+  <p-card class="grid flex col-12 lg:col-6 justify-content-center" header="Registrirajte se">
+    <form class="p-fluid grid flex" [formGroup]="form" (ngSubmit)="submitRegistration()">
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <input type="text" id="firstName" pInputText formControlName="firstName">
+            <label for="firstName">Ime *</label>
+        </span>
+      </div>
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <input type="text" id="lastName" pInputText formControlName="lastName">
+            <label for="lastName">Prezime *</label>
+        </span>
+      </div>
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <input type="text" id="username" pInputText formControlName="username">
+            <label for="username">Korisničko ime *</label>
+        </span>
+      </div>
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <input type="email" id="email" pInputText formControlName="email">
+            <label for="email">Email *</label>
+        </span>
+      </div>
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <p-password inputId="password" [feedback]="false" formControlName="password"></p-password>
+            <label for="password">Password</label>
+        </span>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <button pButton type="submit" (click)="submitRegistration()"
+              [disabled]="!form.valid || isAuthLoading"
+              [loading]="isAuthLoading"
+              label="Registriraj se"></button>
+    </ng-template>
+  </p-card>
+
+</div>
