@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import { AuthService } from 'src/app/services/auth.service';
-import { NotificationService } from 'src/app/services/notification.service';
-import {User} from "../../model/user.model";
+import {AuthService, NotificationService} from '../../../services';
+import {User} from "../../../model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -16,7 +16,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private notificationService: NotificationService,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.isAuthLoading = false;
@@ -32,10 +33,10 @@ export class RegisterComponent implements OnInit {
   public submitRegistration(): void {
     this.authService.register(this.form.value).subscribe((user: User) => {
       this.notificationService.success(`Uspješno registriran korisnik ${user.username}`);
+      this.router.navigate(['/login']);
     }, (error: Error) => {
       this.notificationService.error('Greška prilikom registracije');
       console.log(error)
     });
-    this.notificationService.success("Uspješno registrirani");
   }
 }
