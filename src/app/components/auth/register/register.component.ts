@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthService, NotificationService} from '../../../services';
-import {User} from "../../../model";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { User } from "../../../model";
+import { AuthService, NotificationService } from '../../../services';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +36,6 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(['/login']);
     }, (error: Error) => {
       this.notificationService.error('Greška prilikom registracije');
-      console.log(error)
     });
   }
 }

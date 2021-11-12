@@ -1,0 +1,8 @@
+<p-card header="Informacije o prijavljenom korisniku">
+  <div class="flex flex-column">
+    <p>
+      <span class="p-text-bold">Ime: </span>
+      <span>{{(user$ | async)?.firstName}}</span>
+    </p>
+  </div>
+</p-card>

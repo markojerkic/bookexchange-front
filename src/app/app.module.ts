@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HomeComponent, LoginComponent, RegisterComponent} from './components';
+import {HomeComponent, LoginComponent, ProfileComponent, RegisterComponent} from './components';
 import {MenubarModule} from 'primeng/menubar';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from "primeng/card";
@@ -15,14 +15,17 @@ import {InputTextModule} from "primeng/inputtext";
 import {PasswordModule} from "primeng/password";
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {JwtInterceptor} from "./interceptors/jwt.interceptor";
+import { MenuModule } from 'primeng/menu';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +41,17 @@ import {HttpClientModule} from "@angular/common/http";
     ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
-    ToastModule
+    ToastModule,
+    MenuModule
   ],
-  providers: [MessageService],
+  providers: [
+    MessageService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

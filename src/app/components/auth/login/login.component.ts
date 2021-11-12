@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthService, NotificationService} from "../../../services";
-import {LoggedInUser, LoginRequest} from "../../../model";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
+import { LoggedInUser, LoginRequest } from "../../../model";
+import { AuthService, NotificationService } from "../../../services";
 
 @Component({
   selector: 'app-login',
@@ -15,9 +16,11 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private notificationService: NotificationService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit(): void {
+    this.authService.logout();
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -30,10 +33,10 @@ export class LoginComponent implements OnInit {
     this.authService.login(loginRequest).subscribe((user: LoggedInUser) => {
       this.notificationService.success(`Korisnik ${user.username} je uspješno prijavljen`);
       this.isAuthLoading = false;
+      this.router.navigate(['/profile']);
     }, (error: Error) => {
       this.notificationService.error('Došlo je do greške');
       this.isAuthLoading = false;
-      console.log(error);
     });
 
   }

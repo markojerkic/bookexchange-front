@@ -1,8 +1,17 @@
 <p-toast></p-toast>
 <p-menubar [model]="menuItems">
-  <ng-template pTemplate="end">
-    <p-button label="Prijavi se" routerLink="/login"></p-button>
-    <p-button label="Registriraj se" routerLink="/register"></p-button>
+  <ng-template pTemplate="start">
+    <h3 routerLink="/">Posudba knjiga</h3>
+  </ng-template>
+  <ng-template pTemplate="end" >
+    <div *ngIf="(isAuthenticated$ | async)!">
+      <button pButton class="p-button-outlined" type="button" 
+              label="{{(userToken$ | async)!.username}}" (click)="loggedInMenu.toggle($event)"></button>
+      <p-menu [popup]="true" [model]="authModelItems" #loggedInMenu></p-menu>
+    </div>
+    <div *ngIf="!(isAuthenticated$ | async)!">
+      <p-splitButton label="Prijava" (onClick)="navigateToLogin()" [model]="loginItems"></p-splitButton>
+    </div>
   </ng-template>
 </p-menubar>
 <div class="flex justify-content-center m-4">

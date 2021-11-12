@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
-import {User, LoggedInUser, LoginRequest} from "../model";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {tap} from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { map, tap } from "rxjs/operators";
+import { environment } from "../../environments/environment";
+import { LoggedInUser, LoginRequest, User } from "../model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private loggedInUser$: BehaviorSubject<LoggedInUser>;
+  private loggedInUser$!: Subject<LoggedInUser | undefined>;
 
   constructor(private http: HttpClient) {
-    this.loggedInUser$ = new BehaviorSubject<LoggedInUser>(JSON.parse(<string>localStorage.getItem('user')));
+    this.loggedInUser$ = new BehaviorSubject<LoggedInUser | undefined>(JSON.parse(<string>localStorage.getItem('user')));
   }
 
   public register(userData: User): Observable<User> {
@@ -22,16 +22,24 @@ export class AuthService {
 
   public login(loginRequest: LoginRequest): Observable<LoggedInUser> {
     return this.http.put<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth`, loginRequest)
-      .pipe(tap(this.handleNewLogin));
+      .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
   }
 
-  public get curretLoggedInUser(): LoggedInUser {
-    return JSON.parse(<string>localStorage.getItem('user'))
+  public get userToken(): LoggedInUser {
+    return JSON.parse(<string>localStorage.getItem('user'));
+  }
+
+  public get userToken$(): Observable<LoggedInUser | undefined> {
+    return this.loggedInUser$;
+  }
+
+  public get isAuthenticated$(): Observable<boolean> {
+    return this.loggedInUser$.pipe(map((loggedInUser?: LoggedInUser) => !!loggedInUser));
   }
 
   public refreshToken(): Observable<LoggedInUser> {
-    return this.http.get<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth/refresh/${this.curretLoggedInUser.refreshToken}`)
-      .pipe(tap(this.handleNewLogin));
+    return this.http.get<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth/refresh/${this.userToken.refreshToken}`)
+      .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
   }
 
   private handleNewLogin(user: LoggedInUser): void {
@@ -41,5 +49,10 @@ export class AuthService {
 
   public logout(): void {
     localStorage.removeItem('user');
+    this.loggedInUser$.next(undefined);
+  }
+
+  public getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${environment.BACKEND_ENDPOINT}/auth`);
   }
 }

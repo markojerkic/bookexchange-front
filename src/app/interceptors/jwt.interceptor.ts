@@ -1,10 +1,10 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {AuthService, NotificationService} from "../services";
-import {Observable, throwError} from "rxjs";
-import {catchError, switchMap} from "rxjs/operators";
-import {LoggedInUser} from "../model";
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
+import { Observable, throwError } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
+import { LoggedInUser } from "../model";
+import { AuthService, NotificationService } from "../services";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -15,7 +15,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add authorization header with jwt token if available
-    let currentUser = this.authService.curretLoggedInUser;
+    let currentUser = this.authService.userToken;
     if (currentUser && currentUser.accessToken) {
       request = request.clone({
         setHeaders: {

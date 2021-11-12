@@ -137,5 +137,10 @@
       }
     }
   },
-  "defaultProject": "book-exchange-front"
+  "defaultProject": "book-exchange-front",
+  "schematics": {
+    "@schematics/angular:component": {
+      "skipTests": true
+    }
+  }
 }
