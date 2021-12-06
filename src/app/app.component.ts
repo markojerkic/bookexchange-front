@@ -11,7 +11,7 @@ import { AuthService } from './services';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  
+
   public menuItems!: MenuItem[];
   public authModelItems!: MenuItem[];
   public loginItems!: MenuItem[];
@@ -26,16 +26,23 @@ export class AppComponent implements OnInit {
     this.menuItems= [
       {
         label: 'Oglasi',
-        icon:'pi pi-fw pi-file'
+        icon:'pi pi-fw pi-file',
+        items: [
+          {
+            label: 'Novi oglas',
+            icon: 'pi pi-plus',
+            command: () => {this.router.navigate(['/advert'])}
+          }
+        ]
       }
     ];
     this.authModelItems = [
       {
         label: 'Moj profil',
         icon: 'pi pi-user',
-        command: () => {this.router.navigate(['/profile'])}
+        command: () => {this.router.navigate(['/auth/profile'])}
       },
-      
+
       {
         label: 'Odjavi se',
         icon: 'pi pi-user-minus',
@@ -45,7 +52,7 @@ export class AppComponent implements OnInit {
     this.loginItems = [{
       label: 'Registracija',
       icon: 'pi pi-user-plus',
-      command: () => {this.router.navigate(['/register'])}
+      command: () => {this.router.navigate(['/auth/register'])}
     }];
 
 
@@ -55,6 +62,6 @@ export class AppComponent implements OnInit {
   }
 
   public navigateToLogin(): void {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 }

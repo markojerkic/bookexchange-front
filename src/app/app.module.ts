@@ -4,7 +4,12 @@ import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HomeComponent, LoginComponent, ProfileComponent, RegisterComponent} from './components';
+import {
+  HomeComponent,
+  LoginComponent,
+  ProfileComponent,
+  RegisterComponent,
+  AdvertComponent} from './components';
 import {MenubarModule} from 'primeng/menubar';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from "primeng/card";
@@ -18,6 +23,7 @@ import {MessageService} from "primeng/api";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import { MenuModule } from 'primeng/menu';
+import {DropdownModule} from "primeng/dropdown";
 
 @NgModule({
   declarations: [
@@ -25,7 +31,8 @@ import { MenuModule } from 'primeng/menu';
     HomeComponent,
     RegisterComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdvertComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +49,8 @@ import { MenuModule } from 'primeng/menu';
     InputTextModule,
     PasswordModule,
     ToastModule,
-    MenuModule
+    MenuModule,
+    DropdownModule
   ],
   providers: [
     MessageService,
