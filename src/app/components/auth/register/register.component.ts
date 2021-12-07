@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
   public submitRegistration(): void {
     this.authService.register(this.form.value).subscribe((user: User) => {
       this.notificationService.success(`Uspješno registriran korisnik ${user.username}`);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
     }, (error: Error) => {
       this.notificationService.error('Greška prilikom registracije');
     });

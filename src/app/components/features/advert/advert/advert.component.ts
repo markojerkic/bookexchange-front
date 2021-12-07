@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Author, Genre} from "../../../../model";
 import {isbnValidator} from "../../../../util";
+import {Observable} from "rxjs";
+import {AuthorService, GenreService} from "../../../../services";
 
 @Component({
   selector: 'app-advert',
@@ -14,31 +16,13 @@ export class AdvertComponent implements OnInit {
   public loading: boolean;
 
   // Dummy data
-  public genres: Genre[];
-  public autores: Author[];
+  public genres!: Observable<Genre[]>;
+  public authors!: Observable<Author[]>;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private authorService: AuthorService,
+              private genreService: GenreService) {
     this.loading = false;
-
-    this.genres = [
-      {label: 'Krimić', value: 'crimi'},
-      {label: 'Krimić', value: 'crimi'},
-    ];
-
-    this.autores = [
-      {
-        id: 2,
-        firstName: 'Ivo',
-        lastName: 'Andrić',
-        displayName: 'Andrić, Ivo'
-      },
-      {
-        id: 1,
-        firstName: 'Ivo',
-        lastName: 'Andrić',
-        displayName: 'Andrić, Ivo'
-      },
-    ]
   }
 
   ngOnInit(): void {
@@ -49,6 +33,9 @@ export class AdvertComponent implements OnInit {
       isbn: ['', isbnValidator()],
       genre: ['']
     });
+
+    this.authors = this.authorService.getAllAuthors();
+    this.genres = this.genreService.getAllGenres();
   }
 
   public submitAdvert(): void {

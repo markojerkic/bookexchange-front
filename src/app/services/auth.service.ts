@@ -10,7 +10,7 @@ import { LoggedInUser, LoginRequest, User } from "../model";
 })
 export class AuthService {
 
-  private loggedInUser$!: Subject<LoggedInUser | undefined>;
+  private readonly loggedInUser$!: Subject<LoggedInUser | undefined>;
 
   constructor(private http: HttpClient) {
     this.loggedInUser$ = new BehaviorSubject<LoggedInUser | undefined>(JSON.parse(<string>localStorage.getItem('user')));

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(loginRequest).subscribe((user: LoggedInUser) => {
       this.notificationService.success(`Korisnik ${user.username} je uspješno prijavljen`);
       this.isAuthLoading = false;
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/auth/profile']);
     }, (error: Error) => {
       this.notificationService.error('Došlo je do greške');
       this.isAuthLoading = false;
