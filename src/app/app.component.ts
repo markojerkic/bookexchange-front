@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     this.menuItems= [
       {
         label: 'Oglasi',
-        icon:'pi pi-fw pi-file',
+        icon:'pi pi-book',
         items: [
           {
             label: 'Novi oglas',

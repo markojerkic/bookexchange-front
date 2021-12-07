@@ -24,6 +24,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import { MenuModule } from 'primeng/menu';
 import {DropdownModule} from "primeng/dropdown";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {InputNumberModule} from "primeng/inputnumber";
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import {DropdownModule} from "primeng/dropdown";
     PasswordModule,
     ToastModule,
     MenuModule,
-    DropdownModule
+    DropdownModule,
+    InputTextareaModule,
+    InputNumberModule
   ],
   providers: [
     MessageService,

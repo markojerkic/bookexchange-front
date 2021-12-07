@@ -1,4 +1,6 @@
 import {Genre} from "./genre.model";
+import {Review} from "./review.model";
+import {Image} from "./image.model";
 
 export interface Author {
   id?: number;
@@ -7,6 +9,8 @@ export interface Author {
   yearOfBirth: number;
   yearOfDeath?: number;
   authorsGenres?: Genre[];
+  reviews?: Review[];
+  authorImages?: Image[];
 
   displayName?: string;
 }
