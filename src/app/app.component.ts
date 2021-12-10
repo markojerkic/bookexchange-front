@@ -29,6 +29,11 @@ export class AppComponent implements OnInit {
         icon:'pi pi-book',
         items: [
           {
+            label: 'Pregledaj sve oglase',
+            icon: 'pi pi-list',
+            command: () => {this.router.navigate(['/adverts'])}
+          },
+          {
             label: 'Novi oglas',
             icon: 'pi pi-plus',
             command: () => {this.router.navigate(['/advert'])}

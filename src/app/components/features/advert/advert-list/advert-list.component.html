@@ -1,0 +1,4 @@
+<p-card header="Lista oglasa" *ngIf="(adverts$ | async)! as adverts">
+  <app-advert-preview *ngFor="let advert of adverts" [advert]="advert"></app-advert-preview>
+  <p-paginator [rows]="10" [totalRecords]="totalAdverts" (onPageChange)="loadAdvertPage($event)"></p-paginator>
+</p-card>

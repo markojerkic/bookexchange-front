@@ -1,0 +1,17 @@
+<div class="grid advert-preview mt-2">
+  <div class="col-12">
+    <h2>{{advert.title}}</h2>
+  </div>
+  <div class="col-12">
+    <p>{{advert.description}}</p>
+  </div>
+  <div class="col-12">
+    <p>Knjiga: {{advert.advertisedBook.title}}</p>
+  </div>
+  <div class="col-12" *ngIf="advert.advertisedBook.bookAuthor">
+    <p>Autor: {{advert.advertisedBook.bookAuthor.firstName}} {{advert.advertisedBook.bookAuthor.lastName}}</p>
+  </div>
+  <div class="col-12"*ngIf="advert.price">
+    <p>Cijena: {{advert.price}} kn</p>
+  </div>
+</div>

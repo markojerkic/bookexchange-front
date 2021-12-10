@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Advert} from "../model";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {Advert, Page} from "../model";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -16,5 +16,11 @@ export class AdvertService {
 
   public saveAdvert(advert: Advert): Observable<Advert> {
     return this.httpClient.post<Advert>(this.backendEndpoint, advert);
+  }
+
+  public getAdvertPage(pageNumber: number): Observable<Page<Advert>> {
+    let httpParams = new HttpParams().append('pageNumber', String(pageNumber)).append('pageSize', '10');
+
+    return this.httpClient.get<Page<Advert>>(this.backendEndpoint, {params: httpParams});
   }
 }

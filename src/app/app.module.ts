@@ -9,7 +9,8 @@ import {
   LoginComponent,
   ProfileComponent,
   RegisterComponent,
-  AdvertComponent} from './components';
+  AdvertComponent, AdvertListComponent, AdvertPreviewComponent
+} from './components';
 import {MenubarModule} from 'primeng/menubar';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from "primeng/card";
@@ -26,6 +27,7 @@ import { MenuModule } from 'primeng/menu';
 import {DropdownModule} from "primeng/dropdown";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {InputNumberModule} from "primeng/inputnumber";
+import {PaginatorModule} from "primeng/paginator";
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import {InputNumberModule} from "primeng/inputnumber";
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    AdvertComponent
+    AdvertComponent,
+    AdvertListComponent,
+    AdvertPreviewComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,8 @@ import {InputNumberModule} from "primeng/inputnumber";
     MenuModule,
     DropdownModule,
     InputTextareaModule,
-    InputNumberModule
+    InputNumberModule,
+    PaginatorModule
   ],
   providers: [
     MessageService,

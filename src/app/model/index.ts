@@ -12,3 +12,4 @@ export * from './enum/advert-type.enum';
 export * from './enum/transaction-type.enum';
 export * from './enum/advert-status.enum';
 export * from './enum';
+export * from './util';
