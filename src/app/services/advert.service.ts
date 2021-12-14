@@ -19,7 +19,7 @@ export class AdvertService {
   }
 
   public getAdvertPage(pageNumber: number): Observable<Page<Advert>> {
-    let httpParams = new HttpParams().append('pageNumber', String(pageNumber)).append('pageSize', '10');
+    let httpParams = new HttpParams().append('page', String(pageNumber)).append('size', '10');
 
     return this.httpClient.get<Page<Advert>>(this.backendEndpoint, {params: httpParams});
   }

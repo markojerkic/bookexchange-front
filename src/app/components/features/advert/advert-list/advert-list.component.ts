@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable, ObservableInput} from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {Observable} from "rxjs";
 import {Advert, Page} from "../../../../model";
 import {AdvertService, NotificationService} from "../../../../services";
 import {map, tap} from "rxjs/operators";
@@ -31,7 +31,7 @@ export class AdvertListComponent implements OnInit {
     this.adverts$ = this.advertService.getAdvertPage(pageRequest.page).pipe(
       tap((page: Page<Advert>) => {
         this.advertLoading = false;
-        this.currentPage = page.number;
+        this.currentPage = page.pageable.pageNumber;
         this.totalAdverts = page.totalElements;
       }, () => {
         this.currentPage = 0;
