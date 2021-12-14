@@ -2,3 +2,14 @@
   border-radius: 10px;
   border: 1px solid var(--blue-50);
 }
+:host ::ng-deep {
+  .col-12 {
+    padding: 0;
+  }
+  .col-10 {
+    padding: 0;
+  }
+  .col-2 {
+    padding: 0;
+  }
+}

@@ -54,16 +54,9 @@ export class AdvertComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required, Validators.maxLength(200)]],
-      author: this.formBuilder.group({
-        id: ['', Validators.required]
-      }),
       advertisedBook: this.formBuilder.group({
         id: ['', Validators.required]
       }),
-      //isbn: ['', isbnValidator()],
-      /*genre: this.formBuilder.group({
-        id: ['', Validators.required]
-      }),*/
       advertType: ['', Validators.required],
       transactionType: ['', Validators.required],
       price: ['']
