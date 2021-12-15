@@ -59,7 +59,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
       }),
       advertType: ['', Validators.required],
       transactionType: ['', Validators.required],
-      price: ['']
+      price: [null]
     });
 
     this.authors = this.authorService.getAllAuthors();

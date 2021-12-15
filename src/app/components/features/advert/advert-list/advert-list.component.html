@@ -1,4 +1,116 @@
-<p-card header="Lista oglasa" *ngIf="(adverts$ | async)! as adverts">
+<p-card *ngIf="(adverts$ | async)! as adverts">
+  <ng-template pTemplate="header">
+    <div class="p-2">
+      <h2>Lista oglasa</h2>
+      <p-divider></p-divider>
+
+      <form class="grid p-fluid" [formGroup]="queryForm" (ngSubmit)="submitQuery()">
+        <div class="p-field col-12">
+          <span class="p-float-label p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input type="text" formControlName="query" id="query" pInputText />
+            <label for="query">Pretraga</label>
+          </span>
+        </div>
+
+        <div class="p-field col-3 md:col-4 sm:col-6" formGroupName="author">
+          <span class="p-float-label">
+              <p-dropdown formControlName="id"
+                          [options]="(authors$ | async)!"
+                          [filter]="true"
+                          id="author"
+                          optionLabel="displayName"
+                          optionValue="id"
+                          [autoDisplayFirst]="false">
+              </p-dropdown>
+              <label for="author">Autor</label>
+          </span>
+        </div>
+
+        <div class="p-field col-3 md:col-4 sm:col-6" formGroupName="book">
+          <span class="p-float-label">
+              <p-dropdown formControlName="id"
+                          [options]="(books$ | async)!"
+                          id="book"
+                          [filter]="true"
+                          optionLabel="title"
+                          optionValue="id"
+                          [autoDisplayFirst]="false">
+              </p-dropdown>
+              <label for="book">Knjiga</label>
+          </span>
+        </div>
+
+        <div class="p-field col-3 md:col-4 sm:col-6" formGroupName="genre">
+          <span class="p-float-label">
+              <p-dropdown formControlName="id"
+                          [options]="(genres$ | async)!"
+                          id="genre"
+                          [filter]="true"
+                          optionValue="id"
+                          optionLabel="name"
+                          [autoDisplayFirst]="false">
+              </p-dropdown>
+              <label for="genre">Žanr</label>
+          </span>
+        </div>
+
+        <div class="p-field col-3 md:col-4 sm:col-6">
+          <span class="p-float-label">
+              <p-dropdown formControlName="advertType"
+                          [options]="advertTypes"
+                          id="advertType"
+                          [autoDisplayFirst]="false">
+              </p-dropdown>
+              <label for="advertType">Tip oglasa</label>
+          </span>
+        </div>
+
+        <div class="p-field col-3 md:col-4 sm:col-6">
+          <span class="p-float-label">
+              <p-dropdown formControlName="transactionType"
+                          [options]="transactionTypes"
+                          id="transactionType"
+                          [autoDisplayFirst]="false">
+              </p-dropdown>
+              <label for="transactionType">Tip transakcije</label>
+          </span>
+        </div>
+
+        <div class="col-3 md:col-4 sm:col-6 grid">
+          <div class="p-field col-6">
+            <span class="p-float-label">
+              <p-inputNumber mode="currency" currency="HRK" class="ng-dirty"
+                             locale="hr-HR" inputId="fromPrice" id="fromPrice" formControlName="fromPrice"></p-inputNumber>
+              <label for="fromPrice">Od cijene</label>
+            </span>
+          </div>
+          <div class="p-field col-6">
+            <span class="p-float-label">
+              <p-inputNumber mode="currency" currency="HRK"
+                             locale="hr-HR" id="toPrice" formControlName="toPrice"></p-inputNumber>
+              <label for="toPrice">Do cijene</label>
+            </span>
+
+          </div>
+        </div>
+
+        <div class="p-field col-3 md:col-4 sm:col-6">
+          <span class="p-float-label">
+            <input type="text" formControlName="isbn" id="isbn" pInputText />
+            <label for="isbn">ISBN</label>
+          </span>
+        </div>
+
+        <div class="col-12 flex justify-content-end">
+          <p-button type="submit" label="Pretraži po filterima"></p-button>
+        </div>
+
+      </form>
+
+      <p-divider></p-divider>
+    </div>
+  </ng-template>
   <app-advert-preview *ngFor="let advert of adverts" [advert]="advert"></app-advert-preview>
   <p-paginator [rows]="10" [totalRecords]="totalAdverts" (onPageChange)="loadAdvertPage($event)"></p-paginator>
 </p-card>

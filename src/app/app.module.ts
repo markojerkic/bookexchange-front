@@ -5,11 +5,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {
+  AdvertComponent,
+  AdvertListComponent,
+  AdvertPreviewComponent,
   HomeComponent,
   LoginComponent,
   ProfileComponent,
-  RegisterComponent,
-  AdvertComponent, AdvertListComponent, AdvertPreviewComponent
+  RegisterComponent
 } from './components';
 import {MenubarModule} from 'primeng/menubar';
 import {ButtonModule} from 'primeng/button';
@@ -23,11 +25,12 @@ import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
-import { MenuModule } from 'primeng/menu';
+import {MenuModule} from 'primeng/menu';
 import {DropdownModule} from "primeng/dropdown";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {InputNumberModule} from "primeng/inputnumber";
 import {PaginatorModule} from "primeng/paginator";
+import {DividerModule} from "primeng/divider";
 
 @NgModule({
   declarations: [
@@ -59,7 +62,8 @@ import {PaginatorModule} from "primeng/paginator";
     DropdownModule,
     InputTextareaModule,
     InputNumberModule,
-    PaginatorModule
+    PaginatorModule,
+    DividerModule
   ],
   providers: [
     MessageService,
