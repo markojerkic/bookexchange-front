@@ -12,7 +12,7 @@ import {
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: AdvertListComponent
   },
   {
     path: 'adverts',
