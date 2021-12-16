@@ -4,6 +4,7 @@ import {Advert, AdvertType, Author, Book, Genre, TransactionType} from "../../..
 import {Observable, Subject} from "rxjs";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
 import {takeUntil} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-advert',
@@ -28,7 +29,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
               private genreService: GenreService,
               private bookService: BookService,
               private advertService: AdvertService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private router: Router) {
     this.onDestroy$ = new Subject();
     this.loading = false;
 
@@ -77,7 +79,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.advertService.saveAdvert(advert).pipe(takeUntil(this.onDestroy$)).subscribe((savedAdvert: Advert) => {
       this.loading = false;
-      console.log(savedAdvert);
+      this.router.navigate(['/adverts']);
       this.notificationService.success('Uspješno dodan osglas');
     }, () => {
       this.loading = false;
