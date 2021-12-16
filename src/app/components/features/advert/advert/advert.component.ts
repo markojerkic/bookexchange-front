@@ -3,13 +3,16 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Advert, AdvertType, Author, Book, Genre, TransactionType} from "../../../../model";
 import {Observable, Subject} from "rxjs";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {takeUntil} from "rxjs/operators";
+import {takeUntil, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
+import {DialogService} from "primeng/dynamicdialog";
+import {BookComponent} from "../../book";
 
 @Component({
   selector: 'app-advert',
   templateUrl: './advert.component.html',
-  styleUrls: ['./advert.component.scss']
+  styleUrls: ['./advert.component.scss'],
+  providers: [DialogService]
 })
 export class AdvertComponent implements OnInit, OnDestroy {
 
@@ -30,7 +33,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
               private bookService: BookService,
               private advertService: AdvertService,
               private notificationService: NotificationService,
-              private router: Router) {
+              private router: Router,
+              private dialogService: DialogService) {
     this.onDestroy$ = new Subject();
     this.loading = false;
 
@@ -86,4 +90,18 @@ export class AdvertComponent implements OnInit, OnDestroy {
       this.notificationService.error('Greška prilikom dodavanja oglasa');
     });
   }
+
+  public openNewBookDialog(): void {
+    const ref = this.dialogService.open(BookComponent, {
+      header: 'Unos nove knjige',
+      width: '70%'
+    });
+
+    ref.onClose.subscribe((savedBook: Book) => {
+      this.books = this.bookService.getAllBooks().pipe(tap(() => {
+        this.form.patchValue({advertisedBook: {id: savedBook.id}});
+      }));
+    });
+  }
+
 }

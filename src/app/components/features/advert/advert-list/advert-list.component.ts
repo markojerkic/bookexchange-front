@@ -66,12 +66,7 @@ export class AdvertListComponent implements OnInit {
       query: []
     });
 
-    this.authors$ = this.authorService.getAllAuthors().pipe(map((authors: Author[]) => {
-      return authors.map((author: Author) => {
-        author.displayName = `${author.firstName} ${author.lastName}`;
-        return author;
-      })
-    }));
+    this.authors$ = this.authorService.getAllAuthors();
     this.books$ = this.bookService.getAllBooks();
     this.genres$ = this.genreService.getAllGenres();
 

@@ -18,4 +18,8 @@ export class BookService {
   public getAllBooks(): Observable<Book[]> {
     return this.httpClient.get<Book[]>(`${this.backendEndpoint}/all`);
   }
+
+  public saveBook(book: Book): Observable<Book> {
+    return this.httpClient.post<Book>(this.backendEndpoint, book);
+  }
 }
