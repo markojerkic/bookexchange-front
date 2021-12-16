@@ -13,7 +13,7 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6">
+        <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
               <p-dropdown formControlName="authorId"
                           [options]="(authors$ | async)!"
@@ -28,7 +28,7 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6">
+        <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
               <p-dropdown formControlName="bookId"
                           [options]="(books$ | async)!"
@@ -43,7 +43,7 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6">
+        <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
               <p-dropdown formControlName="genreId"
                           [options]="(genres$ | async)!"
@@ -58,7 +58,7 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6">
+        <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
               <p-dropdown formControlName="advertType"
                           [options]="advertTypes"
@@ -70,7 +70,7 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6">
+        <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
               <p-dropdown formControlName="transactionType"
                           [options]="transactionTypes"
@@ -82,7 +82,14 @@
           </span>
         </div>
 
-        <div class="col-3 md:col-4 sm:col-6 grid">
+        <div class="p-field lg:col-3 md:col-6 col-12">
+          <span class="p-float-label">
+            <input type="text" formControlName="isbn" id="isbn" pInputText />
+            <label for="isbn">ISBN</label>
+          </span>
+        </div>
+
+        <div class="lg:col-3 md:col-6 col-12 grid">
           <div class="p-field col-6">
             <span class="p-float-label">
               <p-inputNumber mode="currency" currency="HRK" class="ng-dirty"
@@ -98,13 +105,6 @@
             </span>
 
           </div>
-        </div>
-
-        <div class="p-field col-3 md:col-4 sm:col-6">
-          <span class="p-float-label">
-            <input type="text" formControlName="isbn" id="isbn" pInputText />
-            <label for="isbn">ISBN</label>
-          </span>
         </div>
 
         <div class="col-12 flex justify-content-end">

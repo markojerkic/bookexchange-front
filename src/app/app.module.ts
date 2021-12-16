@@ -32,6 +32,8 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {PaginatorModule} from "primeng/paginator";
 import {DividerModule} from "primeng/divider";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {RippleModule} from "primeng/ripple";
+import {TooltipModule} from "primeng/tooltip";
 
 @NgModule({
   declarations: [
@@ -44,29 +46,31 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
     AdvertListComponent,
     AdvertPreviewComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        FormsModule,
-        HttpClientModule,
-        CommonModule,
-        MenubarModule,
-        ButtonModule,
-        CardModule,
-        SplitButtonModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        PasswordModule,
-        ToastModule,
-        MenuModule,
-        DropdownModule,
-        InputTextareaModule,
-        InputNumberModule,
-        PaginatorModule,
-        DividerModule,
-        ProgressSpinnerModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    CommonModule,
+    MenubarModule,
+    ButtonModule,
+    CardModule,
+    SplitButtonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    PasswordModule,
+    ToastModule,
+    MenuModule,
+    DropdownModule,
+    InputTextareaModule,
+    InputNumberModule,
+    PaginatorModule,
+    DividerModule,
+    ProgressSpinnerModule,
+    RippleModule,
+    TooltipModule
+  ],
   providers: [
     MessageService,
     {

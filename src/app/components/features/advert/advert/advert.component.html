@@ -18,17 +18,23 @@
       </div>
 
       <!-- Odabir knjige -->
-      <div class="p-field col-12 lg:col-6" formGroupName="advertisedBook">
-        <span class="p-float-label">
+      <div class=" col-12 lg:col-6">
+        <div class="p-field p-inputgroup" formGroupName="advertisedBook">
+          <span>
+            <p-button icon="pi pi-plus" pTooltip="Dodaj novu knjigu"></p-button>
+          </span>
+          <span class="p-float-label">
             <p-dropdown formControlName="id"
                         [options]="(books | async)!"
+                        [showClear]="true"
                         id="advertisedBook"
                         optionLabel="title"
                         optionValue="id"
                         [autoDisplayFirst]="false">
             </p-dropdown>
             <label for="advertisedBook">Knjiga *</label>
-        </span>
+          </span>
+        </div>
       </div>
 
       <!-- Vrsta oglasa -->

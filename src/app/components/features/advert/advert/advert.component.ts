@@ -54,13 +54,13 @@ export class AdvertComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      description: ['', [Validators.required, Validators.maxLength(200)]],
+      title: [null, [Validators.required, Validators.maxLength(50)]],
+      description: [null, [Validators.required, Validators.maxLength(200)]],
       advertisedBook: this.formBuilder.group({
-        id: ['', Validators.required]
+        id: [null, Validators.required]
       }),
-      advertType: ['', Validators.required],
-      transactionType: ['', Validators.required],
+      advertType: [null, Validators.required],
+      transactionType: [null, Validators.required],
       price: [null]
     });
 
