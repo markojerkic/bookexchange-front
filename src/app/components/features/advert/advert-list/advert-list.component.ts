@@ -3,7 +3,8 @@ import {Observable} from "rxjs";
 import {Advert, AdvertType, Author, Book, Genre, Page, TransactionType} from "../../../../model";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
 import {map, tap} from "rxjs/operators";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-advert-list',
@@ -23,7 +24,6 @@ export class AdvertListComponent implements OnInit {
   public genres$!: Observable<Genre[]>;
   public advertTypes: {label: string, value: AdvertType}[];
   public transactionTypes: {label: string, value: TransactionType}[];
-
 
   constructor(private advertService: AdvertService,
               private notificationService: NotificationService,
@@ -55,21 +55,15 @@ export class AdvertListComponent implements OnInit {
 
   ngOnInit(): void {
     this.queryForm = this.formBuilder.group({
-      author: this.formBuilder.group({
-        id: ['']
-      }),
-      book: this.formBuilder.group({
-        id: ['']
-      }),
-      genre: this.formBuilder.group({
-        id: ['']
-      }),
-      advertType: [''],
-      transactionType: [''],
+      authorId: [],
+      bookId: [],
+      genreId: [],
+      advertType: [],
+      transactionType: [],
       fromPrice: [],
       toPrice: [],
-      isbn: [''],
-      query: ['']
+      isbn: [],
+      query: []
     });
 
     this.authors$ = this.authorService.getAllAuthors().pipe(map((authors: Author[]) => {
@@ -84,8 +78,9 @@ export class AdvertListComponent implements OnInit {
     this.loadAdvertPage({page: this.currentPage, rows: 10});
   }
 
-  public loadAdvertPage(pageRequest: {page: number, rows: number}): void {
-    this.adverts$ = this.advertService.getAdvertPage(pageRequest.page).pipe(
+  public loadAdvertPage(pageRequest: {page: number, rows: number}, httpParams?: HttpParams): void {
+    this.advertLoading = true;
+    this.adverts$ = this.advertService.getAdvertPage(pageRequest.page, httpParams).pipe(
       tap((page: Page<Advert>) => {
         this.advertLoading = false;
         this.currentPage = page.pageable.pageNumber;
@@ -102,6 +97,12 @@ export class AdvertListComponent implements OnInit {
   }
 
   public submitQuery(): void {
-    console.log(this.queryForm.value);
+    const queryValues = this.queryForm.value;
+    let httpParams = new HttpParams();
+
+    Object.keys(queryValues).filter(key => queryValues[key]).forEach(key => {
+      return httpParams = httpParams.append(key, queryValues[key]);
+    });
+    this.loadAdvertPage({page: 0, rows: 10}, httpParams);
   }
 }

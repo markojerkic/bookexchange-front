@@ -1,4 +1,4 @@
-<p-card *ngIf="(adverts$ | async)! as adverts">
+<p-card>
   <ng-template pTemplate="header">
     <div class="p-2">
       <h2>Lista oglasa</h2>
@@ -13,11 +13,12 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6" formGroupName="author">
+        <div class="p-field col-3 md:col-4 sm:col-6">
           <span class="p-float-label">
-              <p-dropdown formControlName="id"
+              <p-dropdown formControlName="authorId"
                           [options]="(authors$ | async)!"
                           [filter]="true"
+                          [showClear]="true"
                           id="author"
                           optionLabel="displayName"
                           optionValue="id"
@@ -27,12 +28,13 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6" formGroupName="book">
+        <div class="p-field col-3 md:col-4 sm:col-6">
           <span class="p-float-label">
-              <p-dropdown formControlName="id"
+              <p-dropdown formControlName="bookId"
                           [options]="(books$ | async)!"
                           id="book"
                           [filter]="true"
+                          [showClear]="true"
                           optionLabel="title"
                           optionValue="id"
                           [autoDisplayFirst]="false">
@@ -41,12 +43,13 @@
           </span>
         </div>
 
-        <div class="p-field col-3 md:col-4 sm:col-6" formGroupName="genre">
+        <div class="p-field col-3 md:col-4 sm:col-6">
           <span class="p-float-label">
-              <p-dropdown formControlName="id"
+              <p-dropdown formControlName="genreId"
                           [options]="(genres$ | async)!"
                           id="genre"
                           [filter]="true"
+                          [showClear]="true"
                           optionValue="id"
                           optionLabel="name"
                           [autoDisplayFirst]="false">
@@ -59,6 +62,7 @@
           <span class="p-float-label">
               <p-dropdown formControlName="advertType"
                           [options]="advertTypes"
+                          [showClear]="true"
                           id="advertType"
                           [autoDisplayFirst]="false">
               </p-dropdown>
@@ -70,6 +74,7 @@
           <span class="p-float-label">
               <p-dropdown formControlName="transactionType"
                           [options]="transactionTypes"
+                          [showClear]="true"
                           id="transactionType"
                           [autoDisplayFirst]="false">
               </p-dropdown>
@@ -111,6 +116,9 @@
       <p-divider></p-divider>
     </div>
   </ng-template>
-  <app-advert-preview *ngFor="let advert of adverts" [advert]="advert"></app-advert-preview>
+  <div class="flex justify-content-center">
+    <p-progressSpinner *ngIf="advertLoading"></p-progressSpinner>
+  </div>
+  <app-advert-preview *ngFor="let advert of (adverts$ | async)!" [advert]="advert"></app-advert-preview>
   <p-paginator [rows]="10" [totalRecords]="totalAdverts" (onPageChange)="loadAdvertPage($event)"></p-paginator>
 </p-card>
