@@ -8,6 +8,7 @@ import {
   AdvertComponent,
   AdvertListComponent,
   AdvertPreviewComponent,
+  BookComponent,
   HomeComponent,
   LoginComponent,
   ProfileComponent,
@@ -34,9 +35,9 @@ import {DividerModule} from "primeng/divider";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {RippleModule} from "primeng/ripple";
 import {TooltipModule} from "primeng/tooltip";
-import { BookComponent } from './components/features/book/book/book.component';
 import {DynamicDialogModule} from "primeng/dynamicdialog";
 import {MultiSelectModule} from "primeng/multiselect";
+import {ImageModule} from "primeng/image";
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import {MultiSelectModule} from "primeng/multiselect";
     RippleModule,
     TooltipModule,
     DynamicDialogModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ImageModule
   ],
   providers: [
     MessageService,
