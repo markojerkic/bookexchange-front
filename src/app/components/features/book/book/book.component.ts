@@ -6,6 +6,8 @@ import {AuthorService, BookService, GenreService, NotificationService} from "../
 import {tap} from "rxjs/operators";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthorComponent} from "../../author";
+import {GenreComponent} from "../../genre";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-book',
@@ -28,7 +30,8 @@ export class BookComponent implements OnInit {
               private bookService: BookService,
               private notificationService: NotificationService,
               private dialogService: DialogService,
-              @Optional() private dialogRef: DynamicDialogRef) {
+              @Optional() private dialogRef: DynamicDialogRef,
+              private router: Router) {
     this.loading = false;
   }
 
@@ -55,6 +58,8 @@ export class BookComponent implements OnInit {
       this.notificationService.success(`Knjiga ${savedBook.title} uspješno spremljena`);
       if (this.dialogRef) {
         this.dialogRef.close(savedBook);
+      } else {
+        this.router.navigate(['']);
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja knjige');
@@ -69,9 +74,29 @@ export class BookComponent implements OnInit {
     });
 
     ref.onClose.subscribe((savedAuthor: Author) => {
+      if (!savedAuthor) {
+        return;
+      }
       this.authors$ = this.authorService.getAllAuthors().pipe(tap(() => {
         this.bookForm.patchValue({bookAuthor: {id: savedAuthor.id}});
       }));
     });
+  }
+
+  public openNewGenreDialog(): void {
+    const ref = this.dialogService.open(GenreComponent, {
+      header: 'Unos novog žanra',
+      width: '70%'
+    });
+
+    ref.onClose.subscribe((savedGenre: Genre) => {
+      if (!savedGenre) {
+        return;
+      }
+      this.genres$ = this.genreService.getAllGenres().pipe(tap(() => {
+        this.bookForm.patchValue({genres: [{id: savedGenre.id}]});
+      }));
+    });
+
   }
 }

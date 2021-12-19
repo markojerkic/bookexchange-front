@@ -6,8 +6,8 @@ export interface Author {
   id?: number;
   firstName: string;
   lastName: string;
-  yearOfBirth: number;
-  yearOfDeath?: number;
+  yearOfBirth: Date;
+  yearOfDeath?: Date;
   authorsGenres?: Genre[];
   reviews?: Review[];
   authorImages?: Image[];

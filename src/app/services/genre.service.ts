@@ -18,4 +18,9 @@ export class GenreService {
   public getAllGenres(): Observable<Genre[]> {
     return this.httpClient.get<Genre[]>(`${this.backendEndpoint}/all`);
   }
+
+  public saveGenre(genre: Genre): Observable<Genre> {
+    return this.httpClient.post<Genre>(this.backendEndpoint, genre);
+
+  }
 }

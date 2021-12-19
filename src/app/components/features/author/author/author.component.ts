@@ -1,15 +1,18 @@
 import {Component, OnInit, Optional} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthorService, GenreService, NotificationService} from "../../../../services";
-import {DynamicDialogRef} from "primeng/dynamicdialog";
+import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {Author, Genre} from "../../../../model";
 import {tap} from "rxjs/operators";
 import {Observable} from "rxjs";
+import {GenreComponent} from "../../genre";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-author',
   templateUrl: './author.component.html',
-  styleUrls: ['./author.component.scss']
+  styleUrls: ['./author.component.scss'],
+  providers: [DialogService]
 })
 export class AuthorComponent implements OnInit {
 
@@ -22,21 +25,13 @@ export class AuthorComponent implements OnInit {
               private authorService: AuthorService,
               private genreService: GenreService,
               private notificationService: NotificationService,
-              @Optional() private dialogRef: DynamicDialogRef) {
+              @Optional() private dialogRef: DynamicDialogRef,
+              private dialogService: DialogService,
+              private router: Router) {
     this.loading = false;
   }
 
   ngOnInit(): void {
-    /**
-     *   id?: number;
-     *   firstName: string;
-     *   lastName: string;
-     *   yearOfBirth: number;
-     *   yearOfDeath?: number;
-     *   authorsGenres?: Genre[];
-     *   reviews?: Review[];
-     *   authorImages?: Image[];
-     */
     this.authorForm = this.formBuilder.group({
       id: [null],
       firstName: [null, Validators.required],
@@ -58,10 +53,29 @@ export class AuthorComponent implements OnInit {
       this.notificationService.success(`Autor ${savedAuthor.displayName} uspješno spremljen`);
       if (this.dialogRef) {
         this.dialogRef.close(savedAuthor);
+      } else {
+        this.router.navigate(['']);
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja autora');
       this.loading = false;
     })).subscribe();
+  }
+
+  public openNewGenreDialog(): void {
+    const ref = this.dialogService.open(GenreComponent, {
+      header: 'Unos novog žanra',
+      width: '70%'
+    });
+
+    ref.onClose.subscribe((savedGenre: Genre) => {
+      if (!savedGenre) {
+        return;
+      }
+      this.genres$ = this.genreService.getAllGenres().pipe(tap(() => {
+        this.authorForm.patchValue({authorsGenres: [{id: savedGenre.id}]});
+      }));
+    });
+
   }
 }

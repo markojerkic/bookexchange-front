@@ -10,6 +10,7 @@ import {
   AdvertPreviewComponent,
   AuthorComponent,
   BookComponent,
+  GenreComponent,
   HomeComponent,
   LoginComponent,
   ProfileComponent,
@@ -39,6 +40,7 @@ import {TooltipModule} from "primeng/tooltip";
 import {DynamicDialogModule} from "primeng/dynamicdialog";
 import {MultiSelectModule} from "primeng/multiselect";
 import {ImageModule} from "primeng/image";
+import {CalendarModule} from "primeng/calendar";
 
 @NgModule({
   declarations: [
@@ -51,36 +53,38 @@ import {ImageModule} from "primeng/image";
     AdvertListComponent,
     AdvertPreviewComponent,
     BookComponent,
-    AuthorComponent
+    AuthorComponent,
+    GenreComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    CommonModule,
-    MenubarModule,
-    ButtonModule,
-    CardModule,
-    SplitButtonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    PasswordModule,
-    ToastModule,
-    MenuModule,
-    DropdownModule,
-    InputTextareaModule,
-    InputNumberModule,
-    PaginatorModule,
-    DividerModule,
-    ProgressSpinnerModule,
-    RippleModule,
-    TooltipModule,
-    DynamicDialogModule,
-    MultiSelectModule,
-    ImageModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        CommonModule,
+        MenubarModule,
+        ButtonModule,
+        CardModule,
+        SplitButtonModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        PasswordModule,
+        ToastModule,
+        MenuModule,
+        DropdownModule,
+        InputTextareaModule,
+        InputNumberModule,
+        PaginatorModule,
+        DividerModule,
+        ProgressSpinnerModule,
+        RippleModule,
+        TooltipModule,
+        DynamicDialogModule,
+        MultiSelectModule,
+        ImageModule,
+        CalendarModule
+    ],
   providers: [
     MessageService,
     {
@@ -89,7 +93,7 @@ import {ImageModule} from "primeng/image";
       multi: true
     }
   ],
-  entryComponents: [BookComponent, AuthorComponent],
+  entryComponents: [BookComponent, AuthorComponent, GenreComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

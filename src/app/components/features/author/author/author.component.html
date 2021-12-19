@@ -17,23 +17,38 @@
 
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-inputNumber id="yearOfBirth" formControlName="yearOfBirth"></p-inputNumber>
-            <label for="yearOfBirth">Prezime *</label>
+            <p-calendar view="year" dateFormat="yy" id="yearOfBirth"
+                        formControlName="yearOfBirth"></p-calendar>
+            <label for="yearOfBirth">Godina rođenja *</label>
         </span>
       </div>
 
-      <!-- Odabir genres -->
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <p-calendar view="year" dateFormat="yy" id="yearOfDeath"
+                        dataType="string"
+                        formControlName="yearOfDeath"></p-calendar>
+            <label for="yearOfDeath">Godina smrti</label>
+        </span>
+      </div>
+
+      <!-- Odabir authorsGenres -->
+
       <div class=" col-12 lg:col-6">
-        <div class="p-field" >
+        <div class="p-field p-inputgroup">
+          <span>
+            <p-button icon="pi pi-plus" (onClick)="openNewGenreDialog()" pTooltip="Dodaj novi žanr"></p-button>
+          </span>
           <span class="p-float-label">
             <p-multiSelect formControlName="authorsGenres"
                            [options]="(genres$ | async)!"
                            [filter]="true"
                            appendTo="body"
-                           id="genres"
+                           id="authorsGenres"
+                           dataKey="id"
                            optionLabel="name">
             </p-multiSelect>
-            <label for="genres">Žanrovi *</label>
+            <label for="authorsGenres">Žanrovi *</label>
           </span>
         </div>
       </div>

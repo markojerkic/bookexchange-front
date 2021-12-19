@@ -62,6 +62,17 @@ export class AppComponent implements OnInit {
           }
         ]
       },
+      {
+        label: 'Žanrovi',
+        icon: 'pi pi-th-large',
+        items: [
+          {
+            label: 'Novi žanr',
+            icon: 'pi pi-plus',
+            command: () => {this.router.navigate(['/genre'])}
+          }
+        ]
+      },
     ];
     this.authModelItems = [
       {

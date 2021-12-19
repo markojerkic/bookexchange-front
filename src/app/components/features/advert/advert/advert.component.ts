@@ -98,6 +98,9 @@ export class AdvertComponent implements OnInit, OnDestroy {
     });
 
     ref.onClose.subscribe((savedBook: Book) => {
+      if (!savedBook) {
+        return;
+      }
       this.books = this.bookService.getAllBooks().pipe(tap(() => {
         this.form.patchValue({advertisedBook: {id: savedBook.id}});
       }));
