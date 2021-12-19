@@ -17,8 +17,29 @@
       </div>
 
       <!-- Odabir autora -->
-      <div class="col-12 lg:col-6">
+      <!--<div class="col-12 lg:col-6">
         <div class="p-field" formGroupName="bookAuthor">
+          <span class="p-float-label">
+            <p-dropdown formControlName="id"
+                        [options]="(authors$ | async)!"
+                        [filter]="true"
+                        [showClear]="true"
+                        appendTo="body"
+                        id="author"
+                        optionLabel="displayName"
+                        optionValue="id"
+                        [autoDisplayFirst]="false">
+            </p-dropdown>
+            <label for="author">Autor *</label>
+          </span>
+        </div>
+      </div>-->
+
+      <div class=" col-12 lg:col-6">
+        <div class="p-field p-inputgroup" formGroupName="bookAuthor">
+          <span>
+            <p-button icon="pi pi-plus" (onClick)="openNewAuthorDialog()" pTooltip="Dodaj novog autora"></p-button>
+          </span>
           <span class="p-float-label">
             <p-dropdown formControlName="id"
                         [options]="(authors$ | async)!"
@@ -35,7 +56,6 @@
         </div>
       </div>
 
-      <!-- Odabir genres -->
       <div class=" col-12 lg:col-6">
         <div class="p-field" >
           <span class="p-float-label">
@@ -56,7 +76,7 @@
       <button pButton type="submit" (click)="submitBook()"
               [disabled]="!bookForm.valid || loading"
               [loading]="loading"
-              label="Predaj oglas"></button>
+              label="Spremi knjigu"></button>
     </ng-template>
   </p-card>
 </div>

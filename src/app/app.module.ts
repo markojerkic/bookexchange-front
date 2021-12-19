@@ -8,6 +8,7 @@ import {
   AdvertComponent,
   AdvertListComponent,
   AdvertPreviewComponent,
+  AuthorComponent,
   BookComponent,
   HomeComponent,
   LoginComponent,
@@ -49,7 +50,8 @@ import {ImageModule} from "primeng/image";
     AdvertComponent,
     AdvertListComponent,
     AdvertPreviewComponent,
-    BookComponent
+    BookComponent,
+    AuthorComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +89,7 @@ import {ImageModule} from "primeng/image";
       multi: true
     }
   ],
-  entryComponents: [BookComponent],
+  entryComponents: [BookComponent, AuthorComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,8 +6,9 @@ import {
   ProfileComponent,
   RegisterComponent,
   AdvertComponent,
-  AdvertListComponent
+  AdvertListComponent, BookComponent
 } from "./components";
+import {AuthorComponent} from "./components/features/author/author/author.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,14 @@ const routes: Routes = [
   {
     path: 'adverts',
     component: AdvertListComponent
+  },
+  {
+    path: 'author',
+    component: AuthorComponent
+  },
+  {
+    path: 'book',
+    component: BookComponent
   },
   {
     path: 'auth',

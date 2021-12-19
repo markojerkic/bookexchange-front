@@ -39,7 +39,29 @@ export class AppComponent implements OnInit {
             command: () => {this.router.navigate(['/advert'])}
           }
         ]
-      }
+      },
+      {
+        label: 'Autori',
+        icon: 'pi pi-user',
+        items: [
+          {
+            label: 'Novi autor',
+            icon: 'pi pi-plus',
+            command: () => {this.router.navigate(['/author'])}
+          }
+        ]
+      },
+      {
+        label: 'Knjige',
+        icon: 'pi pi-book',
+        items: [
+          {
+            label: 'Nova knjiga',
+            icon: 'pi pi-plus',
+            command: () => {this.router.navigate(['/book'])}
+          }
+        ]
+      },
     ];
     this.authModelItems = [
       {

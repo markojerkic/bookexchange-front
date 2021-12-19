@@ -27,6 +27,7 @@
             <p-dropdown formControlName="id"
                         [options]="(books | async)!"
                         [showClear]="true"
+                        [filter]="true"
                         id="advertisedBook"
                         optionLabel="title"
                         optionValue="id"

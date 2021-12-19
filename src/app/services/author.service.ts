@@ -24,4 +24,13 @@ export class AuthorService {
       }))
     );
   }
+
+  public saveAuthor(author: Author): Observable<Author> {
+    return this.httpClient.post<Author>(this.backendEndpoint, author).pipe(
+      map((author: Author) => {
+        author.displayName = `${author.lastName}, ${author.firstName}`;
+        return author;
+      })
+    );
+  }
 }

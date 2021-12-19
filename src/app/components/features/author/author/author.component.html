@@ -1,0 +1,49 @@
+<div class="grid flex justify-content-center p-m-4">
+  <p-card header="Unesite novog autora">
+    <form class="p-fluid grid flex" [formGroup]="authorForm">
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <input type="text" id="firstName" pInputText formControlName="firstName">
+            <label for="firstName">Ime *</label>
+        </span>
+      </div>
+
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <input type="text" id="lastName" pInputText formControlName="lastName">
+            <label for="lastName">Prezime *</label>
+        </span>
+      </div>
+
+      <div class="p-field col-12 lg:col-6">
+        <span class="p-float-label">
+            <p-inputNumber id="yearOfBirth" formControlName="yearOfBirth"></p-inputNumber>
+            <label for="yearOfBirth">Prezime *</label>
+        </span>
+      </div>
+
+      <!-- Odabir genres -->
+      <div class=" col-12 lg:col-6">
+        <div class="p-field" >
+          <span class="p-float-label">
+            <p-multiSelect formControlName="authorsGenres"
+                           [options]="(genres$ | async)!"
+                           [filter]="true"
+                           appendTo="body"
+                           id="genres"
+                           optionLabel="name">
+            </p-multiSelect>
+            <label for="genres">Žanrovi *</label>
+          </span>
+        </div>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <button pButton type="submit" (click)="submitAuthor()"
+              [disabled]="!authorForm.valid || loading"
+              [loading]="loading"
+              label="Spremi autora"></button>
+    </ng-template>
+  </p-card>
+</div>
