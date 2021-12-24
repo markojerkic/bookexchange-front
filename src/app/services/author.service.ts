@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Advert, Author, Page} from "../model";
+import {Author, Page} from "../model";
 import {map} from "rxjs/operators";
 
 @Injectable({
@@ -27,7 +27,6 @@ export class AuthorService {
 
   public getPagedAuthors(pageNumber: number, httpParams: HttpParams): Observable<Page<Author>> {
     return this.httpClient.get<Page<Author>>(this.backendEndpoint, {params: httpParams});
-
   }
 
   public saveAuthor(author: Author): Observable<Author> {

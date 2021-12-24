@@ -1,6 +1,4 @@
-import {AdvertType} from "./enum";
-import {TransactionType} from "./enum";
-import {AdvertStatus} from "./enum";
+import {AdvertStatus, AdvertType, TransactionType} from "./enum";
 import {User} from "./user.model";
 import {Book} from "./book.model";
 import {Image} from "./image.model";

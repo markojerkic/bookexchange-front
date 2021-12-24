@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
-import { User } from "../../../model";
-import { AuthService, NotificationService } from "../../../services";
+import {Component, OnInit} from '@angular/core';
+import {Observable} from "rxjs";
+import {User} from "../../../model";
+import {AuthService, NotificationService} from "../../../services";
 
 @Component({
   selector: 'app-profile',

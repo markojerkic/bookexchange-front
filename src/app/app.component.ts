@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { MenuItem } from "primeng/api";
-import { Observable } from 'rxjs';
-import { LoggedInUser } from './model';
-import { AuthService } from './services';
+import {Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
+import {MenuItem} from "primeng/api";
+import {Observable} from 'rxjs';
+import {LoggedInUser} from './model';
+import {AuthService} from './services';
 
 @Component({
   selector: 'app-root',

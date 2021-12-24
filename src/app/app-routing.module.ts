@@ -3,9 +3,12 @@ import {RouterModule, Routes} from '@angular/router';
 import {
   AdvertComponent,
   AdvertListComponent,
-  AuthorComponent, AuthorListComponent,
-  BookComponent, BookListComponent,
-  GenreComponent, GenreListComponent,
+  AuthorComponent,
+  AuthorListComponent,
+  BookComponent,
+  BookListComponent,
+  GenreComponent,
+  GenreListComponent,
   LoginComponent,
   ProfileComponent,
   RegisterComponent

@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Observable} from "rxjs";
+import {Author, Book, Page} from "../../../../model";
+import {LazyLoadEvent} from "primeng/api";
+import {AuthorService, BookService, NotificationService} from "../../../../services";
+import {HttpParams} from "@angular/common/http";
+import {map, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-book-list',
@@ -6,10 +12,55 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./book-list.component.scss']
 })
 export class BookListComponent implements OnInit {
+  public today: Date;
 
-  constructor() { }
+  public books$!: Observable<Book[]>;
+  public currentPage: number;
+  public booksLoading: boolean;
+  public totalBooks: number;
 
-  ngOnInit(): void {
+  public authors$!: Observable<Author[]>;
+
+  constructor(private bookService: BookService,
+              private authorService: AuthorService,
+              private notificationService: NotificationService) {
+    this.today = new Date();
+    this.currentPage = 0;
+    this.booksLoading = false;
+    this.totalBooks = 0;
   }
 
+  ngOnInit(): void {
+    this.authors$ = this.authorService.getAllAuthors();
+  }
+
+  public loadBooks(event: LazyLoadEvent): void {
+    this.booksLoading = true;
+    let httpParams = new HttpParams().append('page', String(event.first! / event.rows!))
+      .append('size', event.rows!);
+    if (event.sortField) {
+      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1? 'ASC': 'DESC'}`);
+    }
+    Object.keys(event.filters!).filter(key => event.filters![key].value).forEach(key => {
+      if (event.filters![key].value instanceof Date) {
+        httpParams = httpParams.append(key, (event.filters![key].value as Date).valueOf());
+      } else {
+        httpParams = httpParams.append(key, event.filters![key].value);
+      }
+    });
+
+    this.books$ = this.bookService.getPagedBooks(this.currentPage, httpParams).pipe(
+      tap((page: Page<Book>) => {
+        this.booksLoading = false;
+        this.currentPage = page.pageable.pageNumber;
+        this.totalBooks = page.totalElements;
+      }, () => {
+        this.currentPage = 0;
+        this.totalBooks = 0;
+        this.booksLoading = false;
+        this.notificationService.error('Došlo je do greške prilikom dohvata knjiga');
+      }),
+      map((page: Page<Book>) => page.content)
+    );
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Optional } from '@angular/core';
+import {Component, OnInit, Optional} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {Author, Book, Genre} from "../../../../model";
