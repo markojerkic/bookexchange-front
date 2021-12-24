@@ -9,8 +9,11 @@ import {
   AdvertListComponent,
   AdvertPreviewComponent,
   AuthorComponent,
+  AuthorListComponent,
   BookComponent,
+  BookListComponent,
   GenreComponent,
+  GenreListComponent,
   HomeComponent,
   LoginComponent,
   ProfileComponent,
@@ -41,6 +44,7 @@ import {DynamicDialogModule} from "primeng/dynamicdialog";
 import {MultiSelectModule} from "primeng/multiselect";
 import {ImageModule} from "primeng/image";
 import {CalendarModule} from "primeng/calendar";
+import {TableModule} from "primeng/table";
 
 @NgModule({
   declarations: [
@@ -54,37 +58,41 @@ import {CalendarModule} from "primeng/calendar";
     AdvertPreviewComponent,
     BookComponent,
     AuthorComponent,
-    GenreComponent
+    GenreComponent,
+    BookListComponent,
+    AuthorListComponent,
+    GenreListComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        FormsModule,
-        HttpClientModule,
-        CommonModule,
-        MenubarModule,
-        ButtonModule,
-        CardModule,
-        SplitButtonModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        PasswordModule,
-        ToastModule,
-        MenuModule,
-        DropdownModule,
-        InputTextareaModule,
-        InputNumberModule,
-        PaginatorModule,
-        DividerModule,
-        ProgressSpinnerModule,
-        RippleModule,
-        TooltipModule,
-        DynamicDialogModule,
-        MultiSelectModule,
-        ImageModule,
-        CalendarModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    CommonModule,
+    MenubarModule,
+    ButtonModule,
+    CardModule,
+    SplitButtonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    PasswordModule,
+    ToastModule,
+    MenuModule,
+    DropdownModule,
+    InputTextareaModule,
+    InputNumberModule,
+    PaginatorModule,
+    DividerModule,
+    ProgressSpinnerModule,
+    RippleModule,
+    TooltipModule,
+    DynamicDialogModule,
+    MultiSelectModule,
+    ImageModule,
+    CalendarModule,
+    TableModule
+  ],
   providers: [
     MessageService,
     {

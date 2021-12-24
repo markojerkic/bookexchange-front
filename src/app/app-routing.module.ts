@@ -1,14 +1,15 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {
-  HomeComponent,
+  AdvertComponent,
+  AdvertListComponent,
+  AuthorComponent, AuthorListComponent,
+  BookComponent, BookListComponent,
+  GenreComponent, GenreListComponent,
   LoginComponent,
   ProfileComponent,
-  RegisterComponent,
-  AdvertComponent,
-  AdvertListComponent, BookComponent, GenreComponent
+  RegisterComponent
 } from "./components";
-import {AuthorComponent} from "./components/features/author/author/author.component";
 
 const routes: Routes = [
   {
@@ -24,12 +25,24 @@ const routes: Routes = [
     component: AuthorComponent
   },
   {
+    path: 'authors',
+    component: AuthorListComponent
+  },
+  {
     path: 'book',
     component: BookComponent
   },
   {
+    path: 'books',
+    component: BookListComponent
+  },
+  {
     path: 'genre',
     component: GenreComponent
+  },
+  {
+    path: 'genres',
+    component: GenreListComponent
   },
   {
     path: 'auth',

@@ -9,18 +9,17 @@
       </div>
       <div class="p-field col-12">
         <span class="p-float-label">
-            <p-password inputId="password" [feedback]="false" formControlName="password"></p-password>
+            <p-password inputId="password" id="password" [feedback]="false" formControlName="password"></p-password>
             <label for="password">Zaporka *</label>
         </span>
       </div>
+      <div class="flex justify-content-center">
+        <button pButton type="submit"
+                [disabled]="!form.valid || isAuthLoading"
+                [loading]="isAuthLoading"
+                label="Prijavi se"></button>
+      </div>
     </form>
-
-    <ng-template pTemplate="footer">
-      <button pButton type="submit" (click)="submitLogin()"
-              [disabled]="!form.valid || isAuthLoading"
-              [loading]="isAuthLoading"
-              label="Prijavi se"></button>
-    </ng-template>
   </p-card>
 
 </div>

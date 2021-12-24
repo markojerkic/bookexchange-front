@@ -48,6 +48,11 @@ export class AppComponent implements OnInit {
             label: 'Novi autor',
             icon: 'pi pi-plus',
             command: () => {this.router.navigate(['/author'])}
+          },
+          {
+            label: 'Lista autora',
+            icon: 'pi pi-list',
+            command: () => {this.router.navigate(['/authors'])}
           }
         ]
       },
@@ -59,6 +64,11 @@ export class AppComponent implements OnInit {
             label: 'Nova knjiga',
             icon: 'pi pi-plus',
             command: () => {this.router.navigate(['/book'])}
+          },
+          {
+            label: 'Lista knjiga',
+            icon: 'pi pi-list',
+            command: () => {this.router.navigate(['/books'])}
           }
         ]
       },
@@ -70,6 +80,11 @@ export class AppComponent implements OnInit {
             label: 'Novi žanr',
             icon: 'pi pi-plus',
             command: () => {this.router.navigate(['/genre'])}
+          },
+          {
+            label: 'Lista žanrova',
+            icon: 'pi pi-list',
+            command: () => {this.router.navigate(['/genres'])}
           }
         ]
       },

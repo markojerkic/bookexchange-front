@@ -1,0 +1,104 @@
+<p-table [value]="(authors$ | async)!" [lazy]="true"
+         (onLazyLoad)="loadAuthors($event)" dataKey="id"
+         [paginator]="true" [rows]="10" [totalRecords]="totalAuthors" [loading]="authorsLoading"
+         [rowsPerPageOptions]="[2, 10, 20]" styleClass="p-datatable-striped"
+         [resizableColumns]="true" [responsive]="true"
+         [globalFilterFields]="['firstName','lastName', 'yearOfBirth', 'yearOfDeath']" #table>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th pResizableColumn>Id</th>
+      <th pResizableColumn pSortableColumn="firstName">Ime <p-sortIcon field="firstName"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="lastName">Prezime <p-sortIcon field="lastName"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="yearOfBirth">Godina rođenja <p-sortIcon field="yearOfBirth"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="yearOfDeath">Godina smrti <p-sortIcon field="yearOfDeath"></p-sortIcon></th>
+      <th style="width:8rem"></th>
+    </tr>
+    <tr>
+      <th>
+        <button pButton label="Očisti" pTooltip="Očisti sve filtere"
+                class="p-button-outlined" icon="pi pi-filter-slash" (click)="table.clear()"></button>
+      </th>
+      <th>
+        <input pInputText (input)="table.filter($any($event.target).value, 'firstName', 'equipped')"
+               placeholder="Unesite ime" class="p-column-filter" />
+        <!--<p-columnFilter type="text" placeholder="Unesite ime" field="firstName"
+                        [showMenu]="false" [showClearButton]="false" [showApplyButton]="false"></p-columnFilter>-->
+      </th>
+      <th>
+        <input pInputText (input)="table.filter($any($event.target).value, 'lastName', 'equipped')"
+               placeholder="Unesite prezime" class="p-column-filter" />
+        <!--<p-columnFilter type="text" placeholder="Unesite prezime" field="lastName"
+                        [showMenu]="false" [showClearButton]="false" [showApplyButton]="false"></p-columnFilter>-->
+      </th>
+      <th>
+        <!--<p-calendar view="year" dateFormat="yy"
+                    appendTo="body" [showButtonBar]="true"
+                    [maxDate]="today"
+                    (onSelect)="table.filter($event.value, 'yearOfBirth', 'equipped')"
+                    placeholder="Godina rođenja"></p-calendar>-->
+        <p-columnFilter matchMode="equals" field="yearOfBirth"
+                        [showMenu]="false" [showClearButton]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-calendar [ngModel]="value" view="year" dateFormat="yy"
+                        appendTo="body" [showButtonBar]="true"
+                        [maxDate]="today"
+                        (onClearClick)="filter($event.value)"
+                        (onSelect)="filter($event)" placeholder="Godina rođenja">
+            </p-calendar>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <!--<p-calendar view="year" dateFormat="yy"
+                    appendTo="body" [showButtonBar]="true"
+                    [maxDate]="today"
+                    (onSelect)="table.filter($event.value, 'yearOfDeath', 'equipped')"
+                    placeholder="Godina smrti"></p-calendar>-->
+        <p-columnFilter matchMode="equals" field="yearOfDeath" type="menu"
+                        [showMenu]="false" [showClearButton]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-calendar [ngModel]="value" view="year" dateFormat="yy"
+                        appendTo="body" [showButtonBar]="true"
+                        [maxDate]="today"
+                        (onClearClick)="filter($event.value)"
+                        (onSelect)="filter($event)" placeholder="Godina smrti">
+            </p-calendar>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th style="width:4rem"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-author>
+    <tr>
+      <td>
+        <span class="p-column-title">Id</span>
+        {{author.id}}
+      </td>
+      <td>
+        <span class="p-column-title">Ime</span>
+        {{author.firstName}}
+      </td>
+      <td>
+        <span class="p-column-title">Prezime</span>
+        {{author.lastName}}
+      </td>
+      <td>
+        <span class="p-column-title">Godina rođenja</span>
+        {{author.yearOfBirth | date:'yyyy'}}
+      </td>
+      <td>
+        <span class="p-column-title">Godina smrti</span>
+        {{author.yearOfDeath | date:'yyyy'}}
+      </td>
+      <td>
+        <div>
+          <p-button icon="pi pi-pencil" pTooltip="Uredi autora"></p-button>
+          <p-button icon="pi pi-trash" pTooltip="Izbriši autora"></p-button>
+        </div>
+        <!--<p-splitButton icon="pi pi-pencil" label="Uredi autora" [model]="authorActions"></p-splitButton>-->
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
