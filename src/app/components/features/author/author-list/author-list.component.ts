@@ -5,6 +5,7 @@ import {Author, Page} from "../../../../model";
 import {HttpParams} from "@angular/common/http";
 import {map, tap} from "rxjs/operators";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-author-list',
@@ -21,8 +22,11 @@ export class AuthorListComponent implements OnInit {
   public totalAuthors: number;
   public authorActions: MenuItem[];
 
+  public selectedAuthorId?: number;
+
   constructor(private authorService: AuthorService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              public router: Router) {
     this.today = new Date();
     this.currentPage = 0;
     this.authorsLoading = false;
@@ -30,9 +34,14 @@ export class AuthorListComponent implements OnInit {
 
     this.authorActions = [
       {
+        label: 'Uredi autora',
+        icon: 'pi pi-pencil',
+        command: () => {this.router.navigate([`/author/edit/${this.selectedAuthorId}`])}
+      },
+      {
         label: 'Izbriši autora',
         icon: 'pi pi-trash',
-        command: () => {}
+        command: () => {this.deleteAuthor(this.selectedAuthorId)}
       }
     ];
   }
@@ -69,5 +78,9 @@ export class AuthorListComponent implements OnInit {
       }),
       map((page: Page<Author>) => page.content)
     );
+  }
+
+  private deleteAuthor(selectedAuthorId: number | undefined) {
+
   }
 }

@@ -10,10 +10,13 @@ import {
   AdvertPreviewComponent,
   AuthorComponent,
   AuthorListComponent,
+  AuthorViewComponent,
   BookComponent,
   BookListComponent,
+  BookViewComponent,
   GenreComponent,
   GenreListComponent,
+  GenreViewComponent,
   HomeComponent,
   LoginComponent,
   ProfileComponent,
@@ -61,7 +64,10 @@ import {TableModule} from "primeng/table";
     GenreComponent,
     BookListComponent,
     AuthorListComponent,
-    GenreListComponent
+    GenreListComponent,
+    BookViewComponent,
+    GenreViewComponent,
+    AuthorViewComponent
   ],
   imports: [
     BrowserModule,

@@ -93,11 +93,9 @@
         {{author.yearOfDeath | date:'yyyy'}}
       </td>
       <td>
-        <div>
-          <p-button icon="pi pi-pencil" pTooltip="Uredi autora"></p-button>
-          <p-button icon="pi pi-trash" pTooltip="Izbriši autora"></p-button>
-        </div>
-        <!--<p-splitButton icon="pi pi-pencil" label="Uredi autora" [model]="authorActions"></p-splitButton>-->
+        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj autora" [model]="authorActions"
+                       appendTo="body" (onClick)="router.navigate(['/author/' + author.id])"
+                       (onDropdownClick)="selectedAuthorId=author.id"></p-splitButton>
       </td>
     </tr>
   </ng-template>

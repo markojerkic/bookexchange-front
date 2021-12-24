@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {Author, Book, Page} from "../../../../model";
-import {LazyLoadEvent} from "primeng/api";
+import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {AuthorService, BookService, NotificationService} from "../../../../services";
 import {HttpParams} from "@angular/common/http";
 import {map, tap} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-book-list',
@@ -19,15 +20,32 @@ export class BookListComponent implements OnInit {
   public booksLoading: boolean;
   public totalBooks: number;
 
+  public selectedBookId?: number;
+
   public authors$!: Observable<Author[]>;
+  public bookActions: MenuItem[];
 
   constructor(private bookService: BookService,
               private authorService: AuthorService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              public router: Router) {
     this.today = new Date();
     this.currentPage = 0;
     this.booksLoading = false;
     this.totalBooks = 0;
+
+    this.bookActions = [
+      {
+        label: 'Uredi knjigu',
+        icon: 'pi pi-pencil',
+        command: () => {this.router.navigate([`/book/edit/${this.selectedBookId}`])}
+      },
+      {
+        label: 'Izbriši knjigu',
+        icon: 'pi pi-trash',
+        command: () => {this.deleteBook(this.selectedBookId)}
+      }
+    ];
   }
 
   ngOnInit(): void {
@@ -62,5 +80,9 @@ export class BookListComponent implements OnInit {
       }),
       map((page: Page<Book>) => page.content)
     );
+  }
+
+  private deleteBook(selectedBookId: number | undefined): void {
+
   }
 }

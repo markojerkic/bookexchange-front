@@ -9,7 +9,7 @@
     <tr>
       <th pResizableColumn>Id</th>
       <th pResizableColumn pSortableColumn="title">Naslov <p-sortIcon field="title"></p-sortIcon></th>
-      <th pResizableColumn pSortableColumn="isbn">isbn <p-sortIcon field="isbn"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="isbn">ISBN <p-sortIcon field="isbn"></p-sortIcon></th>
       <th>Autor</th>
       <th style="width:8rem"></th>
     </tr>
@@ -20,11 +20,11 @@
       </th>
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'title', 'equals')"
-               placeholder="Unesite ime" class="p-column-filter" />
+               placeholder="Unesite naslov" class="p-column-filter" />
       </th>
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'isbn', 'equals')"
-               placeholder="Unesite prezime" class="p-column-filter" />
+               placeholder="Unesite ISBN" class="p-column-filter" />
       </th>
       <th>
         <p-dropdown [options]="(authors$ | async)!"
@@ -60,11 +60,9 @@
         {{book.bookAuthor.displayName}}
       </td>
       <td>
-        <div>
-          <p-button icon="pi pi-pencil" pTooltip="Uredi knjigu"></p-button>
-          <p-button icon="pi pi-trash" pTooltip="Izbriši knjigu"></p-button>
-        </div>
-        <!--<p-splitButton icon="pi pi-pencil" label="Uredi autora" [model]="authorActions"></p-splitButton>-->
+        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj knjigu" [model]="bookActions"
+                       appendTo="body" (onClick)="router.navigate(['/book/' + book.id])"
+                       (onDropdownClick)="selectedBookId=book.id"></p-splitButton>
       </td>
     </tr>
   </ng-template>

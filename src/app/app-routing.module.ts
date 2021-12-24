@@ -5,10 +5,13 @@ import {
   AdvertListComponent,
   AuthorComponent,
   AuthorListComponent,
+  AuthorViewComponent,
   BookComponent,
   BookListComponent,
+  BookViewComponent,
   GenreComponent,
   GenreListComponent,
+  GenreViewComponent,
   LoginComponent,
   ProfileComponent,
   RegisterComponent
@@ -28,11 +31,27 @@ const routes: Routes = [
     component: AuthorComponent
   },
   {
+    path: 'author/:id',
+    component: AuthorViewComponent
+  },
+  {
+    path: 'author/edit/:id',
+    component: AuthorComponent
+  },
+  {
     path: 'authors',
     component: AuthorListComponent
   },
   {
     path: 'book',
+    component: BookComponent
+  },
+  {
+    path: 'book/:id',
+    component: BookViewComponent
+  },
+  {
+    path: 'book/edit/:id',
     component: BookComponent
   },
   {
@@ -42,6 +61,14 @@ const routes: Routes = [
   {
     path: 'genre',
     component: GenreComponent
+  },
+  {
+    path: 'genre/edit/:id',
+    component: GenreComponent
+  },
+  {
+    path: 'genre/:id',
+    component: GenreViewComponent
   },
   {
     path: 'genres',
