@@ -49,7 +49,7 @@ export class BookComponent implements OnInit {
 
     this.activatedRoute.params.subscribe((params: Params) => {
       const id = params['id'];
-      if (id) {
+      if (id && !this.dialogRef) {
         this.id = id;
         this.setBook(id);
       }

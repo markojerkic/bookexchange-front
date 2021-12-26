@@ -44,7 +44,7 @@ export class GenreComponent implements OnInit {
 
     this.activatedRoute.params.subscribe((params: Params) => {
       const id = params['id'];
-      if (id) {
+      if (id && !this.dialogRef) {
         this.id = id;
         this.setGenre(id);
       }
