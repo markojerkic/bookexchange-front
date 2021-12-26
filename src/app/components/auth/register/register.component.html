@@ -1,6 +1,6 @@
-<div class="grid flex justify-content-center p-m-4">
+<form class="grid flex justify-content-center p-m-4" [formGroup]="form" (ngSubmit)="submitRegistration()">
   <p-card class="grid flex col-12 lg:col-6 justify-content-center" header="Registrirajte se">
-    <form class="p-fluid grid flex" [formGroup]="form" (ngSubmit)="submitRegistration()">
+    <div class="p-fluid grid flex">
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
             <input type="text" id="firstName" pInputText formControlName="firstName">
@@ -18,27 +18,29 @@
             <input type="text" id="username" pInputText formControlName="username">
             <label for="username">Korisničko ime *</label>
         </span>
+        <small class="p-error" *ngIf="form.get('username')?.dirty && form.get('username')?.invalid">Korisničko ime se već koristi</small>
       </div>
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
             <input type="email" id="email" pInputText formControlName="email">
             <label for="email">Email *</label>
         </span>
+        <small class="p-error" *ngIf="form.get('email')?.dirty && form.get('email')?.invalid">Email adresa se već koristi</small>
       </div>
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-password inputId="password" [feedback]="false" formControlName="password"></p-password>
+            <p-password inputId="password" id="password" [feedback]="false" formControlName="password"></p-password>
             <label for="password">Zaporka *</label>
         </span>
       </div>
-    </form>
+    </div>
 
     <ng-template pTemplate="footer">
-      <button pButton type="submit" (click)="submitRegistration()"
+      <button pButton type="submit" type="submit"
               [disabled]="!form.valid || isAuthLoading"
               [loading]="isAuthLoading"
               label="Registriraj se"></button>
     </ng-template>
   </p-card>
 
-</div>
+</form>

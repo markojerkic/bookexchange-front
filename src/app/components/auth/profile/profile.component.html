@@ -1,4 +1,7 @@
 <p-card header="Informacije o prijavljenom korisniku">
+  <div class="flex justify-content-center">
+    <p-progressSpinner *ngIf="userDataIsLoading"></p-progressSpinner>
+  </div>
   <div class="flex flex-column">
     <p>
       <span class="p-text-bold">Ime: </span>

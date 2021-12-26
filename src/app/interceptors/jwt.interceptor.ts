@@ -48,8 +48,7 @@ export class JwtInterceptor implements HttpInterceptor {
         return empty();
       }
 
-      const error = err.error.message || err.statusText;
-      return throwError(error);
+      return throwError(err);
     }));
   }
 }
