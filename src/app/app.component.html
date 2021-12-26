@@ -1,11 +1,11 @@
 <p-toast></p-toast>
 <p-menubar [model]="menuItems">
   <ng-template pTemplate="start">
-    <h3 routerLink="/">Posudba knjiga</h3>
+    <h3 style="cursor: pointer" routerLink="/">Posudba knjiga</h3>
   </ng-template>
   <ng-template pTemplate="end" >
     <div *ngIf="(isAuthenticated$ | async)!">
-      <button pButton class="p-button-outlined" type="button" 
+      <button pButton class="p-button-outlined" type="button"
               label="{{(userToken$ | async)!.username}}" (click)="loggedInMenu.toggle($event)"></button>
       <p-menu [popup]="true" [model]="authModelItems" #loggedInMenu></p-menu>
     </div>

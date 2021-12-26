@@ -4,7 +4,7 @@ import {Author, Book, Page} from "../../../../model";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {AuthorService, BookService, NotificationService} from "../../../../services";
 import {HttpParams} from "@angular/common/http";
-import {map, tap} from "rxjs/operators";
+import {finalize, map, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 
 @Component({
@@ -68,14 +68,13 @@ export class BookListComponent implements OnInit {
     });
 
     this.books$ = this.bookService.getPagedBooks(this.currentPage, httpParams).pipe(
+      finalize(() => this.booksLoading = false),
       tap((page: Page<Book>) => {
-        this.booksLoading = false;
         this.currentPage = page.pageable.pageNumber;
         this.totalBooks = page.totalElements;
       }, () => {
         this.currentPage = 0;
         this.totalBooks = 0;
-        this.booksLoading = false;
         this.notificationService.error('Došlo je do greške prilikom dohvata knjiga');
       }),
       map((page: Page<Book>) => page.content)

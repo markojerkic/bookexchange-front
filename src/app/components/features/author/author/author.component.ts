@@ -3,10 +3,11 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthorService, GenreService, NotificationService} from "../../../../services";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {Author, Genre} from "../../../../model";
-import {tap} from "rxjs/operators";
+import {finalize, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {GenreComponent} from "../../genre";
-import {Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-author',
@@ -19,6 +20,8 @@ export class AuthorComponent implements OnInit {
   public authorForm!: FormGroup;
   public loading: boolean;
 
+  public id?: number;
+
   public genres$!: Observable<Genre[]>;
 
   constructor(private formBuilder: FormBuilder,
@@ -27,18 +30,26 @@ export class AuthorComponent implements OnInit {
               private notificationService: NotificationService,
               @Optional() private dialogRef: DynamicDialogRef,
               private dialogService: DialogService,
-              private router: Router) {
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
     this.loading = false;
   }
 
   ngOnInit(): void {
     this.authorForm = this.formBuilder.group({
-      id: [null],
       firstName: [null, Validators.required],
       lastName: [null, Validators.required],
       yearOfBirth: [null, Validators.required],
       yearOfDeath: [null],
       authorsGenres: [null]
+    });
+
+    this.activatedRoute.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (id) {
+        this.id = id;
+        this.setAuthor(id);
+      }
     });
 
     this.genres$ = this.genreService.getAllGenres();
@@ -48,18 +59,16 @@ export class AuthorComponent implements OnInit {
     const author: Author = this.authorForm.value;
 
     this.loading = true;
-    this.authorService.saveAuthor(author).pipe(tap((savedAuthor: Author) => {
-      this.loading = false;
+    this.authorService.saveAuthor(author, this.id).pipe(tap((savedAuthor: Author) => {
       this.notificationService.success(`Autor ${savedAuthor.displayName} uspješno spremljen`);
       if (this.dialogRef) {
         this.dialogRef.close(savedAuthor);
       } else {
-        this.router.navigate(['']);
+        this.router.navigate([`/author/${savedAuthor.id}`]);
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja autora');
-      this.loading = false;
-    })).subscribe();
+    }), finalize(() => this.loading = false)).subscribe();
   }
 
   public openNewGenreDialog(): void {
@@ -76,6 +85,22 @@ export class AuthorComponent implements OnInit {
         this.authorForm.patchValue({authorsGenres: [{id: savedGenre.id}]});
       }));
     });
+
+  }
+
+  private setAuthor(id: number) {
+    this.loading = true;
+    this.authorService.getAuthorById(id).pipe(finalize(() => this.loading = false)).subscribe((author: Author) => {
+      this.authorForm.patchValue({
+        firstName: author.firstName,
+        lastName: author.lastName,
+        yearOfBirth: author.yearOfBirth,
+        yearOfDeath: author.yearOfDeath,
+        authorsGenres: author.authorsGenres
+      });
+    }, () => {
+      this.notificationService.error(`Greška prilikom dohvata autora ${id}`);
+    })
 
   }
 }

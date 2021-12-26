@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {Advert, AdvertType, Author, Book, Genre, Page, TransactionType} from "../../../../model";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {map, tap} from "rxjs/operators";
+import {finalize, map, tap} from "rxjs/operators";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 
@@ -76,14 +76,13 @@ export class AdvertListComponent implements OnInit {
   public loadAdvertPage(pageRequest: {page: number, rows: number}, httpParams?: HttpParams): void {
     this.advertLoading = true;
     this.adverts$ = this.advertService.getAdvertPage(pageRequest.page, httpParams).pipe(
+      finalize(() => this.advertLoading = false),
       tap((page: Page<Advert>) => {
-        this.advertLoading = false;
         this.currentPage = page.pageable.pageNumber;
         this.totalAdverts = page.totalElements;
       }, () => {
         this.currentPage = 0;
         this.totalAdverts = 0;
-        this.advertLoading = false;
         this.notificationService.error('Došlo je do greške prilikom dohvata pitanja');
       }),
       map((page: Page<Advert>) => page.content)

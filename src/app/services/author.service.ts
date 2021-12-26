@@ -18,10 +18,7 @@ export class AuthorService {
 
   public getAllAuthors(): Observable<Author[]> {
     return this.httpClient.get<Author[]>(`${this.backendEndpoint}/all`).pipe(
-      map(authors => authors.map(author => {
-        author.displayName = `${author.lastName}, ${author.firstName}`;
-        return author;
-      }))
+      map(authors => authors.map(this.mapAuthor))
     );
   }
 
@@ -29,12 +26,31 @@ export class AuthorService {
     return this.httpClient.get<Page<Author>>(this.backendEndpoint, {params: httpParams});
   }
 
-  public saveAuthor(author: Author): Observable<Author> {
-    return this.httpClient.post<Author>(this.backendEndpoint, author).pipe(
-      map((author: Author) => {
-        author.displayName = `${author.lastName}, ${author.firstName}`;
-        return author;
-      })
-    );
+  public saveAuthor(author: Author, id: number | undefined): Observable<Author> {
+    if (id) {
+      return this.updateAuthor(author, id);
+    }
+    return this.saveNewAuthor(author);
+  }
+
+  private saveNewAuthor(author: Author): Observable<Author> {
+    return this.httpClient.post<Author>(this.backendEndpoint, author).pipe(map(this.mapAuthor));
+  }
+
+  private updateAuthor(author: Author, id: number): Observable<Author> {
+    return this.httpClient.patch<Author>(`${this.backendEndpoint}/${id}`, author).pipe(map(this.mapAuthor));
+  }
+
+  public getAuthorById(id: number): Observable<Author> {
+    return this.httpClient.get<Author>(`${this.backendEndpoint}/${id}`).pipe(map(this.mapAuthor));
+  }
+
+  private mapAuthor(author: Author): Author {
+    author.yearOfBirth = new Date(author.yearOfBirth);
+    if (author.yearOfDeath) {
+      author.yearOfDeath = new Date(author.yearOfDeath);
+    }
+    author.displayName = `${author.lastName}, ${author.firstName}`;
+    return author;
   }
 }

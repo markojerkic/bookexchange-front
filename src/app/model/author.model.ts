@@ -8,9 +8,9 @@ export interface Author {
   lastName: string;
   yearOfBirth: Date;
   yearOfDeath?: Date;
-  authorsGenres?: Genre[];
-  reviews?: Review[];
-  authorImages?: Image[];
+  authorsGenres: Genre[];
+  reviews: Review[];
+  authorImages: Image[];
 
-  displayName?: string;
+  displayName: string;
 }

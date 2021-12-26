@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Advert, AdvertType, Author, Book, Genre, TransactionType} from "../../../../model";
 import {Observable, Subject} from "rxjs";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {takeUntil, tap} from "rxjs/operators";
+import {finalize, takeUntil, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {DialogService} from "primeng/dynamicdialog";
 import {BookComponent} from "../../book";
@@ -81,12 +81,12 @@ export class AdvertComponent implements OnInit, OnDestroy {
   public submitAdvert(): void {
     const advert: Advert = this.form.value;
     this.loading = true;
-    this.advertService.saveAdvert(advert).pipe(takeUntil(this.onDestroy$)).subscribe((savedAdvert: Advert) => {
-      this.loading = false;
-      this.router.navigate(['/adverts']);
-      this.notificationService.success('Uspješno dodan osglas');
+    this.advertService.saveAdvert(advert).pipe(
+      finalize(() => this.loading = false),
+      takeUntil(this.onDestroy$)).subscribe(() => {
+        this.router.navigate(['/adverts']);
+        this.notificationService.success('Uspješno dodan osglas');
     }, () => {
-      this.loading = false;
       this.notificationService.error('Greška prilikom dodavanja oglasa');
     });
   }

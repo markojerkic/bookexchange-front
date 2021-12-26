@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {Author, Book, Genre} from "../../../../model";
 import {AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {tap} from "rxjs/operators";
+import {finalize, tap} from "rxjs/operators";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthorComponent} from "../../author";
 import {GenreComponent} from "../../genre";
@@ -53,8 +53,9 @@ export class BookComponent implements OnInit {
     const book: Book = this.bookForm.value;
 
     this.loading = true;
-    this.bookService.saveBook(book).pipe(tap((savedBook: Book) => {
-      this.loading = false;
+    this.bookService.saveBook(book).pipe(
+      finalize(() => this.loading = false),
+      tap((savedBook: Book) => {
       this.notificationService.success(`Knjiga ${savedBook.title} uspješno spremljena`);
       if (this.dialogRef) {
         this.dialogRef.close(savedBook);
@@ -63,7 +64,6 @@ export class BookComponent implements OnInit {
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja knjige');
-      this.loading = false;
     })).subscribe();
   }
 

@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {Author, Genre} from "../../../../model";
 import {AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
-import {tap} from "rxjs/operators";
+import {finalize, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 
 @Component({
@@ -45,8 +45,9 @@ export class GenreComponent implements OnInit {
     const genre: Genre = this.genreForm.value;
 
     this.loading = true;
-    this.genreService.saveGenre(genre).pipe(tap((savedGenre: Genre) => {
-      this.loading = false;
+    this.genreService.saveGenre(genre).pipe(
+      finalize(() => this.loading = false),
+      tap((savedGenre: Genre) => {
       this.notificationService.success(`Žanr ${savedGenre.name} uspješno spremljen`);
       if (this.dialogRef) {
         this.dialogRef.close(savedGenre);
@@ -55,7 +56,6 @@ export class GenreComponent implements OnInit {
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja žanra');
-      this.loading = false;
     })).subscribe();
 
   }

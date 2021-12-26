@@ -1,5 +1,5 @@
 <div class="grid flex justify-content-center p-m-4">
-  <p-card header="Unesite novog autora">
+  <p-card [header]="id? 'Uredite autora': 'Unesite novog autora'">
     <form class="p-fluid grid flex" [formGroup]="authorForm">
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">

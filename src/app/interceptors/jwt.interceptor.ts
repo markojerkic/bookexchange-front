@@ -1,7 +1,7 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
-import {Observable, throwError} from "rxjs";
+import {Observable, of, throwError} from "rxjs";
 import {catchError, switchMap} from "rxjs/operators";
 import {LoggedInUser} from "../model";
 import {AuthService, NotificationService} from "../services";
@@ -40,6 +40,9 @@ export class JwtInterceptor implements HttpInterceptor {
           this.router.navigate(['/login']);
           return throwError(err);
         }));
+      } else if (err.status === 403) {
+        this.notificationService.warn('Nemate prava za tu akciju');
+        return of();
       }
 
       const error = err.error.message || err.statusText;

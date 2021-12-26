@@ -1,6 +1,6 @@
-<div class="grid flex justify-content-center p-m-4">
+<form class="grid flex justify-content-center p-m-4" [formGroup]="form" (ngSubmit)="submitLogin()">
   <p-card class="grid flex col-12 lg:col-6 justify-content-center" header="Prijava">
-    <form class="p-fluid grid flex" [formGroup]="form" (ngSubmit)="submitLogin()">
+    <div class="p-fluid grid flex">
       <div class="p-field col-12">
         <span class="p-float-label">
             <input type="text" id="username" pInputText formControlName="username">
@@ -13,13 +13,13 @@
             <label for="password">Zaporka *</label>
         </span>
       </div>
-      <div class="flex justify-content-center">
-        <button pButton type="submit"
-                [disabled]="!form.valid || isAuthLoading"
-                [loading]="isAuthLoading"
-                label="Prijavi se"></button>
-      </div>
-    </form>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton type="submit"
+              [disabled]="!form.valid || isAuthLoading"
+              [loading]="isAuthLoading"
+              label="Prijavi se"></button>
+    </ng-template>
   </p-card>
 
-</div>
+</form>

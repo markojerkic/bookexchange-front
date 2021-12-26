@@ -3,7 +3,7 @@ import {AuthorService, NotificationService} from "../../../../services";
 import {Observable} from "rxjs";
 import {Author, Page} from "../../../../model";
 import {HttpParams} from "@angular/common/http";
-import {map, tap} from "rxjs/operators";
+import {finalize, map, tap} from "rxjs/operators";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {Router} from "@angular/router";
 
@@ -66,14 +66,13 @@ export class AuthorListComponent implements OnInit {
     });
 
     this.authors$ = this.authorService.getPagedAuthors(this.currentPage, httpParams).pipe(
+      finalize(() => this.authorsLoading = false),
       tap((page: Page<Author>) => {
-        this.authorsLoading = false;
         this.currentPage = page.pageable.pageNumber;
         this.totalAuthors = page.totalElements;
       }, () => {
         this.currentPage = 0;
         this.totalAuthors = 0;
-        this.authorsLoading = false;
         this.notificationService.error('Došlo je do greške prilikom dohvata autora');
       }),
       map((page: Page<Author>) => page.content)
