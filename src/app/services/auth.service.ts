@@ -1,9 +1,11 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable, Subject, throwError} from "rxjs";
 import {map, tap} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 import {LoggedInUser, LoginRequest, User} from "../model";
+import {Router} from "@angular/router";
+import {throwNullPortalError} from "@angular/cdk/portal/portal-errors";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,8 @@ export class AuthService {
 
   private readonly loggedInUser$!: Subject<LoggedInUser | undefined>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private router: Router) {
     this.loggedInUser$ = new BehaviorSubject<LoggedInUser | undefined>(JSON.parse(<string>localStorage.getItem('user')));
   }
 
@@ -37,7 +40,14 @@ export class AuthService {
     return this.loggedInUser$.pipe(map((loggedInUser?: LoggedInUser) => !!loggedInUser));
   }
 
+  public get isAuthenticated(): boolean {
+    return !!localStorage.getItem('user');
+  }
+
   public refreshToken(): Observable<LoggedInUser> {
+    if (!this.isAuthenticated) {
+      return throwError('Token je istekao');
+    }
     return this.http.get<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth/refresh/${this.userToken.refreshToken}`)
       .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
   }
