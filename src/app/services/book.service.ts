@@ -31,7 +31,22 @@ export class BookService {
       })
     );
   }
-  public saveBook(book: Book): Observable<Book> {
+  public saveBook(book: Book, id: number | undefined): Observable<Book> {
+    if (id) {
+      return this.updateBook(book, id);
+    }
+    return this.saveNewBook(book);
+  }
+
+  public getBookById(id: number): Observable<Book> {
+    return this.httpClient.get<Book>(`${this.backendEndpoint}/${id}`);
+  }
+
+  private updateBook(book: any, id: number): Observable<Book> {
+    return this.httpClient.patch<Book>(`${this.backendEndpoint}/${id}`, book);
+  }
+
+  private saveNewBook(book: Book): Observable<Book> {
     return this.httpClient.post<Book>(this.backendEndpoint, book);
   }
 }

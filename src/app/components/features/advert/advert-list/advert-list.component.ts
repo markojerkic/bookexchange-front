@@ -22,8 +22,8 @@ export class AdvertListComponent implements OnInit {
   public authors$!: Observable<Author[]>;
   public books$!: Observable<Book[]>;
   public genres$!: Observable<Genre[]>;
-  public advertTypes: {label: string, value: AdvertType}[];
-  public transactionTypes: {label: string, value: TransactionType}[];
+  public advertTypes: { label: string, value: AdvertType }[];
+  public transactionTypes: { label: string, value: TransactionType }[];
 
   constructor(private advertService: AdvertService,
               private notificationService: NotificationService,
@@ -73,7 +73,7 @@ export class AdvertListComponent implements OnInit {
     this.loadAdvertPage({page: this.currentPage, rows: 10});
   }
 
-  public loadAdvertPage(pageRequest: {page: number, rows: number}, httpParams?: HttpParams): void {
+  public loadAdvertPage(pageRequest: { page: number, rows: number }, httpParams?: HttpParams): void {
     this.advertLoading = true;
     this.adverts$ = this.advertService.getAdvertPage(pageRequest.page, httpParams).pipe(
       finalize(() => this.advertLoading = false),

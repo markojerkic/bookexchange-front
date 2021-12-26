@@ -7,7 +7,7 @@ import {finalize, tap} from "rxjs/operators";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthorComponent} from "../../author";
 import {GenreComponent} from "../../genre";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'app-book',
@@ -23,6 +23,7 @@ export class BookComponent implements OnInit {
   public genres$!: Observable<Genre[]>;
 
   public loading: boolean;
+  public id?: number;
 
   constructor(private formBuilder: FormBuilder,
               private authorService: AuthorService,
@@ -31,7 +32,8 @@ export class BookComponent implements OnInit {
               private notificationService: NotificationService,
               private dialogService: DialogService,
               @Optional() private dialogRef: DynamicDialogRef,
-              private router: Router) {
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
     this.loading = false;
   }
 
@@ -45,6 +47,14 @@ export class BookComponent implements OnInit {
       })
     });
 
+    this.activatedRoute.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (id) {
+        this.id = id;
+        this.setBook(id);
+      }
+    });
+
     this.authors$ = this.authorService.getAllAuthors();
     this.genres$ = this.genreService.getAllGenres();
   }
@@ -53,14 +63,14 @@ export class BookComponent implements OnInit {
     const book: Book = this.bookForm.value;
 
     this.loading = true;
-    this.bookService.saveBook(book).pipe(
+    this.bookService.saveBook(book, this.id).pipe(
       finalize(() => this.loading = false),
       tap((savedBook: Book) => {
       this.notificationService.success(`Knjiga ${savedBook.title} uspješno spremljena`);
       if (this.dialogRef) {
         this.dialogRef.close(savedBook);
       } else {
-        this.router.navigate(['']);
+        this.router.navigate([`/book/${savedBook.id}`]);
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja knjige');
@@ -98,5 +108,19 @@ export class BookComponent implements OnInit {
       }));
     });
 
+  }
+
+  private setBook(id: number): void {
+    this.loading = true;
+    this.bookService.getBookById(id).pipe(finalize(() => this.loading = false)).subscribe((book: Book) => {
+      this.bookForm.patchValue({
+        title: book.title,
+        isbn: book.isbn,
+        genres: book.genres,
+        bookAuthor: book.bookAuthor
+      });
+    }, () => {
+      this.notificationService.error(`Greška prilikom dohvata knjige ${id}`);
+    });
   }
 }

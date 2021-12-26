@@ -110,4 +110,5 @@ import {TableModule} from "primeng/table";
   entryComponents: [BookComponent, AuthorComponent, GenreComponent],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

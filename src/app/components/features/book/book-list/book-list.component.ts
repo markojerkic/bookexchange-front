@@ -38,12 +38,16 @@ export class BookListComponent implements OnInit {
       {
         label: 'Uredi knjigu',
         icon: 'pi pi-pencil',
-        command: () => {this.router.navigate([`/book/edit/${this.selectedBookId}`])}
+        command: () => {
+          this.router.navigate([`/book/edit/${this.selectedBookId}`])
+        }
       },
       {
         label: 'Izbriši knjigu',
         icon: 'pi pi-trash',
-        command: () => {this.deleteBook(this.selectedBookId)}
+        command: () => {
+          this.deleteBook(this.selectedBookId)
+        }
       }
     ];
   }
@@ -57,7 +61,7 @@ export class BookListComponent implements OnInit {
     let httpParams = new HttpParams().append('page', String(event.first! / event.rows!))
       .append('size', event.rows!);
     if (event.sortField) {
-      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1? 'ASC': 'DESC'}`);
+      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1 ? 'ASC' : 'DESC'}`);
     }
     Object.keys(event.filters!).filter(key => event.filters![key].value).forEach(key => {
       if (event.filters![key].value instanceof Date) {

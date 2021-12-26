@@ -99,7 +99,6 @@ export class AuthorComponent implements OnInit {
       });
     }, () => {
       this.notificationService.error(`Greška prilikom dohvata autora ${id}`);
-    })
-
+    });
   }
 }

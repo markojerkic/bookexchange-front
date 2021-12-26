@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
   public isAuthenticated$!: Observable<boolean>;
 
   constructor(private router: Router,
-              private authService: AuthService) {}
+              private authService: AuthService) {
+  }
 
   ngOnInit(): void {
 
@@ -29,17 +30,21 @@ export class AppComponent implements OnInit {
       return [
         {
           label: 'Oglasi',
-          icon:'pi pi-book',
+          icon: 'pi pi-book',
           items: [
             {
               label: 'Novi oglas',
               icon: 'pi pi-plus',
-              command: () => {this.router.navigate(['/advert'])}
+              command: () => {
+                this.router.navigate(['/advert'])
+              }
             },
             {
               label: 'Pregledaj sve oglase',
               icon: 'pi pi-list',
-              command: () => {this.router.navigate(['/adverts'])}
+              command: () => {
+                this.router.navigate(['/adverts'])
+              }
             }
           ]
         },
@@ -51,12 +56,16 @@ export class AppComponent implements OnInit {
               label: 'Novi autor',
               visible: isUserAdmin,
               icon: 'pi pi-plus',
-              command: () => {this.router.navigate(['/author'])}
+              command: () => {
+                this.router.navigate(['/author'])
+              }
             },
             {
               label: 'Lista autora',
               icon: 'pi pi-list',
-              command: () => {this.router.navigate(['/authors'])}
+              command: () => {
+                this.router.navigate(['/authors'])
+              }
             }
           ]
         },
@@ -68,12 +77,16 @@ export class AppComponent implements OnInit {
               label: 'Nova knjiga',
               visible: isUserAdmin,
               icon: 'pi pi-plus',
-              command: () => {this.router.navigate(['/book'])}
+              command: () => {
+                this.router.navigate(['/book'])
+              }
             },
             {
               label: 'Lista knjiga',
               icon: 'pi pi-list',
-              command: () => {this.router.navigate(['/books'])}
+              command: () => {
+                this.router.navigate(['/books'])
+              }
             }
           ]
         },
@@ -85,12 +98,16 @@ export class AppComponent implements OnInit {
               label: 'Novi žanr',
               visible: isUserAdmin,
               icon: 'pi pi-plus',
-              command: () => {this.router.navigate(['/genre'])}
+              command: () => {
+                this.router.navigate(['/genre'])
+              }
             },
             {
               label: 'Lista žanrova',
               icon: 'pi pi-list',
-              command: () => {this.router.navigate(['/genres'])}
+              command: () => {
+                this.router.navigate(['/genres'])
+              }
             }
           ]
         },
@@ -100,19 +117,25 @@ export class AppComponent implements OnInit {
       {
         label: 'Moj profil',
         icon: 'pi pi-user',
-        command: () => {this.router.navigate(['/auth/profile'])}
+        command: () => {
+          this.router.navigate(['/auth/profile'])
+        }
       },
 
       {
         label: 'Odjavi se',
         icon: 'pi pi-user-minus',
-        command: () => {this.authService.logout()}
+        command: () => {
+          this.authService.logout()
+        }
       }
     ];
     this.loginItems = [{
       label: 'Registracija',
       icon: 'pi pi-user-plus',
-      command: () => {this.router.navigate(['/auth/register'])}
+      command: () => {
+        this.router.navigate(['/auth/register'])
+      }
     }];
 
 

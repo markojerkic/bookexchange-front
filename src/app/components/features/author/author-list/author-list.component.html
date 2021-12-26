@@ -21,13 +21,13 @@
                 (click)="firstName.value=''; lastName.value=''; table.clear(); table.filter('', 'firstName', 'equals');table.filter('', 'lastName', 'equals');"></button>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'firstName', 'equipped')"
+        <input pInputText (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
                placeholder="Unesite ime" class="p-column-filter" #firstName/>
         <!--<p-columnFilter type="text" placeholder="Unesite ime" field="firstName"
                         [showMenu]="false" [showClearButton]="false" [showApplyButton]="false"></p-columnFilter>-->
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'lastName', 'equipped')"
+        <input pInputText (input)="table.filter($any($event.target).value, 'lastName', 'equals')"
                placeholder="Unesite prezime" class="p-column-filter" #lastName/>
         <!--<p-columnFilter type="text" placeholder="Unesite prezime" field="lastName"
                         [showMenu]="false" [showClearButton]="false" [showApplyButton]="false"></p-columnFilter>-->
@@ -36,7 +36,7 @@
         <!--<p-calendar view="year" dateFormat="yy"
                     appendTo="body" [showButtonBar]="true"
                     [maxDate]="today"
-                    (onSelect)="table.filter($event.value, 'yearOfBirth', 'equipped')"
+                    (onSelect)="table.filter($event.value, 'yearOfBirth', 'equals')"
                     placeholder="Godina rođenja"></p-calendar>-->
         <p-columnFilter matchMode="equals" field="yearOfBirth"
                         [showMenu]="false" [showClearButton]="false">
@@ -54,7 +54,7 @@
         <!--<p-calendar view="year" dateFormat="yy"
                     appendTo="body" [showButtonBar]="true"
                     [maxDate]="today"
-                    (onSelect)="table.filter($event.value, 'yearOfDeath', 'equipped')"
+                    (onSelect)="table.filter($event.value, 'yearOfDeath', 'equals')"
                     placeholder="Godina smrti"></p-calendar>-->
         <p-columnFilter matchMode="equals" field="yearOfDeath" type="menu"
                         [showMenu]="false" [showClearButton]="false">

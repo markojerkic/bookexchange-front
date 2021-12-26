@@ -16,16 +16,14 @@ import {BookComponent} from "../../book";
 })
 export class AdvertComponent implements OnInit, OnDestroy {
 
-  private onDestroy$: Subject<void>;
-
   public form!: FormGroup;
   public loading: boolean;
-
   public genres!: Observable<Genre[]>;
   public authors!: Observable<Author[]>;
   public books!: Observable<Book[]>;
-  public advertTypes: {label: string, value: AdvertType}[];
-  public transactionTypes: {label: string, value: TransactionType}[];
+  public advertTypes: { label: string, value: AdvertType }[];
+  public transactionTypes: { label: string, value: TransactionType }[];
+  private onDestroy$: Subject<void>;
 
   constructor(private formBuilder: FormBuilder,
               private authorService: AuthorService,
@@ -84,8 +82,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
     this.advertService.saveAdvert(advert).pipe(
       finalize(() => this.loading = false),
       takeUntil(this.onDestroy$)).subscribe(() => {
-        this.router.navigate(['/adverts']);
-        this.notificationService.success('Uspješno dodan osglas');
+      this.router.navigate(['/adverts']);
+      this.notificationService.success('Uspješno dodan osglas');
     }, () => {
       this.notificationService.error('Greška prilikom dodavanja oglasa');
     });

@@ -5,7 +5,7 @@ import {Author, Genre} from "../../../../model";
 import {AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {finalize, tap} from "rxjs/operators";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'app-genre',
@@ -22,6 +22,8 @@ export class GenreComponent implements OnInit {
 
   public loading: boolean;
 
+  public id?: number;
+
   constructor(private formBuilder: FormBuilder,
               private authorService: AuthorService,
               private genreService: GenreService,
@@ -29,15 +31,23 @@ export class GenreComponent implements OnInit {
               private notificationService: NotificationService,
               private dialogService: DialogService,
               @Optional() private dialogRef: DynamicDialogRef,
-              private router: Router) {
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
     this.loading = false;
   }
 
   ngOnInit(): void {
     this.genreForm = this.formBuilder.group({
-      id: [null],
       name: [null, Validators.required],
       description: [null]
+    });
+
+    this.activatedRoute.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (id) {
+        this.id = id;
+        this.setGenre(id);
+      }
     });
   }
 
@@ -45,18 +55,30 @@ export class GenreComponent implements OnInit {
     const genre: Genre = this.genreForm.value;
 
     this.loading = true;
-    this.genreService.saveGenre(genre).pipe(
+    this.genreService.saveGenre(genre, this.id).pipe(
       finalize(() => this.loading = false),
       tap((savedGenre: Genre) => {
       this.notificationService.success(`Žanr ${savedGenre.name} uspješno spremljen`);
       if (this.dialogRef) {
         this.dialogRef.close(savedGenre);
       } else {
-        this.router.navigate(['']);
+        this.router.navigate([`/genre/${savedGenre.id}`]);
       }
     }, () => {
       this.notificationService.error('Greška prilikom spremanja žanra');
     })).subscribe();
 
+  }
+
+  private setGenre(id: number) {
+    this.loading = true;
+    this.genreService.getGenreById(id).pipe(finalize(() => this.loading = false)).subscribe((genre: Genre) => {
+      this.genreForm.patchValue({
+        name: genre.name,
+        description: genre.description
+      });
+    }, () => {
+      this.notificationService.error(`Greška prilikom dohvata žanra ${id}`);
+    });
   }
 }

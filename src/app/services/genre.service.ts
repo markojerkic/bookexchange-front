@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Genre} from "../model";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {Author, Genre, Page} from "../model";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 
@@ -19,8 +19,26 @@ export class GenreService {
     return this.httpClient.get<Genre[]>(`${this.backendEndpoint}/all`);
   }
 
-  public saveGenre(genre: Genre): Observable<Genre> {
-    return this.httpClient.post<Genre>(this.backendEndpoint, genre);
+  public saveGenre(genre: Genre, id: number | undefined): Observable<Genre> {
+    if (id) {
+      return this.updateGenre(genre, id);
+    }
+    return this.saveNewGenre(genre);
+  }
 
+  public getPagedGenres(pageNumber: number, httpParams: HttpParams): Observable<Page<Genre>> {
+    return this.httpClient.get<Page<Genre>>(this.backendEndpoint, {params: httpParams});
+  }
+
+  public getGenreById(id: number): Observable<Genre> {
+    return this.httpClient.get<Genre>(`${this.backendEndpoint}/${id}`);
+  }
+
+  private updateGenre(genre: any, id: number) {
+    return this.httpClient.patch<Genre>(`${this.httpClient}/${id}`, genre);
+  }
+
+  private saveNewGenre(genre: Genre) {
+    return this.httpClient.post<Genre>(this.backendEndpoint, genre);
   }
 }

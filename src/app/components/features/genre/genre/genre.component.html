@@ -1,5 +1,5 @@
 <div class="grid flex justify-content-center p-m-4">
-  <p-card header="Unesite novu knjigu">
+  <p-card [header]="id? 'Uredite žanr': 'Unesite novi žanr'">
     <form class="p-fluid grid flex" [formGroup]="genreForm">
 
       <div class="p-field col-12">

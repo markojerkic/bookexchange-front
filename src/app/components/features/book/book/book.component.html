@@ -1,7 +1,7 @@
 <div class="grid flex justify-content-center p-m-4">
-  <p-card header="Unesite novu knjigu">
+  <p-card [header]="id? 'Uredite knjigu': 'Unesite novu knjigu'">
     <form class="p-fluid grid flex" [formGroup]="bookForm">
-      <!-- Naslov oglasa -->
+      <!-- Naslov knjige -->
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
             <input type="text" id="title" pInputText formControlName="title">

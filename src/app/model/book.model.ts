@@ -6,7 +6,7 @@ import {Author} from "./author.model";
 export interface Book {
   id?: number;
   title: string;
-  ISBN: string;
+  isbn: string;
   reviews?: Review[];
   genres?: Genre[];
   bookImages?: Image[];
