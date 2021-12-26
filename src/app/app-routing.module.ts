@@ -16,6 +16,7 @@ import {
   ProfileComponent,
   RegisterComponent
 } from "./components";
+import {AuthGuard} from "./util";
 
 const routes: Routes = [
   {
@@ -23,12 +24,18 @@ const routes: Routes = [
     component: AdvertListComponent
   },
   {
+    path: 'advert',
+    component: AdvertComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'adverts',
     component: AdvertListComponent
   },
   {
     path: 'author',
-    component: AuthorComponent
+    component: AuthorComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'author/:id',
@@ -36,7 +43,11 @@ const routes: Routes = [
   },
   {
     path: 'author/edit/:id',
-    component: AuthorComponent
+    component: AuthorComponent,
+    canActivate: [AuthGuard],
+    data: {
+      adminRequired: true
+    }
   },
   {
     path: 'authors',
@@ -44,7 +55,8 @@ const routes: Routes = [
   },
   {
     path: 'book',
-    component: BookComponent
+    component: BookComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'book/:id',
@@ -52,7 +64,11 @@ const routes: Routes = [
   },
   {
     path: 'book/edit/:id',
-    component: BookComponent
+    component: BookComponent,
+    canActivate: [AuthGuard],
+    data: {
+      adminRequired: true
+    }
   },
   {
     path: 'books',
@@ -60,11 +76,16 @@ const routes: Routes = [
   },
   {
     path: 'genre',
-    component: GenreComponent
+    component: GenreComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'genre/edit/:id',
-    component: GenreComponent
+    component: GenreComponent,
+    canActivate: [AuthGuard],
+    data: {
+      adminRequired: true
+    }
   },
   {
     path: 'genre/:id',
@@ -87,18 +108,16 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfileComponent
+        component: ProfileComponent,
+        canActivate: [AuthGuard]
       }
     ]
-  },
-  {
-    path: 'advert',
-    component: AdvertComponent
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }

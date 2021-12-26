@@ -4,6 +4,7 @@ import {MenuItem} from "primeng/api";
 import {Observable} from 'rxjs';
 import {LoggedInUser} from './model';
 import {AuthService} from './services';
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import {AuthService} from './services';
 })
 export class AppComponent implements OnInit {
 
-  public menuItems!: MenuItem[];
+  public menuItems$!: Observable<MenuItem[]>;
   public authModelItems!: MenuItem[];
   public loginItems!: MenuItem[];
 
@@ -23,72 +24,78 @@ export class AppComponent implements OnInit {
               private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.menuItems= [
-      {
-        label: 'Oglasi',
-        icon:'pi pi-book',
-        items: [
-          {
-            label: 'Pregledaj sve oglase',
-            icon: 'pi pi-list',
-            command: () => {this.router.navigate(['/adverts'])}
-          },
-          {
-            label: 'Novi oglas',
-            icon: 'pi pi-plus',
-            command: () => {this.router.navigate(['/advert'])}
-          }
-        ]
-      },
-      {
-        label: 'Autori',
-        icon: 'pi pi-user',
-        items: [
-          {
-            label: 'Novi autor',
-            icon: 'pi pi-plus',
-            command: () => {this.router.navigate(['/author'])}
-          },
-          {
-            label: 'Lista autora',
-            icon: 'pi pi-list',
-            command: () => {this.router.navigate(['/authors'])}
-          }
-        ]
-      },
-      {
-        label: 'Knjige',
-        icon: 'pi pi-book',
-        items: [
-          {
-            label: 'Nova knjiga',
-            icon: 'pi pi-plus',
-            command: () => {this.router.navigate(['/book'])}
-          },
-          {
-            label: 'Lista knjiga',
-            icon: 'pi pi-list',
-            command: () => {this.router.navigate(['/books'])}
-          }
-        ]
-      },
-      {
-        label: 'Žanrovi',
-        icon: 'pi pi-th-large',
-        items: [
-          {
-            label: 'Novi žanr',
-            icon: 'pi pi-plus',
-            command: () => {this.router.navigate(['/genre'])}
-          },
-          {
-            label: 'Lista žanrova',
-            icon: 'pi pi-list',
-            command: () => {this.router.navigate(['/genres'])}
-          }
-        ]
-      },
-    ];
+
+    this.menuItems$ = this.authService.isUserAdmin$.pipe(map((isUserAdmin: boolean) => {
+      return [
+        {
+          label: 'Oglasi',
+          icon:'pi pi-book',
+          items: [
+            {
+              label: 'Novi oglas',
+              icon: 'pi pi-plus',
+              command: () => {this.router.navigate(['/advert'])}
+            },
+            {
+              label: 'Pregledaj sve oglase',
+              icon: 'pi pi-list',
+              command: () => {this.router.navigate(['/adverts'])}
+            }
+          ]
+        },
+        {
+          label: 'Autori',
+          icon: 'pi pi-user',
+          items: [
+            {
+              label: 'Novi autor',
+              visible: isUserAdmin,
+              icon: 'pi pi-plus',
+              command: () => {this.router.navigate(['/author'])}
+            },
+            {
+              label: 'Lista autora',
+              icon: 'pi pi-list',
+              command: () => {this.router.navigate(['/authors'])}
+            }
+          ]
+        },
+        {
+          label: 'Knjige',
+          icon: 'pi pi-book',
+          items: [
+            {
+              label: 'Nova knjiga',
+              visible: isUserAdmin,
+              icon: 'pi pi-plus',
+              command: () => {this.router.navigate(['/book'])}
+            },
+            {
+              label: 'Lista knjiga',
+              icon: 'pi pi-list',
+              command: () => {this.router.navigate(['/books'])}
+            }
+          ]
+        },
+        {
+          label: 'Žanrovi',
+          icon: 'pi pi-th-large',
+          items: [
+            {
+              label: 'Novi žanr',
+              visible: isUserAdmin,
+              icon: 'pi pi-plus',
+              command: () => {this.router.navigate(['/genre'])}
+            },
+            {
+              label: 'Lista žanrova',
+              icon: 'pi pi-list',
+              command: () => {this.router.navigate(['/genres'])}
+            }
+          ]
+        },
+      ];
+    }));
     this.authModelItems = [
       {
         label: 'Moj profil',

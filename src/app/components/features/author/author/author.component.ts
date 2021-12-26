@@ -7,7 +7,6 @@ import {finalize, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {GenreComponent} from "../../genre";
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-author',

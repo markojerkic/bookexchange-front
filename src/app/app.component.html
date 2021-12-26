@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<p-menubar [model]="menuItems">
+<p-menubar [model]="(menuItems$ | async)!">
   <ng-template pTemplate="start">
     <h3 style="cursor: pointer" routerLink="/">Posudba knjiga</h3>
   </ng-template>

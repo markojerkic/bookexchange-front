@@ -5,7 +5,6 @@ import {map, tap} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 import {LoggedInUser, LoginRequest, User} from "../model";
 import {Router} from "@angular/router";
-import {throwNullPortalError} from "@angular/cdk/portal/portal-errors";
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +35,11 @@ export class AuthService {
     return this.loggedInUser$;
   }
 
+  public get isUserAdmin$(): Observable<boolean> {
+    return this.loggedInUser$.pipe(map((userToken: LoggedInUser | undefined) =>
+      userToken? userToken.roles.includes('ROLE_ADMIN'): false));
+  }
+
   public get isAuthenticated$(): Observable<boolean> {
     return this.loggedInUser$.pipe(map((loggedInUser?: LoggedInUser) => !!loggedInUser));
   }
@@ -60,6 +64,7 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem('user');
     this.loggedInUser$.next(undefined);
+    this.router.navigate(['/auth/login']);
   }
 
   public getCurrentUser(): Observable<User> {
