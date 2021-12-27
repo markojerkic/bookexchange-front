@@ -48,6 +48,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {ImageModule} from "primeng/image";
 import {CalendarModule} from "primeng/calendar";
 import {TableModule} from "primeng/table";
+import {DataViewModule} from "primeng/dataview";
 
 @NgModule({
   declarations: [
@@ -69,36 +70,37 @@ import {TableModule} from "primeng/table";
     GenreViewComponent,
     AuthorViewComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    CommonModule,
-    MenubarModule,
-    ButtonModule,
-    CardModule,
-    SplitButtonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    PasswordModule,
-    ToastModule,
-    MenuModule,
-    DropdownModule,
-    InputTextareaModule,
-    InputNumberModule,
-    PaginatorModule,
-    DividerModule,
-    ProgressSpinnerModule,
-    RippleModule,
-    TooltipModule,
-    DynamicDialogModule,
-    MultiSelectModule,
-    ImageModule,
-    CalendarModule,
-    TableModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        CommonModule,
+        MenubarModule,
+        ButtonModule,
+        CardModule,
+        SplitButtonModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        PasswordModule,
+        ToastModule,
+        MenuModule,
+        DropdownModule,
+        InputTextareaModule,
+        InputNumberModule,
+        PaginatorModule,
+        DividerModule,
+        ProgressSpinnerModule,
+        RippleModule,
+        TooltipModule,
+        DynamicDialogModule,
+        MultiSelectModule,
+        ImageModule,
+        CalendarModule,
+        TableModule,
+        DataViewModule
+    ],
   providers: [
     MessageService,
     {

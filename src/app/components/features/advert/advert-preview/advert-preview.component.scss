@@ -1,15 +1,135 @@
-.advert-preview {
-  border-radius: 10px;
-  border: 1px solid var(--blue-50);
-}
 :host ::ng-deep {
-  .col-12 {
-    padding: 0;
+
+  .p-dataview.p-dataview-list .p-dataview-content>.p-grid>div {
+    width: 100%;
   }
-  .col-10 {
-    padding: 0;
+
+  .p-dropdown {
+    width: 14rem;
+    font-weight: normal;
   }
-  .col-2 {
-    padding: 0;
+
+  .advert-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 1rem;
+  }
+
+  .advert-description {
+    margin: 0 0 1rem 0;
+  }
+
+  .advert-category-icon {
+    vertical-align: middle;
+    margin-right: .5rem;
+  }
+
+  .advert-category {
+    font-weight: 600;
+    vertical-align: middle;
+  }
+
+  .advert-list-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+
+    img {
+      width: 150px;
+      margin-right: 2rem;
+    }
+
+    .advert-list-detail {
+      flex: 1 1 0;
+    }
+
+    .p-rating {
+      margin: 0 0 .5rem 0;
+    }
+
+    .advert-price {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+      align-self: flex-end;
+    }
+
+    .advert-list-action {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .p-button {
+      margin-bottom: .5rem;
+    }
+  }
+
+  .advert-grid-item {
+    margin: .5em;
+    border: 1px solid var(--surface-border);
+    padding: 1rem;
+
+    .advert-grid-item-top,
+    .advert-grid-item-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .advert-name {
+      margin-top: 1rem;
+    }
+
+    img {
+      width: 75%;
+      margin: 2rem;
+    }
+
+    .advert-grid-item-content {
+      text-align: center;
+    }
+
+    .advert-price {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+}
+
+
+
+@media screen and (max-width: 576px) {
+  :host ::ng-deep .advert-list-item {
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 75%;
+      margin: 2rem 0;
+    }
+
+    .advert-list-detail {
+      text-align: center;
+    }
+
+    .advert-price {
+      align-self: center;
+    }
+
+    .advert-list-action {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .advert-list-action {
+      margin-top: 2rem;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
   }
 }

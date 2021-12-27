@@ -14,6 +14,7 @@
             <input type="text" formControlName="isbn" id="isbn" pInputText />
             <label for="isbn">ISBN *</label>
           </span>
+        <small class="p-error" *ngIf="bookForm.get('isbn')?.dirty && bookForm.get('isbn')?.invalid">ISBN se već koristi</small>
       </div>
 
       <div class=" col-12 lg:col-6">

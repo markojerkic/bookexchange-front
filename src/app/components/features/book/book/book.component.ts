@@ -8,6 +8,7 @@ import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthorComponent} from "../../author";
 import {GenreComponent} from "../../genre";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-book',
@@ -72,8 +73,11 @@ export class BookComponent implements OnInit {
       } else {
         this.router.navigate([`/book/${savedBook.id}`]);
       }
-    }, () => {
-      this.notificationService.error('Greška prilikom spremanja knjige');
+    }, (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.bookForm.controls['isbn'].setErrors({'used': true});
+        }
+        this.notificationService.error('Greška prilikom spremanja knjige');
     })).subscribe();
   }
 

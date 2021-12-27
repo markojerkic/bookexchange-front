@@ -1,3 +1,3 @@
 export enum AdvertStatus {
-  ACTIVE = 'ATIVE', DEACTIVATED = 'DEACTIVATED'
+  ACTIVE = 'ACTIVE', DEACTIVATED = 'DEACTIVATED'
 }

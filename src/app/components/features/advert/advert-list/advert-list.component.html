@@ -119,6 +119,6 @@
   <div class="flex justify-content-center">
     <p-progressSpinner *ngIf="advertLoading"></p-progressSpinner>
   </div>
-  <app-advert-preview *ngFor="let advert of (adverts$ | async)!" [advert]="advert"></app-advert-preview>
+  <app-advert-preview [adverts]="(adverts$ | async)!"></app-advert-preview>
   <p-paginator [rows]="10" [totalRecords]="totalAdverts" (onPageChange)="loadAdvertPage($event)"></p-paginator>
 </p-card>

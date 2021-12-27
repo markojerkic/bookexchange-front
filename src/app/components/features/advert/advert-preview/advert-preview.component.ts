@@ -9,9 +9,19 @@ import {Advert} from "../../../../model";
 export class AdvertPreviewComponent implements OnInit {
 
   @Input()
-  public advert!: Advert;
+  public adverts!: Advert[];
 
-  constructor() { }
+  public gridImageWidth: string;
+
+  constructor() {
+    if (window.screen.width <= 563) {
+      this.gridImageWidth = '150';
+    } else if (window.screen.width <= 800) {
+      this.gridImageWidth = `${window.screen.width / 2}`;
+    } else {
+      this.gridImageWidth = '450';
+    }
+  }
 
   ngOnInit(): void {
   }

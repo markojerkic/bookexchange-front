@@ -31,6 +31,7 @@ export class AdvertListComponent implements OnInit {
               private formBuilder: FormBuilder,
               private bookService: BookService,
               private genreService: GenreService) {
+
     this.currentPage = 0;
     this.advertLoading = true;
     this.totalAdverts = 0;

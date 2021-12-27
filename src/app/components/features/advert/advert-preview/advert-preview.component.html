@@ -1,26 +1,53 @@
-<div class="grid flex advert-preview p-2 mt-2">
-  <h2 class="col-12">{{advert.title}}</h2>
-  <div class="md:col-2 lg:col-2 sm:col-12 flex justify-content-center align-items-center">
-    <p-image src="https://plchldr.co/i/500x250" [preview]="true" alt="Image" width="200"></p-image>
-  </div>
-  <div class="md:col-10 lg:col-10 sm:col-12 grid flex">
-    <div class="col-12">
-      <label class="text-xs font-bold">Opis</label>
-      <p class="col-12">{{advert.description}}</p>
+<p-dataView [value]="adverts" [rows]="10" layout="list" class="p-d-flex p-jc-center"
+            emptyMessage="Oglasi nisu pronađeni">
+  <ng-template pTemplate="header">
+    <div class="flex justify-content-end">
+      <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
     </div>
-    <div class="col-12" *ngIf="advert.advertisedBook!.bookAuthor!">
-      <label class="text-xs font-bold">Knjiga</label>
-      <p class="col-12">{{advert.advertisedBook!.title}}</p>
-    </div>
-    <div class="col-12 flex justify-content-end">
-      <div class="grid">
-        <label class="text-xs font-bold">Autor</label>
-        <p class="col-12">{{advert.advertisedBook!.bookAuthor!.firstName}} {{advert.advertisedBook!.bookAuthor!.lastName}}</p>
+  </ng-template>
+
+  <ng-template let-advert pTemplate="listItem">
+    <div class="p-col-12">
+      <div class="advert-list-item">
+        <!--<p-image src="https://plchldr.co/i/500x250" [preview]="true" width="150" alt="Image"></p-image>-->
+        <img src="https://plchldr.co/i/500x250" />
+        <div class="advert-list-detail">
+          <div class="advert-name">{{advert.title}}</div>
+          <div class="advert-description">{{advert.description}}</div>
+          <!--<p-rating [ngModel]="advert.rating" [readonly]="true" [cancel]="false"></p-rating>-->
+          <i class="pi pi-tag advert-category-icon"></i>
+          <span class="advert-category">{{advert.advertType === 'LOOKING'? 'Tražim': 'Nudim'}}</span>
+          <div class="advert-description">{{advert.transactionType === 'BUY'? 'Kupovina': 'Posudba'}}</div>
+        </div>
+        <div class="advert-list-action">
+          <span class="advert-price" *ngIf="advert.price">{{advert.price}} kn</span>
+          <p-button icon="pi pi-external-link" pTooltip="Pogledaj" [disabled]="advert.advertStatus !== 'ACTIVE'"></p-button>
+        </div>
       </div>
-      <div class="grid" *ngIf="advert.price!">
-        <label class="text-xs font-bold">Cijena</label>
-        <p class="col-12">{{advert.price!}} kn</p>
+    </div>
+  </ng-template>
+
+  <ng-template let-advert pTemplate="gridItem">
+    <div class="p-col-12 p-md-4">
+      <div class="advert-grid-item card">
+        <div class="advert-grid-item-top">
+          <div>
+            <i class="pi pi-tag advert-category-icon"></i>
+            <span class="advert-category">{{advert.advertType === 'LOOKING'? 'Tražim': 'Nudim'}}</span>
+          </div>
+        </div>
+        <div class="advert-grid-item-content">
+          <!--<p-image src="https://plchldr.co/i/500x250" [preview]="true" [width]="gridImageWidth" alt="Image"></p-image>-->
+          <img src="https://plchldr.co/i/500x250" />
+          <div class="advert-name">{{advert.title}}</div>
+          <div class="advert-description">{{advert.description}}</div>
+          <!--<p-rating [ngModel]="advert.rating" [readonly]="true" [cancel]="false"></p-rating>-->
+        </div>
+        <div class="advert-grid-item-bottom">
+          <span class="advert-price" *ngIf="advert.price">{{advert.price}} kn</span>
+          <p-button icon="pi pi-external-link" pTooltip="Pogledaj" [disabled]="advert.advertStatus !== 'ACTIVE'"></p-button>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </ng-template>
+</p-dataView>
