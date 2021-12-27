@@ -1,0 +1,18 @@
+<p-card [header]="advert.title"
+        *ngIf="(advert$ | async)! as advert"
+        class="grid flex justify-content-center">
+  <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+  <p-galleria [value]="images" [responsiveOptions]="responsiveOptions"
+              [containerStyle]="{'max-width': '90vw'}" [numVisible]="5">
+    <ng-template pTemplate="item" let-item>
+      <img [src]="item" style="width: 100%;" />
+    </ng-template>
+    <ng-template pTemplate="thumbnail" let-item>
+      <div class="grid p-nogutter flex justify-content-center">
+        <img [src]="item" style="display: block; height: 100px;" />
+      </div>
+    </ng-template>
+  </p-galleria>
+  <p class="font-bold col-12">Opis</p>
+  <p>{{advert.description}}</p>
+</p-card>

@@ -103,7 +103,7 @@ export class BookListComponent implements OnInit {
     this.bookService.deleteBook(selectedBookId).pipe(finalize(() => this.bookIsDeleting = false),
       catchError((error: Error) => {
         this.notificationService.error('Greška prilikom brisanja knjige');
-        return throwError(error);
+        return throwError(() => error);
       })).subscribe(() => {
       this.loadBooks(this.lastLazyLoadEvent!);
     });

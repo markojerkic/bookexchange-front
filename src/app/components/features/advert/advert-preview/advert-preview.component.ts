@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Advert} from "../../../../model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-advert-preview',
@@ -13,7 +14,7 @@ export class AdvertPreviewComponent implements OnInit {
 
   public gridImageWidth: string;
 
-  constructor() {
+  constructor(private router: Router) {
     if (window.screen.width <= 563) {
       this.gridImageWidth = '150';
     } else if (window.screen.width <= 800) {
@@ -24,6 +25,10 @@ export class AdvertPreviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  public navigateToAdvertDetail(advertId: number): void {
+    this.router.navigate([`/advert/${advertId}`]);
   }
 
 }

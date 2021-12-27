@@ -26,4 +26,8 @@ export class AdvertService {
 
     return this.httpClient.get<Page<Advert>>(this.backendEndpoint, {params: httpParams});
   }
+
+  public getAdvertById(id: number): Observable<Advert> {
+    return this.httpClient.get<Advert>(`${this.backendEndpoint}/${id}`);
+  }
 }

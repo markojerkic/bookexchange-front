@@ -99,7 +99,7 @@ export class GenreListComponent implements OnInit {
     this.genreService.deleteGenre(selectedGenreId).pipe(finalize(() => this.genreIsDeleting = false),
       catchError((error: Error) => {
         this.notificationService.error('Greška prilikom brisanja žanra');
-        return throwError(error);
+        return throwError(() => error);
       })).subscribe(() => {
       this.loadGenres(this.lastLazyLoadEvent!);
     });

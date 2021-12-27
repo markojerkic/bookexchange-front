@@ -8,6 +8,7 @@ import {
   AdvertComponent,
   AdvertListComponent,
   AdvertPreviewComponent,
+  AdvertViewComponent,
   AuthorComponent,
   AuthorListComponent,
   AuthorViewComponent,
@@ -49,6 +50,7 @@ import {ImageModule} from "primeng/image";
 import {CalendarModule} from "primeng/calendar";
 import {TableModule} from "primeng/table";
 import {DataViewModule} from "primeng/dataview";
+import {GalleriaModule} from "primeng/galleria";
 
 @NgModule({
   declarations: [
@@ -68,39 +70,41 @@ import {DataViewModule} from "primeng/dataview";
     GenreListComponent,
     BookViewComponent,
     GenreViewComponent,
-    AuthorViewComponent
+    AuthorViewComponent,
+    AdvertViewComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        FormsModule,
-        HttpClientModule,
-        CommonModule,
-        MenubarModule,
-        ButtonModule,
-        CardModule,
-        SplitButtonModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        PasswordModule,
-        ToastModule,
-        MenuModule,
-        DropdownModule,
-        InputTextareaModule,
-        InputNumberModule,
-        PaginatorModule,
-        DividerModule,
-        ProgressSpinnerModule,
-        RippleModule,
-        TooltipModule,
-        DynamicDialogModule,
-        MultiSelectModule,
-        ImageModule,
-        CalendarModule,
-        TableModule,
-        DataViewModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    CommonModule,
+    MenubarModule,
+    ButtonModule,
+    CardModule,
+    SplitButtonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    PasswordModule,
+    ToastModule,
+    MenuModule,
+    DropdownModule,
+    InputTextareaModule,
+    InputNumberModule,
+    PaginatorModule,
+    DividerModule,
+    ProgressSpinnerModule,
+    RippleModule,
+    TooltipModule,
+    DynamicDialogModule,
+    MultiSelectModule,
+    ImageModule,
+    CalendarModule,
+    TableModule,
+    DataViewModule,
+    GalleriaModule
+  ],
   providers: [
     MessageService,
     {

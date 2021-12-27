@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {
   AdvertComponent,
   AdvertListComponent,
+  AdvertViewComponent,
   AuthorComponent,
   AuthorListComponent,
   AuthorViewComponent,
@@ -27,6 +28,10 @@ const routes: Routes = [
     path: 'advert',
     component: AdvertComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'advert/:id',
+    component: AdvertViewComponent
   },
   {
     path: 'adverts',

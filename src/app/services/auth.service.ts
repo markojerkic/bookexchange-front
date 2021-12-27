@@ -50,7 +50,7 @@ export class AuthService {
 
   public refreshToken(): Observable<LoggedInUser> {
     if (!this.isAuthenticated) {
-      return throwError('Token je istekao');
+      return throwError(() => 'Token je istekao');
     }
     return this.http.get<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth/refresh/${this.userToken.refreshToken}`)
       .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));

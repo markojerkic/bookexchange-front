@@ -41,14 +41,14 @@ export class JwtInterceptor implements HttpInterceptor {
         }), catchError((err) => {
           this.notificationService.error('Vaš token je istekao');
           this.router.navigate(['/auth/login']);
-          return throwError(err);
+          return throwError(() => err);
         }));
       } else if (err.status === 403) {
         this.notificationService.warn('Nemate prava za tu akciju');
         return empty();
       }
 
-      return throwError(err);
+      return throwError(() => err);
     }));
   }
 }

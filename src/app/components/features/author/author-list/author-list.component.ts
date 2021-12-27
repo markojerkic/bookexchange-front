@@ -94,7 +94,7 @@ export class AuthorListComponent implements OnInit {
     this.authorService.deleteAuthor(selectedAuthorId).pipe(finalize(() => this.authorIsDeleting = false),
       catchError((error: Error) => {
         this.notificationService.error('Greška prilikom brisanja autora');
-        return throwError(error);
+        return throwError(() => error);
       })).subscribe(() => {
         this.loadAuthors(this.lastLazyLoadEvent!);
     });

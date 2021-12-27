@@ -21,7 +21,9 @@
         </div>
         <div class="advert-list-action">
           <span class="advert-price" *ngIf="advert.price">{{advert.price}} kn</span>
-          <p-button icon="pi pi-external-link" pTooltip="Pogledaj" [disabled]="advert.advertStatus !== 'ACTIVE'"></p-button>
+          <p-button icon="pi pi-external-link" pTooltip="Pogledaj"
+                    [disabled]="advert.advertStatus !== 'ACTIVE'"
+                    (onClick)="navigateToAdvertDetail(advert.id)"></p-button>
         </div>
       </div>
     </div>
@@ -45,7 +47,9 @@
         </div>
         <div class="advert-grid-item-bottom">
           <span class="advert-price" *ngIf="advert.price">{{advert.price}} kn</span>
-          <p-button icon="pi pi-external-link" pTooltip="Pogledaj" [disabled]="advert.advertStatus !== 'ACTIVE'"></p-button>
+          <p-button icon="pi pi-external-link" pTooltip="Pogledaj"
+                    [disabled]="advert.advertStatus !== 'ACTIVE'"
+                    (onClick)="navigateToAdvertDetail(advert.id)"></p-button>
         </div>
       </div>
     </div>

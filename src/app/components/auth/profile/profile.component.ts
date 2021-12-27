@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
     this.user$ = this.authService.getCurrentUser().pipe(finalize(() => this.userDataIsLoading = false),
       catchError((error: Error) => {
         this.notificationService.error('Greška prilikom dohvata podataka o korisniku');
-        return throwError(error);
+        return throwError(() => error);
       }));
   }
 
