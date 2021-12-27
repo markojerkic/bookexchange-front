@@ -1,0 +1,8 @@
+:host::ng-deep {
+  .p-datatable {
+    .p-datatable-thead > tr > th:nth-child(n),
+    .p-datatable-thead > tr > td:nth-child(n) {
+      white-space: normal !important;
+    }
+  }
+}

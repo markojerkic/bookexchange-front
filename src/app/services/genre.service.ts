@@ -41,4 +41,8 @@ export class GenreService {
   private saveNewGenre(genre: Genre) {
     return this.httpClient.post<Genre>(this.backendEndpoint, genre);
   }
+
+  public deleteGenre(genreId: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${genreId}`);
+  }
 }

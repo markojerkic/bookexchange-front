@@ -14,7 +14,7 @@
     </tr>
     <tr>
       <th>
-        <button pButton pTooltip="Očisti sve filtere"
+        <button pButton pTooltip="Dodaj novi žanr"
                 class="p-button-outlined" icon="pi pi-plus"
                 (click)="newGenre()"></button>
       </th>
@@ -44,7 +44,7 @@
         {{genre.description}}
       </td>
       <td>
-        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj žanr" [model]="genreActions"
+        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj žanr" [model]="(genreActions$ | async)!"
                        appendTo="body" (onClick)="router.navigate(['/genre/' + genre.id])"
                        (onDropdownClick)="selectedGenreId=genre.id"></p-splitButton>
       </td>

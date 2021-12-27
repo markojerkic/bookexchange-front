@@ -23,21 +23,12 @@
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
                placeholder="Unesite ime" class="p-column-filter" #firstName/>
-        <!--<p-columnFilter type="text" placeholder="Unesite ime" field="firstName"
-                        [showMenu]="false" [showClearButton]="false" [showApplyButton]="false"></p-columnFilter>-->
       </th>
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'lastName', 'equals')"
                placeholder="Unesite prezime" class="p-column-filter" #lastName/>
-        <!--<p-columnFilter type="text" placeholder="Unesite prezime" field="lastName"
-                        [showMenu]="false" [showClearButton]="false" [showApplyButton]="false"></p-columnFilter>-->
       </th>
       <th>
-        <!--<p-calendar view="year" dateFormat="yy"
-                    appendTo="body" [showButtonBar]="true"
-                    [maxDate]="today"
-                    (onSelect)="table.filter($event.value, 'yearOfBirth', 'equals')"
-                    placeholder="Godina rođenja"></p-calendar>-->
         <p-columnFilter matchMode="equals" field="yearOfBirth"
                         [showMenu]="false" [showClearButton]="false">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -51,11 +42,6 @@
         </p-columnFilter>
       </th>
       <th>
-        <!--<p-calendar view="year" dateFormat="yy"
-                    appendTo="body" [showButtonBar]="true"
-                    [maxDate]="today"
-                    (onSelect)="table.filter($event.value, 'yearOfDeath', 'equals')"
-                    placeholder="Godina smrti"></p-calendar>-->
         <p-columnFilter matchMode="equals" field="yearOfDeath" type="menu"
                         [showMenu]="false" [showClearButton]="false">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -94,7 +80,7 @@
         {{author.yearOfDeath | date:'yyyy.'}}
       </td>
       <td>
-        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj autora" [model]="authorActions"
+        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj autora" [model]="(authorActions$ | async)!"
                        appendTo="body" (onClick)="router.navigate(['/author/' + author.id])"
                        (onDropdownClick)="selectedAuthorId=author.id"></p-splitButton>
       </td>

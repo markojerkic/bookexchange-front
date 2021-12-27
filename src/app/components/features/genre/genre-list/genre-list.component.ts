@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Genre, Page} from "../../../../model";
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {GenreService, NotificationService} from "../../../../services";
+import {AuthService, GenreService, NotificationService} from "../../../../services";
 import {Router} from "@angular/router";
 import {HttpParams} from "@angular/common/http";
-import {finalize, map, tap} from "rxjs/operators";
+import {catchError, finalize, map, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-genre-list',
@@ -20,36 +20,47 @@ export class GenreListComponent implements OnInit {
   public currentPage: number;
   public genresLoading: boolean;
   public totalGenres: number;
-  public genreActions: MenuItem[];
+  public genreActions$: Observable<MenuItem[]>;
 
   public selectedGenreId?: number;
+  private genreIsDeleting: boolean;
+  private lastLazyLoadEvent?: LazyLoadEvent;
 
   constructor(private genreService: GenreService,
               private notificationService: NotificationService,
-              public router: Router) {
+              public router: Router,
+              authService: AuthService) {
     this.today = new Date();
     this.currentPage = 0;
     this.genresLoading = false;
     this.totalGenres = 0;
+    this.genreIsDeleting = false;
 
-    this.genreActions = [
-      {
-        label: 'Uredi žanr',
-        icon: 'pi pi-pencil',
-        command: () => {this.router.navigate([`/genre/edit/${this.selectedGenreId}`])}
-      },
-      {
-        label: 'Izbriši žanr',
-        icon: 'pi pi-trash',
-        command: () => {this.deleteGenre(this.selectedGenreId)}
-      }
-    ];
+
+    this.genreActions$ = authService.isUserAdmin$.pipe(map((isAdmin: boolean) => {
+      return [
+        {
+          label: 'Uredi žanr',
+          icon: 'pi pi-pencil',
+          disabled: !isAdmin,
+          command: () => {this.router.navigate([`/genre/edit/${this.selectedGenreId}`])}
+        },
+        {
+          label: 'Izbriši žanr',
+          icon: 'pi pi-trash',
+          disabled: !isAdmin,
+          command: () => {this.deleteGenre(this.selectedGenreId)}
+        }
+      ];
+    }));
   }
 
   ngOnInit(): void {
   }
 
   public loadGenres(event: LazyLoadEvent): void {
+    this.lastLazyLoadEvent = event;
+
     this.genresLoading = true;
     let httpParams = new HttpParams();
     httpParams = httpParams.append('page', String(event.first! / event.rows!))
@@ -79,7 +90,19 @@ export class GenreListComponent implements OnInit {
     );
   }
 
-  private deleteGenre(genreId: number | undefined) {
+  private deleteGenre(selectedGenreId: number | undefined) {
+    if (!selectedGenreId) {
+      return;
+    }
+
+    this.genreIsDeleting = true;
+    this.genreService.deleteGenre(selectedGenreId).pipe(finalize(() => this.genreIsDeleting = false),
+      catchError((error: Error) => {
+        this.notificationService.error('Greška prilikom brisanja žanra');
+        return throwError(error);
+      })).subscribe(() => {
+      this.loadGenres(this.lastLazyLoadEvent!);
+    });
 
   }
 

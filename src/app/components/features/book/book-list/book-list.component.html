@@ -16,7 +16,7 @@
     <tr>
       <th>
         <button pButton pTooltip="Nova knjiga"
-                class="p-button-outlined" icon="pi pi-plus" (onClick)="newBook()"></button>
+                class="p-button-outlined" icon="pi pi-plus" (click)="newBook()"></button>
       </th>
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'title', 'equals')"
@@ -31,10 +31,10 @@
                     [filter]="true"
                     placeholder="Odaberite autora"
                     [showClear]="true"
-                    (onChange)="table.filter($any($event.target).value, 'author', 'equals')"
+                    (onChange)="table.filter($any($event).value, 'author', 'equals')"
                     appendTo="body"
+                    optionValue="id"
                     optionLabel="displayName"
-
                     [autoDisplayFirst]="false">
         </p-dropdown>
       </th>
@@ -60,7 +60,7 @@
         {{book.bookAuthor.displayName}}
       </td>
       <td>
-        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj knjigu" [model]="bookActions"
+        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj knjigu" [model]="(bookActions$ | async)!"
                        appendTo="body" (onClick)="router.navigate(['/book/' + book.id])"
                        (onDropdownClick)="selectedBookId=book.id"></p-splitButton>
       </td>

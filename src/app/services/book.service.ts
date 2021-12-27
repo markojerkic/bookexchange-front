@@ -17,7 +17,12 @@ export class BookService {
   }
 
   public getAllBooks(): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`${this.backendEndpoint}/all`);
+    return this.httpClient.get<Book[]>(`${this.backendEndpoint}/all`).pipe(map((books: Book[]) => {
+      return books.map((book: Book) => {
+        book.displayName = `${book.title} - ${book.bookAuthor!.firstName} ${book.bookAuthor!.lastName}`;
+        return book;
+      })
+    }));
   }
 
   public getPagedBooks(pageNumber: number, httpParams: HttpParams): Observable<Page<Book>> {
@@ -48,5 +53,9 @@ export class BookService {
 
   private saveNewBook(book: Book): Observable<Book> {
     return this.httpClient.post<Book>(this.backendEndpoint, book);
+  }
+
+  public deleteBook(bookId: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${bookId}`);
   }
 }

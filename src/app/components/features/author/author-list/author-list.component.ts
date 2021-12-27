@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthorService, NotificationService} from "../../../../services";
+import {AuthorService, AuthService, NotificationService} from "../../../../services";
 import {Observable, throwError} from "rxjs";
 import {Author, Page} from "../../../../model";
 import {HttpParams} from "@angular/common/http";
@@ -20,7 +20,7 @@ export class AuthorListComponent implements OnInit {
   public currentPage: number;
   public authorsLoading: boolean;
   public totalAuthors: number;
-  public authorActions: MenuItem[];
+  public authorActions$: Observable<MenuItem[]>;
 
   public selectedAuthorId?: number;
   public authorIsDeleting: boolean;
@@ -29,25 +29,30 @@ export class AuthorListComponent implements OnInit {
 
   constructor(private authorService: AuthorService,
               private notificationService: NotificationService,
-              public router: Router) {
+              public router: Router,
+              authService: AuthService) {
     this.today = new Date();
     this.currentPage = 0;
     this.authorsLoading = false;
     this.authorIsDeleting = false;
     this.totalAuthors = 0;
 
-    this.authorActions = [
-      {
-        label: 'Uredi autora',
-        icon: 'pi pi-pencil',
-        command: () => {this.router.navigate([`/author/edit/${this.selectedAuthorId}`])}
-      },
-      {
-        label: 'Izbriši autora',
-        icon: 'pi pi-trash',
-        command: () => {this.deleteAuthor(this.selectedAuthorId)}
-      }
-    ];
+    this.authorActions$ = authService.isUserAdmin$.pipe(map((isAdmin: boolean) => {
+      return [
+        {
+          label: 'Uredi autora',
+          icon: 'pi pi-pencil',
+          disabled: !isAdmin,
+          command: () => {this.router.navigate([`/author/edit/${this.selectedAuthorId}`])}
+        },
+        {
+          label: 'Izbriši autora',
+          icon: 'pi pi-trash',
+          disabled: !isAdmin,
+          command: () => {this.deleteAuthor(this.selectedAuthorId)}
+        }
+      ];
+    }))
   }
 
   ngOnInit(): void {
@@ -64,11 +69,7 @@ export class AuthorListComponent implements OnInit {
       httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1? 'ASC': 'DESC'}`);
     }
     Object.keys(event.filters!).filter(key => event.filters![key].value).forEach(key => {
-      if (event.filters![key].value instanceof Date) {
-        httpParams = httpParams.append(key, (event.filters![key].value as Date).valueOf());
-      } else {
-        httpParams = httpParams.append(key, event.filters![key].value);
-      }
+      httpParams = httpParams.append(key, event.filters![key].value);
     });
 
     this.authors$ = this.authorService.getPagedAuthors(this.currentPage, httpParams).pipe(

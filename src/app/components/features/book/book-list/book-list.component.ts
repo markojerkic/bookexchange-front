@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {Author, Book, Page} from "../../../../model";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {AuthorService, BookService, NotificationService} from "../../../../services";
+import {AuthorService, AuthService, BookService, NotificationService} from "../../../../services";
 import {HttpParams} from "@angular/common/http";
-import {finalize, map, tap} from "rxjs/operators";
+import {catchError, finalize, map, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 
 @Component({
@@ -23,33 +23,41 @@ export class BookListComponent implements OnInit {
   public selectedBookId?: number;
 
   public authors$!: Observable<Author[]>;
-  public bookActions: MenuItem[];
+  public bookActions$: Observable<MenuItem[]>;
+  private bookIsDeleting: boolean;
+  private lastLazyLoadEvent?: LazyLoadEvent;
 
   constructor(private bookService: BookService,
               private authorService: AuthorService,
               private notificationService: NotificationService,
-              public router: Router) {
+              public router: Router,
+              authService: AuthService) {
     this.today = new Date();
     this.currentPage = 0;
     this.booksLoading = false;
     this.totalBooks = 0;
+    this.bookIsDeleting = false;
 
-    this.bookActions = [
-      {
-        label: 'Uredi knjigu',
-        icon: 'pi pi-pencil',
-        command: () => {
-          this.router.navigate([`/book/edit/${this.selectedBookId}`])
+    this.bookActions$ = authService.isUserAdmin$.pipe(map((isAdmin: boolean) => {
+      return [
+        {
+          label: 'Uredi knjigu',
+          icon: 'pi pi-pencil',
+          disabled: !isAdmin,
+          command: () => {
+            this.router.navigate([`/book/edit/${this.selectedBookId}`])
+          }
+        },
+        {
+          label: 'Izbriši knjigu',
+          icon: 'pi pi-trash',
+          disabled: !isAdmin,
+          command: () => {
+            this.deleteBook(this.selectedBookId)
+          }
         }
-      },
-      {
-        label: 'Izbriši knjigu',
-        icon: 'pi pi-trash',
-        command: () => {
-          this.deleteBook(this.selectedBookId)
-        }
-      }
-    ];
+      ];
+    }));
   }
 
   ngOnInit(): void {
@@ -57,6 +65,7 @@ export class BookListComponent implements OnInit {
   }
 
   public loadBooks(event: LazyLoadEvent): void {
+    this.lastLazyLoadEvent = event;
     this.booksLoading = true;
     let httpParams = new HttpParams().append('page', String(event.first! / event.rows!))
       .append('size', event.rows!);
@@ -86,7 +95,18 @@ export class BookListComponent implements OnInit {
   }
 
   private deleteBook(selectedBookId: number | undefined): void {
+    if (!selectedBookId) {
+      return;
+    }
 
+    this.bookIsDeleting = true;
+    this.bookService.deleteBook(selectedBookId).pipe(finalize(() => this.bookIsDeleting = false),
+      catchError((error: Error) => {
+        this.notificationService.error('Greška prilikom brisanja knjige');
+        return throwError(error);
+      })).subscribe(() => {
+      this.loadBooks(this.lastLazyLoadEvent!);
+    });
   }
 
   public newBook(): void {
