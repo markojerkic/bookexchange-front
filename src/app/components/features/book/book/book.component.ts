@@ -117,7 +117,9 @@ export class BookComponent implements OnInit {
         title: book.title,
         isbn: book.isbn,
         genres: book.genres,
-        bookAuthor: book.bookAuthor
+        bookAuthor: {
+          id: book.bookAuthor!.id
+        }
       });
     }, () => {
       this.notificationService.error(`Greška prilikom dohvata knjige ${id}`);

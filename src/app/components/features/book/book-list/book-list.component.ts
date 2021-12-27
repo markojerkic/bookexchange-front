@@ -88,4 +88,8 @@ export class BookListComponent implements OnInit {
   private deleteBook(selectedBookId: number | undefined): void {
 
   }
+
+  public newBook(): void {
+    this.router.navigate(['/book']);
+  }
 }

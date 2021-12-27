@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthorService, NotificationService} from "../../../../services";
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {Author, Page} from "../../../../model";
 import {HttpParams} from "@angular/common/http";
-import {finalize, map, tap} from "rxjs/operators";
+import {catchError, finalize, map, tap} from "rxjs/operators";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {Router} from "@angular/router";
 
@@ -23,6 +23,9 @@ export class AuthorListComponent implements OnInit {
   public authorActions: MenuItem[];
 
   public selectedAuthorId?: number;
+  public authorIsDeleting: boolean;
+
+  private lastLazyLoadEvent?: LazyLoadEvent;
 
   constructor(private authorService: AuthorService,
               private notificationService: NotificationService,
@@ -30,6 +33,7 @@ export class AuthorListComponent implements OnInit {
     this.today = new Date();
     this.currentPage = 0;
     this.authorsLoading = false;
+    this.authorIsDeleting = false;
     this.totalAuthors = 0;
 
     this.authorActions = [
@@ -50,6 +54,8 @@ export class AuthorListComponent implements OnInit {
   }
 
   public loadAuthors(event: LazyLoadEvent): void {
+    this.lastLazyLoadEvent = event;
+
     this.authorsLoading = true;
     let httpParams = new HttpParams();
     httpParams = httpParams.append('page', String(event.first! / event.rows!))
@@ -79,7 +85,21 @@ export class AuthorListComponent implements OnInit {
     );
   }
 
-  private deleteAuthor(selectedAuthorId: number | undefined) {
+  private deleteAuthor(selectedAuthorId: number | undefined): void {
+    if (!selectedAuthorId) {
+      return;
+    }
+    this.authorIsDeleting = true;
+    this.authorService.deleteAuthor(selectedAuthorId).pipe(finalize(() => this.authorIsDeleting = false),
+      catchError((error: Error) => {
+        this.notificationService.error('Greška prilikom brisanja autora');
+        return throwError(error);
+      })).subscribe(() => {
+        this.loadAuthors(this.lastLazyLoadEvent!);
+    });
+  }
 
+  public newAuthor(): void {
+    this.router.navigate(['/author']);
   }
 }

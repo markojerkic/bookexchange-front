@@ -16,9 +16,9 @@
     </tr>
     <tr>
       <th>
-        <button pButton label="Očisti" pTooltip="Očisti sve filtere"
-                class="p-button-outlined" icon="pi pi-filter-slash"
-                (click)="firstName.value=''; lastName.value=''; table.clear(); table.filter('', 'firstName', 'equals');table.filter('', 'lastName', 'equals');"></button>
+        <button pButton pTooltip="Novi autor"
+                class="p-button-outlined" icon="pi pi-plus"
+                (click)="newAuthor()"></button>
       </th>
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
@@ -87,11 +87,11 @@
       </td>
       <td>
         <span class="p-column-title">Godina rođenja</span>
-        {{author.yearOfBirth | date:'yyyy'}}
+        {{author.yearOfBirth | date:'yyyy.'}}
       </td>
       <td>
         <span class="p-column-title">Godina smrti</span>
-        {{author.yearOfDeath | date:'yyyy'}}
+        {{author.yearOfDeath | date:'yyyy.'}}
       </td>
       <td>
         <p-splitButton icon="pi pi-search" pTooltip="Pregledaj autora" [model]="authorActions"

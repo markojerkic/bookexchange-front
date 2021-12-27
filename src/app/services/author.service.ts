@@ -53,4 +53,8 @@ export class AuthorService {
     author.displayName = `${author.lastName}, ${author.firstName}`;
     return author;
   }
+
+  public deleteAuthor(id: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${id}`);
+  }
 }

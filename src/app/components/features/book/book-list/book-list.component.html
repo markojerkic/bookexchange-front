@@ -15,8 +15,8 @@
     </tr>
     <tr>
       <th>
-        <button pButton label="Očisti" pTooltip="Očisti sve filtere"
-                class="p-button-outlined" icon="pi pi-filter-slash" (click)="table.clear()"></button>
+        <button pButton pTooltip="Nova knjiga"
+                class="p-button-outlined" icon="pi pi-plus" (onClick)="newBook()"></button>
       </th>
       <th>
         <input pInputText (input)="table.filter($any($event.target).value, 'title', 'equals')"
