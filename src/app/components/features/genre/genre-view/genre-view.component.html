@@ -8,7 +8,7 @@
   </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
-    <div class="grid">
+    <div class="grid flex">
       <div class="col-12">
         <h4>Naslov</h4>
         <p>{{genre.name}}</p>
@@ -18,7 +18,7 @@
         <p>{{genre.description}}</p>
       </div>
 
-      <p-tabView class="col-12">
+      <p-tabView class="col-12" [scrollable]="true">
         <p-tabPanel header="Autori koji su pisali žanr">
           <app-author-list [genreId]="genre.id!"></app-author-list>
         </p-tabPanel>

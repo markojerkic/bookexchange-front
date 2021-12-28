@@ -10,9 +10,11 @@
     <div class="p-col-12">
       <div class="advert-list-item">
         <!--<p-image src="https://plchldr.co/i/500x250" [preview]="true" width="150" alt="Image"></p-image>-->
-        <img src="https://plchldr.co/i/500x250"/>
+        <!--<img src="https://plchldr.co/i/500x250"/>-->
+        <p-image [preview]="true" src="https://plchldr.co/i/500x250" ></p-image>
         <div class="advert-list-detail">
-          <div class="advert-name">{{advert.title}}</div>
+          <div class="advert-name" style="cursor: pointer;"
+               [routerLink]="'/advert/' + advert.id!">{{advert.title}}</div>
           <div class="advert-description">{{advert.description}}</div>
           <!--<p-rating [ngModel]="advert.rating" [readonly]="true" [cancel]="false"></p-rating>-->
           <i class="pi pi-tag advert-category-icon"></i>
@@ -38,11 +40,13 @@
             <span class="advert-category">{{advert.advertType === 'LOOKING' ? 'Tražim' : 'Nudim'}}</span>
           </div>
         </div>
-        <div class="advert-grid-item-content">
+        <div class="advert-grid-item-content flex justify-content-center grid">
           <!--<p-image src="https://plchldr.co/i/500x250" [preview]="true" [width]="gridImageWidth" alt="Image"></p-image>-->
-          <img src="https://plchldr.co/i/500x250"/>
-          <div class="advert-name">{{advert.title}}</div>
-          <div class="advert-description">{{advert.description}}</div>
+          <p-image class="col-12" [preview]="true" src="https://plchldr.co/i/500x250"></p-image>
+          <div class="info-container">
+            <div class="advert-name">{{advert.title}}</div>
+            <div class="advert-description">{{advert.description}}</div>
+          </div>
           <!--<p-rating [ngModel]="advert.rating" [readonly]="true" [cancel]="false"></p-rating>-->
         </div>
         <div class="advert-grid-item-bottom">
