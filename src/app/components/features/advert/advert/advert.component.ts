@@ -1,12 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Advert, AdvertType, Author, Book, Genre, TransactionType} from "../../../../model";
+import {Advert, AdvertType, Author, Book, Genre, Image, TransactionType} from "../../../../model";
 import {Observable, Subject, throwError} from "rxjs";
-import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
+import {
+  AdvertService,
+  AuthorService,
+  BookService,
+  GenreService,
+  ImageService,
+  NotificationService
+} from "../../../../services";
 import {catchError, finalize, takeUntil, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {DialogService} from "primeng/dynamicdialog";
 import {BookComponent} from "../../book";
+import {HttpErrorResponse} from "@angular/common/http";
+import {FileUpload} from "primeng/fileupload";
 
 @Component({
   selector: 'app-advert',
@@ -15,6 +24,9 @@ import {BookComponent} from "../../book";
   providers: [DialogService]
 })
 export class AdvertComponent implements OnInit, OnDestroy {
+
+  @ViewChild('fileUpload')
+  private fileUpload!: FileUpload;
 
   public form!: FormGroup;
   public loading: boolean;
@@ -32,7 +44,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
               private advertService: AdvertService,
               private notificationService: NotificationService,
               private router: Router,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private imageService: ImageService) {
     this.onDestroy$ = new Subject();
     this.loading = false;
 
@@ -107,4 +120,13 @@ export class AdvertComponent implements OnInit, OnDestroy {
     });
   }
 
+  public uploadImages(images: File[]): void {
+    this.imageService.uploadImages(images).pipe(catchError((error: HttpErrorResponse) => {
+      this.notificationService.error('Greška prilikom prijenosa slika');
+      return throwError(() => error);
+    })).subscribe((images: Image[]) => {
+      console.log(images);
+      this.fileUpload.clear();
+    });
+  }
 }

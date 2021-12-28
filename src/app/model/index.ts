@@ -3,7 +3,6 @@ export * from './user.model';
 export * from './login-request.model';
 export * from './genre.model';
 export * from './author.model';
-export * from './image-file-extension.enum';
 export * from './book.model';
 export * from './image.model';
 export * from './review.model';

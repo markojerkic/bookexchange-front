@@ -52,6 +52,7 @@ import {TableModule} from "primeng/table";
 import {DataViewModule} from "primeng/dataview";
 import {GalleriaModule} from "primeng/galleria";
 import {TabViewModule} from "primeng/tabview";
+import {FileUploadModule} from "primeng/fileupload";
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import {TabViewModule} from "primeng/tabview";
     TableModule,
     DataViewModule,
     GalleriaModule,
-    TabViewModule
+    TabViewModule,
+    FileUploadModule
   ],
   providers: [
     MessageService,

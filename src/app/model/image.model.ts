@@ -1,4 +1,4 @@
-import {ImageFileExtension} from "./image-file-extension.enum";
+import {ImageFileExtension} from "./enum";
 
 export interface Image {
   uuid?: string;

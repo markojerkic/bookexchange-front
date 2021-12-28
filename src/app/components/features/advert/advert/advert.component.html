@@ -71,6 +71,15 @@
         </span>
       </div>
 
+      <p-fileUpload #fileUpload (uploadHandler)="uploadImages($event)" [customUpload]="true"
+                    [maxFileSize]="2000000" [multiple]="true" accept="image/*"
+                    cancelLabel="Otkaži"
+                    chooseLabel="Odaberi"
+                    class="col-12"
+                    invalidFileSizeMessageDetail="maksimalna dozvoljena veličina {0}." invalidFileSizeMessageSummary="{0}: Prevelika datoteka, "
+                    name="images[]"
+                    uploadLabel="Prenesi"></p-fileUpload>
+
     </form>
 
     <ng-template pTemplate="footer">

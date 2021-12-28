@@ -3,7 +3,6 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Genre, Page} from "../model";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
-import {AuthorService, BookService} from '.';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +11,7 @@ export class GenreService {
 
   private readonly backendEndpoint: string;
 
-  constructor(private httpClient: HttpClient,
-              private bookService: BookService,
-              private authorService: AuthorService) {
+  constructor(private httpClient: HttpClient) {
     this.backendEndpoint = `${environment.BACKEND_ENDPOINT}/genre`;
   }
 
