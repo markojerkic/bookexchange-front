@@ -19,25 +19,14 @@
       </div>
 
       <p-tabView class="col-12">
-        <p-tabPanel header="Autori koji su pisali žanr"><!--
-          <h4 class="col-12">Autori koji su pisali</h4>
-          <div class="col-12"
-               *ngFor="let author of (authors$ | async)!">
-            <p style="cursor: pointer;" class="underline link-text"
-               pTooltip="Pogledajte autora"
-               [routerLink]="'/author/' + author.id">{{author.displayName}}</p>
-          </div>-->
+        <p-tabPanel header="Autori koji su pisali žanr">
           <app-author-list [genreId]="genre.id!"></app-author-list>
         </p-tabPanel>
         <p-tabPanel header="Knjige koje su pisane u žanru">
-          <!--<h4 class="col-12">Knjige</h4>
-          <div class="col-12"
-               *ngFor="let book of (books$ | async)!">
-            <p style="cursor: pointer;" class="underline link-text"
-               pTooltip="Pogledajte autora"
-               [routerLink]="'/book/' + book.id">{{book.displayName}}</p>
-          </div>-->
           <app-book-list [genreId]="genre.id!"></app-book-list>
+        </p-tabPanel>
+        <p-tabPanel header="Oglasi koji sadrže knjige u žanru">
+          <app-advert-list [genreId]="genre.id!"></app-advert-list>
         </p-tabPanel>
       </p-tabView>
 

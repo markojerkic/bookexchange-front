@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {Advert, AdvertType, Author, Book, Genre, Page, TransactionType} from "../../../../model";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
@@ -12,6 +12,9 @@ import {HttpParams} from "@angular/common/http";
   styleUrls: ['./advert-list.component.scss']
 })
 export class AdvertListComponent implements OnInit {
+
+  @Input()
+  public genreId?: number;
 
   public adverts$!: Observable<Advert[]>;
   public currentPage: number;
@@ -71,7 +74,12 @@ export class AdvertListComponent implements OnInit {
     this.books$ = this.bookService.getAllBooks();
     this.genres$ = this.genreService.getAllGenres();
 
-    this.loadAdvertPage({page: this.currentPage, rows: 10});
+    if (this.genreId) {
+      this.queryForm.patchValue({genreId: this.genreId});
+      this.submitQuery();
+    } else {
+      this.loadAdvertPage({page: this.currentPage, rows: 10});
+    }
   }
 
   public loadAdvertPage(pageRequest: { page: number, rows: number }, httpParams?: HttpParams): void {

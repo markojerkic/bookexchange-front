@@ -4,7 +4,7 @@
   <ng-template pTemplate="subtitle">
     <p-button (onClick)="editAuthor(author.id!)" *ngIf="(authService.isUserAdmin$ | async)"
               icon="pi pi-pencil"
-              label="Uredi knjigu"></p-button>
+              label="Uredi autora"></p-button>
   </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">

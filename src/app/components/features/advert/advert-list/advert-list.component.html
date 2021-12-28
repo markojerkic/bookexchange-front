@@ -47,8 +47,9 @@
           <span class="p-float-label">
               <p-dropdown [autoDisplayFirst]="false"
                           [filter]="true"
+                          [readonly]="!!genreId"
                           [options]="(genres$ | async)!"
-                          [showClear]="true"
+                          [showClear]="!genreId"
                           formControlName="genreId"
                           id="genre"
                           optionLabel="name"
