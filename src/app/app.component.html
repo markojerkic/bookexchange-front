@@ -1,7 +1,8 @@
 <p-toast></p-toast>
 <p-menubar [model]="(menuItems$ | async)!">
   <ng-template pTemplate="start">
-    <h3 style="cursor: pointer" routerLink="/">Posudba knjiga</h3>
+    <h3 style="cursor: pointer" routerLink="/"
+        role="link" routerLinkActive="active" pRipple>Posudba knjiga</h3>
   </ng-template>
   <ng-template pTemplate="end" >
     <div *ngIf="(isAuthenticated$ | async)!">

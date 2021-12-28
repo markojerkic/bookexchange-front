@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {MenuItem} from "primeng/api";
+import {MenuItem, PrimeNGConfig} from "primeng/api";
 import {Observable} from 'rxjs';
 import {LoggedInUser} from './model';
 import {AuthService} from './services';
@@ -21,10 +21,13 @@ export class AppComponent implements OnInit {
   public isAuthenticated$!: Observable<boolean>;
 
   constructor(private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private primengConfig: PrimeNGConfig) {
   }
 
   ngOnInit(): void {
+
+    this.primengConfig.ripple = true;
 
     this.menuItems$ = this.authService.isUserAdmin$.pipe(map((isUserAdmin: boolean) => {
       return [

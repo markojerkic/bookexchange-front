@@ -3,6 +3,8 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Advert, Page} from "../model";
 import {Observable} from "rxjs";
+import {AuthorService} from "./author.service";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ import {Observable} from "rxjs";
 export class AdvertService {
   private readonly backendEndpoint: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private authorService: AuthorService) {
     this.backendEndpoint = `${environment.BACKEND_ENDPOINT}/advert`;
   }
 
@@ -28,6 +31,9 @@ export class AdvertService {
   }
 
   public getAdvertById(id: number): Observable<Advert> {
-    return this.httpClient.get<Advert>(`${this.backendEndpoint}/${id}`);
+    return this.httpClient.get<Advert>(`${this.backendEndpoint}/${id}`).pipe(map((advert: Advert) => {
+      advert.advertisedBook!.bookAuthor = this.authorService.mapAuthor(advert.advertisedBook!.bookAuthor!);
+      return advert;
+    }));
   }
 }

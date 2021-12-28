@@ -4,6 +4,7 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Book, Page} from "../model";
 import {map} from "rxjs/operators";
+import {AuthorService, AuthService} from '.';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class BookService {
 
   private readonly backendEndpoint: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private authorService: AuthorService) {
     this.backendEndpoint = `${environment.BACKEND_ENDPOINT}/book`;
   }
 
@@ -20,6 +22,7 @@ export class BookService {
     return this.httpClient.get<Book[]>(`${this.backendEndpoint}/all`).pipe(map((books: Book[]) => {
       return books.map((book: Book) => {
         book.displayName = `${book.title} - ${book.bookAuthor!.firstName} ${book.bookAuthor!.lastName}`;
+        book.bookAuthor = this.authorService.mapAuthor(book.bookAuthor!);
         return book;
       })
     }));
@@ -44,7 +47,10 @@ export class BookService {
   }
 
   public getBookById(id: number): Observable<Book> {
-    return this.httpClient.get<Book>(`${this.backendEndpoint}/${id}`);
+    return this.httpClient.get<Book>(`${this.backendEndpoint}/${id}`).pipe(map((book: Book) => {
+      book.bookAuthor = this.authorService.mapAuthor(book.bookAuthor!);
+      return book;
+    }));
   }
 
   private updateBook(book: any, id: number): Observable<Book> {

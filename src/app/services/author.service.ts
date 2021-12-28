@@ -45,7 +45,7 @@ export class AuthorService {
     return this.httpClient.get<Author>(`${this.backendEndpoint}/${id}`).pipe(map(this.mapAuthor));
   }
 
-  private mapAuthor(author: Author): Author {
+  public mapAuthor(author: Author): Author {
     author.yearOfBirth = new Date(author.yearOfBirth);
     if (author.yearOfDeath) {
       author.yearOfDeath = new Date(author.yearOfDeath);
