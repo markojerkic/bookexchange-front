@@ -3,7 +3,7 @@ import {Observable, throwError} from "rxjs";
 import {Author, Book, Genre} from "../../../../model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AuthorService, AuthService, BookService, GenreService, NotificationService} from "../../../../services";
-import {catchError, finalize, tap} from "rxjs/operators";
+import {catchError, finalize} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
@@ -55,9 +55,6 @@ export class GenreViewComponent implements OnInit {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }), tap((genre: Genre) => {
-        this.books$ = this.bookService.getAllByGenreId(genre.id!).pipe(tap(() => this.booksLoaded = true));
-        this.authors$ = this.authorService.getAllByGenreId(genre.id!).pipe(tap(() => this.authorsLoaded = true));
       }));
   }
 }
