@@ -1,9 +1,11 @@
 <p-card [header]="genre.name"
         *ngIf="(genre$ | async)! as genre"
         class="grid flex justify-content-center">
-  <!--<ng-template pTemplate="subtitle">
-    <h3>Objavio korisnik <span class="font-bold font-italic">{{genre.!.username}}</span></h3>
-  </ng-template>-->
+  <ng-template pTemplate="subtitle">
+    <p-button label="Uredite žanr" icon="pi pi-pencil"
+              *ngIf="(authService.isUserAdmin$ | async)"
+              (onClick)="editGenre(genre.id!)"></p-button>
+  </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
     <div class="grid">

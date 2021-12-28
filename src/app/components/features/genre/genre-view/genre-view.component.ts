@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, throwError} from "rxjs";
 import {Author, Book, Genre} from "../../../../model";
-import {ActivatedRoute, Params} from "@angular/router";
-import {AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {AuthorService, AuthService, BookService, GenreService, NotificationService} from "../../../../services";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -26,7 +26,9 @@ export class GenreViewComponent implements OnInit {
               private genreService: GenreService,
               private authorService: AuthorService,
               private bookService: BookService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              public authService: AuthService,
+              private router: Router) {
     this.loading = false;
     this.booksLoaded = false;
     this.authorsLoaded = false;
@@ -54,5 +56,9 @@ export class GenreViewComponent implements OnInit {
         this.books$ = this.bookService.getAllByGenreId(genre.id!).pipe(tap(() => this.booksLoaded = true));
         this.authors$ = this.authorService.getAllByGenreId(genre.id!).pipe(tap(() => this.authorsLoaded = true));
       }));
+  }
+
+  public editGenre(genreId: number): void {
+    this.router.navigate([`/genre/edit/${genreId}`]);
   }
 }

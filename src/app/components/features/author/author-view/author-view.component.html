@@ -1,1 +1,51 @@
-<p>author-view works!</p>
+<p-card [header]="author.displayName"
+        *ngIf="(author$ | async)! as author"
+        class="grid flex justify-content-center">
+  <ng-template pTemplate="subtitle">
+    <p-button label="Uredi knjigu" icon="pi pi-pencil"
+              (onClick)="editAuthor(author.id!)"
+              *ngIf="(authService.isUserAdmin$ | async)"></p-button>
+  </ng-template>
+  <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+  <ng-template pTemplate="content">
+    <p-galleria [value]="images" [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{'max-width': '90vw'}" [numVisible]="5">
+      <ng-template pTemplate="item" let-item>
+        <img [src]="item" style="width: 100%;"/>
+      </ng-template>
+      <ng-template pTemplate="thumbnail" let-item>
+        <div class="grid p-nogutter flex justify-content-center">
+          <img [src]="item" style="display: block; height: 100px;"/>
+        </div>
+      </ng-template>
+    </p-galleria>
+
+    <div class="grid">
+      <div class="col-6">
+        <h4>Ime</h4>
+        <p>{{author.firstName}}</p>
+      </div>
+      <div class="col-6">
+        <h4>Prezime</h4>
+        <p>{{author.lastName}}</p>
+      </div>
+      <div class="col-6">
+        <h4>Godina rođenja</h4>
+        <p>{{author.yearOfBirth | date:'yyyy.'}}</p>
+      </div>
+      <div class="col-6">
+        <h4>Godina smrti</h4>
+        <p>{{author.yearOfDeath? (author.yearOfDeath | date:'yyyy.'): 'Još živ/a'}}</p>
+      </div>
+      <div class="col-6" *ngIf="author.authorsGenres.length > 0">
+        <h4>Pisao/la žanrove</h4>
+        <p style="cursor: pointer;"
+           *ngFor="let genre of author.authorsGenres">
+          <span class="underline link-text"
+                pTooltip="Pogledajte žanr"
+                [routerLink]="'/genre/' + genre.id">{{genre.name}}</span>; </p>
+      </div>
+
+    </div>
+  </ng-template>
+</p-card>

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, throwError} from "rxjs";
 import {Book} from "../../../../model";
-import {ActivatedRoute, Params} from "@angular/router";
-import {BookService, NotificationService} from "../../../../services";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {AuthService, BookService, NotificationService} from "../../../../services";
 import {catchError, finalize} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -39,7 +39,9 @@ export class BookViewComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private bookService: BookService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              public authService: AuthService,
+              private router: Router) {
     this.loading = false;
   }
 
@@ -62,5 +64,9 @@ export class BookViewComponent implements OnInit {
         }
         return throwError(() => error);
       }));
+  }
+
+  public editBook(bookId: number): void {
+    this.router.navigate([`/book/edit/${bookId}`]);
   }
 }
