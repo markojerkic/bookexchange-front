@@ -1,1 +1,39 @@
-<p>genre-view works!</p>
+<p-card [header]="genre.name"
+        *ngIf="(genre$ | async)! as genre"
+        class="grid flex justify-content-center">
+  <!--<ng-template pTemplate="subtitle">
+    <h3>Objavio korisnik <span class="font-bold font-italic">{{genre.!.username}}</span></h3>
+  </ng-template>-->
+  <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+  <ng-template pTemplate="content">
+    <div class="grid">
+      <div class="col-12">
+        <h4>Naslov</h4>
+        <p>{{genre.name}}</p>
+      </div>
+      <div class="col-12" *ngIf="genre.description">
+        <h4>Opis</h4>
+        <p>{{genre.description}}</p>
+      </div>
+      <div class="col-6 grid" *ngIf="authorsLoaded">
+        <h4 class="col-12">Autori koji su pisali</h4>
+        <div class="col-12"
+             *ngFor="let author of (authors$ | async)!">
+          <p style="cursor: pointer;" class="underline link-text"
+             pTooltip="Pogledajte autora"
+             [routerLink]="'/author/' + author.id">{{author.displayName}}</p>
+        </div>
+      </div>
+      <div class="col-6 grid" *ngIf="booksLoaded">
+        <h4 class="col-12">Knjige</h4>
+        <div class="col-12"
+             *ngFor="let book of (books$ | async)!">
+          <p style="cursor: pointer;" class="underline link-text"
+             pTooltip="Pogledajte autora"
+             [routerLink]="'/book/' + book.id">{{book.displayName}}</p>
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
+</p-card>

@@ -57,4 +57,8 @@ export class AuthorService {
   public deleteAuthor(id: number): Observable<Object> {
     return this.httpClient.delete(`${this.backendEndpoint}/${id}`);
   }
+
+  public getAllByGenreId(genreId: number): Observable<Author[]> {
+    return this.httpClient.get<Author[]>(`${this.backendEndpoint}/by-genre/${genreId}`);
+  }
 }

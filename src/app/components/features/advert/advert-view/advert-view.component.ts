@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {Observable, tap, throwError} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {Advert} from "../../../../model";
 import {AdvertService, NotificationService} from "../../../../services";
 import {catchError, finalize} from "rxjs/operators";
