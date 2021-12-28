@@ -15,7 +15,8 @@ export class ProfileComponent implements OnInit {
   public userDataIsLoading!: boolean;
 
   constructor(private authService: AuthService,
-              private notificationService: NotificationService) { }
+              private notificationService: NotificationService) {
+  }
 
   ngOnInit(): void {
     this.userDataIsLoading = true;

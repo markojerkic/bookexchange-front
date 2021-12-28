@@ -1,47 +1,51 @@
-<p-table [value]="(books$ | async)!" [lazy]="true"
-         (onLazyLoad)="loadBooks($event)" dataKey="id"
-         [paginator]="true" [rows]="10" [totalRecords]="totalBooks" [loading]="booksLoading"
-         [rowsPerPageOptions]="[2, 10, 20]" styleClass="p-datatable-striped"
-         [resizableColumns]="true" [responsive]="true"
-         [globalFilterFields]="['title','isbn']" #table>
+<p-table #table (onLazyLoad)="loadBooks($event)"
+         [globalFilterFields]="['title','isbn']" [lazy]="true"
+         [loading]="booksLoading" [paginator]="true" [resizableColumns]="true" [responsive]="true"
+         [rowsPerPageOptions]="[2, 10, 20]" [rows]="10"
+         [totalRecords]="totalBooks" [value]="(books$ | async)!"
+         dataKey="id" styleClass="p-datatable-striped">
 
   <ng-template pTemplate="header">
     <tr>
       <th pResizableColumn>Id</th>
-      <th pResizableColumn pSortableColumn="title">Naslov <p-sortIcon field="title"></p-sortIcon></th>
-      <th pResizableColumn pSortableColumn="isbn">ISBN <p-sortIcon field="isbn"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="title">Naslov
+        <p-sortIcon field="title"></p-sortIcon>
+      </th>
+      <th pResizableColumn pSortableColumn="isbn">ISBN
+        <p-sortIcon field="isbn"></p-sortIcon>
+      </th>
       <th>Autor</th>
       <th style="width:8rem"></th>
     </tr>
     <tr>
       <th>
-        <button pButton pTooltip="Nova knjiga"
-                class="p-button-outlined" icon="pi pi-plus" (click)="newBook()"></button>
+        <button (click)="newBook()" class="p-button-outlined"
+                icon="pi pi-plus" pButton pTooltip="Nova knjiga"></button>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'title', 'equals')"
-               placeholder="Unesite naslov" class="p-column-filter" />
+        <input (input)="table.filter($any($event.target).value, 'title', 'equals')" class="p-column-filter"
+               pInputText placeholder="Unesite naslov"/>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'isbn', 'equals')"
-               placeholder="Unesite ISBN" class="p-column-filter" />
+        <input (input)="table.filter($any($event.target).value, 'isbn', 'equals')" class="p-column-filter"
+               pInputText placeholder="Unesite ISBN"/>
       </th>
       <th>
-        <p-dropdown [options]="(authors$ | async)!"
+        <p-dropdown (onChange)="table.filter($any($event).value, 'author', 'equals')"
+                    [autoDisplayFirst]="false"
                     [filter]="true"
-                    placeholder="Odaberite autora"
+                    [options]="(authors$ | async)!"
                     [showClear]="true"
-                    (onChange)="table.filter($any($event).value, 'author', 'equals')"
                     appendTo="body"
-                    optionValue="id"
                     optionLabel="displayName"
-                    [autoDisplayFirst]="false">
+                    optionValue="id"
+                    placeholder="Odaberite autora">
         </p-dropdown>
       </th>
       <th style="width:4rem"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-book>
+  <ng-template let-book pTemplate="body">
     <tr>
       <td>
         <span class="p-column-title">Id</span>
@@ -60,9 +64,9 @@
         {{book.bookAuthor.displayName}}
       </td>
       <td>
-        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj knjigu" [model]="(bookActions$ | async)!"
-                       appendTo="body" (onClick)="router.navigate(['/book/' + book.id])"
-                       (onDropdownClick)="selectedBookId=book.id"></p-splitButton>
+        <p-splitButton (onClick)="router.navigate(['/book/' + book.id])" (onDropdownClick)="selectedBookId=book.id" [model]="(bookActions$ | async)!"
+                       appendTo="body" icon="pi pi-search"
+                       pTooltip="Pregledaj knjigu"></p-splitButton>
       </td>
     </tr>
   </ng-template>

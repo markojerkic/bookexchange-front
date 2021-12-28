@@ -43,13 +43,17 @@ export class GenreListComponent implements OnInit {
           label: 'Uredi žanr',
           icon: 'pi pi-pencil',
           disabled: !isAdmin,
-          command: () => {this.router.navigate([`/genre/edit/${this.selectedGenreId}`])}
+          command: () => {
+            this.router.navigate([`/genre/edit/${this.selectedGenreId}`])
+          }
         },
         {
           label: 'Izbriši žanr',
           icon: 'pi pi-trash',
           disabled: !isAdmin,
-          command: () => {this.deleteGenre(this.selectedGenreId)}
+          command: () => {
+            this.deleteGenre(this.selectedGenreId)
+          }
         }
       ];
     }));
@@ -66,7 +70,7 @@ export class GenreListComponent implements OnInit {
     httpParams = httpParams.append('page', String(event.first! / event.rows!))
       .append('size', event.rows!);
     if (event.sortField) {
-      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1? 'ASC': 'DESC'}`);
+      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1 ? 'ASC' : 'DESC'}`);
     }
     Object.keys(event.filters!).filter(key => event.filters![key].value).forEach(key => {
       if (event.filters![key].value instanceof Date) {
@@ -90,6 +94,10 @@ export class GenreListComponent implements OnInit {
     );
   }
 
+  public newGenre(): void {
+    this.router.navigate(['/genre']);
+  }
+
   private deleteGenre(selectedGenreId: number | undefined) {
     if (!selectedGenreId) {
       return;
@@ -104,9 +112,5 @@ export class GenreListComponent implements OnInit {
       this.loadGenres(this.lastLazyLoadEvent!);
     });
 
-  }
-
-  public newGenre(): void {
-    this.router.navigate(['/genre']);
   }
 }

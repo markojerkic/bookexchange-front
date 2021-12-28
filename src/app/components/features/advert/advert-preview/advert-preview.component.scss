@@ -1,6 +1,6 @@
 :host ::ng-deep {
 
-  .p-dataview.p-dataview-list .p-dataview-content>.p-grid>div {
+  .p-dataview.p-dataview-list .p-dataview-content > .p-grid > div {
     width: 100%;
   }
 
@@ -98,7 +98,6 @@
     }
   }
 }
-
 
 
 @media screen and (max-width: 576px) {

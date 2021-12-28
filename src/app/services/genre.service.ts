@@ -4,7 +4,6 @@ import {Genre, Page} from "../model";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {AuthorService, BookService} from '.';
-import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -38,15 +37,15 @@ export class GenreService {
     return this.httpClient.get<Genre>(`${this.backendEndpoint}/${id}`);
   }
 
+  public deleteGenre(genreId: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${genreId}`);
+  }
+
   private updateGenre(genre: any, id: number) {
-    return this.httpClient.patch<Genre>(`${this.httpClient}/${id}`, genre);
+    return this.httpClient.patch<Genre>(`${this.backendEndpoint}/${id}`, genre);
   }
 
   private saveNewGenre(genre: Genre) {
     return this.httpClient.post<Genre>(this.backendEndpoint, genre);
-  }
-
-  public deleteGenre(genreId: number): Observable<Object> {
-    return this.httpClient.delete(`${this.backendEndpoint}/${genreId}`);
   }
 }

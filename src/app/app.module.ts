@@ -51,6 +51,7 @@ import {CalendarModule} from "primeng/calendar";
 import {TableModule} from "primeng/table";
 import {DataViewModule} from "primeng/dataview";
 import {GalleriaModule} from "primeng/galleria";
+import {TabViewModule} from "primeng/tabview";
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import {GalleriaModule} from "primeng/galleria";
     CalendarModule,
     TableModule,
     DataViewModule,
-    GalleriaModule
+    GalleriaModule,
+    TabViewModule
   ],
   providers: [
     MessageService,

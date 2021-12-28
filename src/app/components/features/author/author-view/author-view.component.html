@@ -1,19 +1,19 @@
-<p-card [header]="author.displayName"
-        *ngIf="(author$ | async)! as author"
+<p-card *ngIf="(author$ | async)! as author"
+        [header]="author.displayName"
         class="grid flex justify-content-center">
   <ng-template pTemplate="subtitle">
-    <p-button label="Uredi knjigu" icon="pi pi-pencil"
-              (onClick)="editAuthor(author.id!)"
-              *ngIf="(authService.isUserAdmin$ | async)"></p-button>
+    <p-button (onClick)="editAuthor(author.id!)" *ngIf="(authService.isUserAdmin$ | async)"
+              icon="pi pi-pencil"
+              label="Uredi knjigu"></p-button>
   </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
-    <p-galleria [value]="images" [responsiveOptions]="responsiveOptions"
-                [containerStyle]="{'max-width': '90vw'}" [numVisible]="5">
-      <ng-template pTemplate="item" let-item>
+    <p-galleria [containerStyle]="{'max-width': '90vw'}" [numVisible]="5"
+                [responsiveOptions]="responsiveOptions" [value]="images">
+      <ng-template let-item pTemplate="item">
         <img [src]="item" style="width: 100%;"/>
       </ng-template>
-      <ng-template pTemplate="thumbnail" let-item>
+      <ng-template let-item pTemplate="thumbnail">
         <div class="grid p-nogutter flex justify-content-center">
           <img [src]="item" style="display: block; height: 100px;"/>
         </div>
@@ -35,15 +35,15 @@
       </div>
       <div class="col-6">
         <h4>Godina smrti</h4>
-        <p>{{author.yearOfDeath? (author.yearOfDeath | date:'yyyy.'): 'Još živ/a'}}</p>
+        <p>{{author.yearOfDeath ? (author.yearOfDeath | date:'yyyy.') : 'Još živ/a'}}</p>
       </div>
-      <div class="col-6" *ngIf="author.authorsGenres.length > 0">
+      <div *ngIf="author.authorsGenres.length > 0" class="col-6">
         <h4>Pisao/la žanrove</h4>
-        <p style="cursor: pointer;"
-           *ngFor="let genre of author.authorsGenres">
-          <span class="underline link-text"
-                pTooltip="Pogledajte žanr"
-                [routerLink]="'/genre/' + genre.id">{{genre.name}}</span>; </p>
+        <p *ngFor="let genre of author.authorsGenres"
+           style="cursor: pointer;">
+          <span [routerLink]="'/genre/' + genre.id"
+                class="underline link-text"
+                pTooltip="Pogledajte žanr">{{genre.name}}</span>; </p>
       </div>
 
     </div>

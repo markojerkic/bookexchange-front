@@ -2,10 +2,11 @@
   input .p-dropdown-filter {
     width: 100%;
   }
+
   .p-inputgroup .p-inputtext,
   .p-fluid .p-inputgroup .p-inputtext,
   .p-inputgroup .p-inputwrapper,
-  .p-inputgroup .p-inputwrapper>.p-component {
+  .p-inputgroup .p-inputwrapper > .p-component {
     width: 100%;
   }
 }

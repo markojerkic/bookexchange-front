@@ -1,55 +1,63 @@
-<p-table [value]="(authors$ | async)!" [lazy]="true"
-         (onLazyLoad)="loadAuthors($event)" dataKey="id"
-         [paginator]="true" [rows]="10" [totalRecords]="totalAuthors" [loading]="authorsLoading"
-         [rowsPerPageOptions]="[2, 10, 20]" styleClass="p-datatable-striped"
-         [resizableColumns]="true" [responsive]="true"
-         [globalFilterFields]="['firstName','lastName', 'yearOfBirth', 'yearOfDeath']" #table>
+<p-table #table (onLazyLoad)="loadAuthors($event)"
+         [globalFilterFields]="['firstName','lastName', 'yearOfBirth', 'yearOfDeath']" [lazy]="true"
+         [loading]="authorsLoading" [paginator]="true" [resizableColumns]="true" [responsive]="true"
+         [rowsPerPageOptions]="[2, 10, 20]" [rows]="10"
+         [totalRecords]="totalAuthors" [value]="(authors$ | async)!"
+         dataKey="id" styleClass="p-datatable-striped">
 
   <ng-template pTemplate="header">
     <tr>
       <th pResizableColumn>Id</th>
-      <th pResizableColumn pSortableColumn="firstName">Ime <p-sortIcon field="firstName"></p-sortIcon></th>
-      <th pResizableColumn pSortableColumn="lastName">Prezime <p-sortIcon field="lastName"></p-sortIcon></th>
-      <th pResizableColumn pSortableColumn="yearOfBirth">Godina rođenja <p-sortIcon field="yearOfBirth"></p-sortIcon></th>
-      <th pResizableColumn pSortableColumn="yearOfDeath">Godina smrti <p-sortIcon field="yearOfDeath"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="firstName">Ime
+        <p-sortIcon field="firstName"></p-sortIcon>
+      </th>
+      <th pResizableColumn pSortableColumn="lastName">Prezime
+        <p-sortIcon field="lastName"></p-sortIcon>
+      </th>
+      <th pResizableColumn pSortableColumn="yearOfBirth">Godina rođenja
+        <p-sortIcon field="yearOfBirth"></p-sortIcon>
+      </th>
+      <th pResizableColumn pSortableColumn="yearOfDeath">Godina smrti
+        <p-sortIcon field="yearOfDeath"></p-sortIcon>
+      </th>
       <th style="width:8rem"></th>
     </tr>
     <tr>
       <th>
-        <button pButton pTooltip="Novi autor"
-                class="p-button-outlined" icon="pi pi-plus"
-                (click)="newAuthor()"></button>
+        <button (click)="newAuthor()" class="p-button-outlined"
+                icon="pi pi-plus" pButton
+                pTooltip="Novi autor"></button>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
-               placeholder="Unesite ime" class="p-column-filter" #firstName/>
+        <input #firstName (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
+               class="p-column-filter" pInputText placeholder="Unesite ime"/>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'lastName', 'equals')"
-               placeholder="Unesite prezime" class="p-column-filter" #lastName/>
+        <input #lastName (input)="table.filter($any($event.target).value, 'lastName', 'equals')"
+               class="p-column-filter" pInputText placeholder="Unesite prezime"/>
       </th>
       <th>
-        <p-columnFilter matchMode="equals" field="yearOfBirth"
-                        [showMenu]="false" [showClearButton]="false">
-          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <p-calendar [ngModel]="value" view="year" dateFormat="yy"
-                        appendTo="body" [showButtonBar]="true"
-                        [maxDate]="today"
-                        (onClearClick)="filter($event.value)"
-                        (onSelect)="filter($event)" placeholder="Godina rođenja">
+        <p-columnFilter [showClearButton]="false" [showMenu]="false"
+                        field="yearOfBirth" matchMode="equals">
+          <ng-template let-filter="filterCallback" let-value pTemplate="filter">
+            <p-calendar (onClearClick)="filter($event.value)" (onSelect)="filter($event)" [maxDate]="today"
+                        [ngModel]="value" [showButtonBar]="true"
+                        appendTo="body"
+                        dateFormat="yy"
+                        placeholder="Godina rođenja" view="year">
             </p-calendar>
           </ng-template>
         </p-columnFilter>
       </th>
       <th>
-        <p-columnFilter matchMode="equals" field="yearOfDeath" type="menu"
-                        [showMenu]="false" [showClearButton]="false">
-          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <p-calendar [ngModel]="value" view="year" dateFormat="yy"
-                        appendTo="body" [showButtonBar]="true"
-                        [maxDate]="today"
-                        (onClearClick)="filter($event.value)"
-                        (onSelect)="filter($event)" placeholder="Godina smrti">
+        <p-columnFilter [showClearButton]="false" [showMenu]="false" field="yearOfDeath"
+                        matchMode="equals" type="menu">
+          <ng-template let-filter="filterCallback" let-value pTemplate="filter">
+            <p-calendar (onClearClick)="filter($event.value)" (onSelect)="filter($event)" [maxDate]="today"
+                        [ngModel]="value" [showButtonBar]="true"
+                        appendTo="body"
+                        dateFormat="yy"
+                        placeholder="Godina smrti" view="year">
             </p-calendar>
           </ng-template>
         </p-columnFilter>
@@ -57,7 +65,7 @@
       <th style="width:4rem"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-author>
+  <ng-template let-author pTemplate="body">
     <tr>
       <td>
         <span class="p-column-title">Id</span>
@@ -80,9 +88,9 @@
         {{author.yearOfDeath | date:'yyyy.'}}
       </td>
       <td>
-        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj autora" [model]="(authorActions$ | async)!"
-                       appendTo="body" (onClick)="router.navigate(['/author/' + author.id])"
-                       (onDropdownClick)="selectedAuthorId=author.id"></p-splitButton>
+        <p-splitButton (onClick)="router.navigate(['/author/' + author.id])" (onDropdownClick)="selectedAuthorId=author.id" [model]="(authorActions$ | async)!"
+                       appendTo="body" icon="pi pi-search"
+                       pTooltip="Pregledaj autora"></p-splitButton>
       </td>
     </tr>
   </ng-template>

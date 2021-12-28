@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable, throwError} from "rxjs";
 import {Author, Book, Page} from "../../../../model";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
@@ -13,6 +13,10 @@ import {Router} from "@angular/router";
   styleUrls: ['./book-list.component.scss']
 })
 export class BookListComponent implements OnInit {
+
+  @Input()
+  public genreId?: number;
+
   public today: Date;
 
   public books$!: Observable<Book[]>;
@@ -80,6 +84,10 @@ export class BookListComponent implements OnInit {
       }
     });
 
+    if (this.genreId) {
+      httpParams = httpParams.append('genre', this.genreId);
+    }
+
     this.books$ = this.bookService.getPagedBooks(this.currentPage, httpParams).pipe(
       finalize(() => this.booksLoading = false),
       tap((page: Page<Book>) => {
@@ -92,6 +100,10 @@ export class BookListComponent implements OnInit {
       }),
       map((page: Page<Book>) => page.content)
     );
+  }
+
+  public newBook(): void {
+    this.router.navigate(['/book']);
   }
 
   private deleteBook(selectedBookId: number | undefined): void {
@@ -107,9 +119,5 @@ export class BookListComponent implements OnInit {
       })).subscribe(() => {
       this.loadBooks(this.lastLazyLoadEvent!);
     });
-  }
-
-  public newBook(): void {
-    this.router.navigate(['/book']);
   }
 }

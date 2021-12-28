@@ -1,10 +1,10 @@
 <div class="grid flex justify-content-center p-m-4">
   <p-card header="Napravite novi oglas">
-    <form class="p-fluid grid flex" [formGroup]="form">
+    <form [formGroup]="form" class="p-fluid grid flex">
       <!-- Naslov oglasa -->
       <div class="p-field col-12">
         <span class="p-float-label">
-            <input type="text" id="title" pInputText formControlName="title">
+            <input formControlName="title" id="title" pInputText type="text">
             <label for="title">Naslov oglasa *</label>
         </span>
       </div>
@@ -12,7 +12,7 @@
       <!-- Opis oglasa -->
       <div class="p-field col-12">
         <span class="p-float-label">
-            <textarea id="description" rows="3" formControlName="description" pInputTextarea></textarea>
+            <textarea formControlName="description" id="description" pInputTextarea rows="3"></textarea>
             <label for="description">Opis oglasa *</label>
         </span>
       </div>
@@ -21,17 +21,17 @@
       <div class=" col-12 lg:col-6">
         <div class="p-field p-inputgroup" formGroupName="advertisedBook">
           <span>
-            <p-button icon="pi pi-plus" (onClick)="openNewBookDialog()" pTooltip="Dodaj novu knjigu"></p-button>
+            <p-button (onClick)="openNewBookDialog()" icon="pi pi-plus" pTooltip="Dodaj novu knjigu"></p-button>
           </span>
           <span class="p-float-label">
-            <p-dropdown formControlName="id"
+            <p-dropdown [autoDisplayFirst]="false"
+                        [filter]="true"
                         [options]="(books | async)!"
                         [showClear]="true"
-                        [filter]="true"
+                        formControlName="id"
                         id="advertisedBook"
                         optionLabel="displayName"
-                        optionValue="id"
-                        [autoDisplayFirst]="false">
+                        optionValue="id">
             </p-dropdown>
             <label for="advertisedBook">Knjiga *</label>
           </span>
@@ -41,10 +41,10 @@
       <!-- Vrsta oglasa -->
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-dropdown formControlName="advertType"
+            <p-dropdown [autoDisplayFirst]="false"
                         [options]="advertTypes"
-                        id="advertType"
-                        [autoDisplayFirst]="false">
+                        formControlName="advertType"
+                        id="advertType">
             </p-dropdown>
             <label for="advertType">Vrsta oglasa *</label>
         </span>
@@ -53,10 +53,10 @@
       <!-- Vrsta transakcije -->
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-dropdown formControlName="transactionType"
+            <p-dropdown [autoDisplayFirst]="false"
                         [options]="transactionTypes"
-                        id="transactionType"
-                        [autoDisplayFirst]="false">
+                        formControlName="transactionType"
+                        id="transactionType">
             </p-dropdown>
             <label for="transactionType">Vrsta transakcije *</label>
         </span>
@@ -65,8 +65,8 @@
       <!-- Cijena transakcije -->
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-inputNumber mode="currency" currency="HRK" locale="hr-HR" id="price"
-                           formControlName="price"></p-inputNumber>
+            <p-inputNumber currency="HRK" formControlName="price" id="price" locale="hr-HR"
+                           mode="currency"></p-inputNumber>
             <label for="price">Cijena transakcije</label>
         </span>
       </div>
@@ -74,10 +74,10 @@
     </form>
 
     <ng-template pTemplate="footer">
-      <button pButton type="submit" (click)="submitAdvert()"
-              [disabled]="!form.valid || loading"
-              [loading]="loading"
-              label="Predaj oglas"></button>
+      <button (click)="submitAdvert()" [disabled]="!form.valid || loading" [loading]="loading"
+              label="Predaj oglas"
+              pButton
+              type="submit"></button>
     </ng-template>
   </p-card>
 </div>

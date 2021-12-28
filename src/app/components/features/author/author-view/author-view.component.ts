@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable, throwError} from "rxjs";
 import {Author} from "../../../../model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {AuthService, AuthorService, NotificationService} from "../../../../services";
+import {AuthorService, AuthService, NotificationService} from "../../../../services";
 import {catchError, finalize} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -13,7 +13,6 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class AuthorViewComponent implements OnInit {
 
-  private id!: number;
   public author$!: Observable<Author>;
   public loading: boolean;
   public images = [
@@ -36,6 +35,7 @@ export class AuthorViewComponent implements OnInit {
       numVisible: 1
     }
   ];
+  private id!: number;
 
   constructor(private activatedRoute: ActivatedRoute,
               private authorService: AuthorService,
@@ -52,6 +52,10 @@ export class AuthorViewComponent implements OnInit {
     });
   }
 
+  public editAuthor(authorId: number): void {
+    this.router.navigate([`/author/edit/${authorId}`]);
+  }
+
   private setAuthor(): void {
     this.loading = true;
     this.author$ = this.authorService.getAuthorById(this.id).pipe(
@@ -64,9 +68,5 @@ export class AuthorViewComponent implements OnInit {
         }
         return throwError(() => error);
       }));
-  }
-
-  public editAuthor(authorId: number): void {
-    this.router.navigate([`/author/edit/${authorId}`]);
   }
 }

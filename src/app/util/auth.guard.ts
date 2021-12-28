@@ -10,7 +10,8 @@ export class AuthGuard implements CanActivate {
 
   public constructor(private authService: AuthService,
                      private router: Router,
-                     private notificationService: NotificationService) {}
+                     private notificationService: NotificationService) {
+  }
 
 
   canActivate(route: ActivatedRouteSnapshot): boolean | Observable<boolean> {
@@ -18,7 +19,7 @@ export class AuthGuard implements CanActivate {
 
     return this.authService.userToken$.pipe(map((token: LoggedInUser | undefined) => {
       const isAuthenticated = !!token;
-      const isAdmin = !!token? token.roles.includes('ROLE_ADMIN'): false;
+      const isAdmin = !!token ? token.roles.includes('ROLE_ADMIN') : false;
       if (!isAuthenticated || (adminRequired && !isAdmin)) {
         if (!isAuthenticated) {
           this.notificationService.warn('Morate biti prijavljeni da pristupite toj ruti');

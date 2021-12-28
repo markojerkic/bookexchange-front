@@ -58,15 +58,15 @@ export class GenreComponent implements OnInit {
     this.genreService.saveGenre(genre, this.id).pipe(
       finalize(() => this.loading = false),
       tap((savedGenre: Genre) => {
-      this.notificationService.success(`Žanr ${savedGenre.name} uspješno spremljen`);
-      if (this.dialogRef) {
-        this.dialogRef.close(savedGenre);
-      } else {
-        this.router.navigate([`/genre/${savedGenre.id}`]);
-      }
-    }, () => {
-      this.notificationService.error('Greška prilikom spremanja žanra');
-    })).subscribe();
+        this.notificationService.success(`Žanr ${savedGenre.name} uspješno spremljen`);
+        if (this.dialogRef) {
+          this.dialogRef.close(savedGenre);
+        } else {
+          this.router.navigate([`/genre/${savedGenre.id}`]);
+        }
+      }, () => {
+        this.notificationService.error('Greška prilikom spremanja žanra');
+      })).subscribe();
 
   }
 

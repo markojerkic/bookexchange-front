@@ -1,35 +1,39 @@
-<p-table [value]="(genres$ | async)!" [lazy]="true"
-         (onLazyLoad)="loadGenres($event)" dataKey="id"
-         [paginator]="true" [rows]="10" [totalRecords]="totalGenres" [loading]="genresLoading"
-         [rowsPerPageOptions]="[2, 10, 20]" styleClass="p-datatable-striped"
-         [resizableColumns]="true" [responsive]="true"
-         [globalFilterFields]="['firstName','description', 'yearOfBirth', 'yearOfDeath']" #table>
+<p-table #table (onLazyLoad)="loadGenres($event)"
+         [globalFilterFields]="['firstName','description', 'yearOfBirth', 'yearOfDeath']" [lazy]="true"
+         [loading]="genresLoading" [paginator]="true" [resizableColumns]="true" [responsive]="true"
+         [rowsPerPageOptions]="[2, 10, 20]" [rows]="10"
+         [totalRecords]="totalGenres" [value]="(genres$ | async)!"
+         dataKey="id" styleClass="p-datatable-striped">
 
   <ng-template pTemplate="header">
     <tr>
       <th pResizableColumn>Id</th>
-      <th pResizableColumn pSortableColumn="name">Naziv <p-sortIcon field="name"></p-sortIcon></th>
-      <th pResizableColumn pSortableColumn="description">Opis <p-sortIcon field="description"></p-sortIcon></th>
+      <th pResizableColumn pSortableColumn="name">Naziv
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pResizableColumn pSortableColumn="description">Opis
+        <p-sortIcon field="description"></p-sortIcon>
+      </th>
       <th style="width:8rem"></th>
     </tr>
     <tr>
       <th>
-        <button pButton pTooltip="Dodaj novi žanr"
-                class="p-button-outlined" icon="pi pi-plus"
-                (click)="newGenre()"></button>
+        <button (click)="newGenre()" class="p-button-outlined"
+                icon="pi pi-plus" pButton
+                pTooltip="Dodaj novi žanr"></button>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'name', 'equals')"
-               placeholder="Unesite naziv" class="p-column-filter"/>
+        <input (input)="table.filter($any($event.target).value, 'name', 'equals')" class="p-column-filter"
+               pInputText placeholder="Unesite naziv"/>
       </th>
       <th>
-        <input pInputText (input)="table.filter($any($event.target).value, 'description', 'equals')"
-               placeholder="Unesite opis" class="p-column-filter"/>
+        <input (input)="table.filter($any($event.target).value, 'description', 'equals')" class="p-column-filter"
+               pInputText placeholder="Unesite opis"/>
       </th>
       <th style="width:4rem"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-genre>
+  <ng-template let-genre pTemplate="body">
     <tr>
       <td>
         <span class="p-column-title">Id</span>
@@ -44,9 +48,9 @@
         {{genre.description}}
       </td>
       <td>
-        <p-splitButton icon="pi pi-search" pTooltip="Pregledaj žanr" [model]="(genreActions$ | async)!"
-                       appendTo="body" (onClick)="router.navigate(['/genre/' + genre.id])"
-                       (onDropdownClick)="selectedGenreId=genre.id"></p-splitButton>
+        <p-splitButton (onClick)="router.navigate(['/genre/' + genre.id])" (onDropdownClick)="selectedGenreId=genre.id" [model]="(genreActions$ | async)!"
+                       appendTo="body" icon="pi pi-search"
+                       pTooltip="Pregledaj žanr"></p-splitButton>
       </td>
     </tr>
   </ng-template>

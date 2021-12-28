@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AuthorService, AuthService, NotificationService} from "../../../../services";
 import {Observable, throwError} from "rxjs";
 import {Author, Page} from "../../../../model";
@@ -13,6 +13,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./author-list.component.scss']
 })
 export class AuthorListComponent implements OnInit {
+
+  @Input()
+  public genreId?: number;
 
   public today: Date;
 
@@ -43,13 +46,17 @@ export class AuthorListComponent implements OnInit {
           label: 'Uredi autora',
           icon: 'pi pi-pencil',
           disabled: !isAdmin,
-          command: () => {this.router.navigate([`/author/edit/${this.selectedAuthorId}`])}
+          command: () => {
+            this.router.navigate([`/author/edit/${this.selectedAuthorId}`])
+          }
         },
         {
           label: 'Izbriši autora',
           icon: 'pi pi-trash',
           disabled: !isAdmin,
-          command: () => {this.deleteAuthor(this.selectedAuthorId)}
+          command: () => {
+            this.deleteAuthor(this.selectedAuthorId)
+          }
         }
       ];
     }))
@@ -66,11 +73,15 @@ export class AuthorListComponent implements OnInit {
     httpParams = httpParams.append('page', String(event.first! / event.rows!))
       .append('size', event.rows!);
     if (event.sortField) {
-      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1? 'ASC': 'DESC'}`);
+      httpParams = httpParams.append('sort', `${event.sortField},${event.sortOrder === -1 ? 'ASC' : 'DESC'}`);
     }
     Object.keys(event.filters!).filter(key => event.filters![key].value).forEach(key => {
       httpParams = httpParams.append(key, event.filters![key].value);
     });
+
+    if (this.genreId) {
+      httpParams = httpParams.append('genre', this.genreId);
+    }
 
     this.authors$ = this.authorService.getPagedAuthors(this.currentPage, httpParams).pipe(
       finalize(() => this.authorsLoading = false),
@@ -86,6 +97,10 @@ export class AuthorListComponent implements OnInit {
     );
   }
 
+  public newAuthor(): void {
+    this.router.navigate(['/author']);
+  }
+
   private deleteAuthor(selectedAuthorId: number | undefined): void {
     if (!selectedAuthorId) {
       return;
@@ -96,11 +111,7 @@ export class AuthorListComponent implements OnInit {
         this.notificationService.error('Greška prilikom brisanja autora');
         return throwError(() => error);
       })).subscribe(() => {
-        this.loadAuthors(this.lastLazyLoadEvent!);
+      this.loadAuthors(this.lastLazyLoadEvent!);
     });
-  }
-
-  public newAuthor(): void {
-    this.router.navigate(['/author']);
   }
 }

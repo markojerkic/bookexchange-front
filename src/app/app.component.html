@@ -1,17 +1,17 @@
 <p-toast></p-toast>
 <p-menubar [model]="(menuItems$ | async)!">
   <ng-template pTemplate="start">
-    <h3 style="cursor: pointer" routerLink="/"
-        role="link" routerLinkActive="active" pRipple>Posudba knjiga</h3>
+    <h3 pRipple role="link"
+        routerLink="/" routerLinkActive="active" style="cursor: pointer">Posudba knjiga</h3>
   </ng-template>
-  <ng-template pTemplate="end" >
+  <ng-template pTemplate="end">
     <div *ngIf="(isAuthenticated$ | async)!">
-      <button pButton class="p-button-outlined" type="button"
-              label="{{(userToken$ | async)!.username}}" (click)="loggedInMenu.toggle($event)"></button>
-      <p-menu [popup]="true" [model]="authModelItems" #loggedInMenu></p-menu>
+      <button (click)="loggedInMenu.toggle($event)" class="p-button-outlined" label="{{(userToken$ | async)!.username}}"
+              pButton type="button"></button>
+      <p-menu #loggedInMenu [model]="authModelItems" [popup]="true"></p-menu>
     </div>
     <div *ngIf="!(isAuthenticated$ | async)!">
-      <p-splitButton label="Prijava" (onClick)="navigateToLogin()" [model]="loginItems"></p-splitButton>
+      <p-splitButton (onClick)="navigateToLogin()" [model]="loginItems" label="Prijava"></p-splitButton>
     </div>
   </ng-template>
 </p-menubar>

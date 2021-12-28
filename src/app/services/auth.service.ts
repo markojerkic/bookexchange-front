@@ -18,15 +18,6 @@ export class AuthService {
     this.loggedInUser$ = new BehaviorSubject<LoggedInUser | undefined>(JSON.parse(<string>localStorage.getItem('user')));
   }
 
-  public register(userData: User): Observable<User> {
-    return this.http.post<User>(`${environment.BACKEND_ENDPOINT}/user`, userData);
-  }
-
-  public login(loginRequest: LoginRequest): Observable<LoggedInUser> {
-    return this.http.put<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth`, loginRequest)
-      .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
-  }
-
   public get userToken(): LoggedInUser {
     return JSON.parse(<string>localStorage.getItem('user'));
   }
@@ -37,7 +28,7 @@ export class AuthService {
 
   public get isUserAdmin$(): Observable<boolean> {
     return this.loggedInUser$.pipe(map((userToken: LoggedInUser | undefined) =>
-      userToken? userToken.roles.includes('ROLE_ADMIN'): false));
+      userToken ? userToken.roles.includes('ROLE_ADMIN') : false));
   }
 
   public get isAuthenticated$(): Observable<boolean> {
@@ -48,17 +39,21 @@ export class AuthService {
     return !!localStorage.getItem('user');
   }
 
+  public register(userData: User): Observable<User> {
+    return this.http.post<User>(`${environment.BACKEND_ENDPOINT}/user`, userData);
+  }
+
+  public login(loginRequest: LoginRequest): Observable<LoggedInUser> {
+    return this.http.put<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth`, loginRequest)
+      .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
+  }
+
   public refreshToken(): Observable<LoggedInUser> {
     if (!this.isAuthenticated) {
       return throwError(() => 'Token je istekao');
     }
     return this.http.get<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth/refresh/${this.userToken.refreshToken}`)
       .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
-  }
-
-  private handleNewLogin(user: LoggedInUser): void {
-    localStorage.setItem('user', JSON.stringify(user));
-    this.loggedInUser$.next(user);
   }
 
   public logout(): void {
@@ -69,5 +64,10 @@ export class AuthService {
 
   public getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${environment.BACKEND_ENDPOINT}/auth`);
+  }
+
+  private handleNewLogin(user: LoggedInUser): void {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.loggedInUser$.next(user);
   }
 }

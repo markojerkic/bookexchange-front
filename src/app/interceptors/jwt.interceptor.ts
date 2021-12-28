@@ -11,7 +11,8 @@ export class JwtInterceptor implements HttpInterceptor {
 
   constructor(private router: Router,
               private authService: AuthService,
-              private notificationService: NotificationService) { }
+              private notificationService: NotificationService) {
+  }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add authorization header with jwt token if available

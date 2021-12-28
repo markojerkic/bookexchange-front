@@ -1,27 +1,27 @@
 <div class="grid flex justify-content-center p-m-4">
   <p-card [header]="id? 'Uredite žanr': 'Unesite novi žanr'">
-    <form class="p-fluid grid flex" [formGroup]="genreForm">
+    <form [formGroup]="genreForm" class="p-fluid grid flex">
 
       <div class="p-field col-12">
         <span class="p-float-label">
-            <input type="text" id="name" pInputText formControlName="name">
+            <input formControlName="name" id="name" pInputText type="text">
             <label for="name">Ime žanra *</label>
         </span>
       </div>
 
       <div class="p-field col-12">
         <span class="p-float-label">
-            <textarea id="description" rows="3" formControlName="description" pInputTextarea></textarea>
+            <textarea formControlName="description" id="description" pInputTextarea rows="3"></textarea>
             <label for="description">Opis žanra</label>
         </span>
       </div>
     </form>
 
     <ng-template pTemplate="footer">
-      <button pButton type="submit" (click)="submitGenre()"
-              [disabled]="!genreForm.valid || loading"
-              [loading]="loading"
-              label="Spremi žanr"></button>
+      <button (click)="submitGenre()" [disabled]="!genreForm.valid || loading" [loading]="loading"
+              label="Spremi žanr"
+              pButton
+              type="submit"></button>
     </ng-template>
   </p-card>
 </div>

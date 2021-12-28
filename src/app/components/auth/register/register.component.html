@@ -1,45 +1,47 @@
-<form class="grid flex justify-content-center p-m-4" [formGroup]="form" (ngSubmit)="submitRegistration()">
+<form (ngSubmit)="submitRegistration()" [formGroup]="form" class="grid flex justify-content-center p-m-4">
   <p-card class="grid flex col-12 lg:col-6 justify-content-center" header="Registrirajte se">
     <div class="p-fluid grid flex">
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="text" id="firstName" pInputText formControlName="firstName">
+            <input formControlName="firstName" id="firstName" pInputText type="text">
             <label for="firstName">Ime *</label>
         </span>
       </div>
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="text" id="lastName" pInputText formControlName="lastName">
+            <input formControlName="lastName" id="lastName" pInputText type="text">
             <label for="lastName">Prezime *</label>
         </span>
       </div>
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="text" id="username" pInputText formControlName="username">
+            <input formControlName="username" id="username" pInputText type="text">
             <label for="username">Korisničko ime *</label>
         </span>
-        <small class="p-error" *ngIf="form.get('username')?.dirty && form.get('username')?.invalid">Korisničko ime se već koristi</small>
+        <small *ngIf="form.get('username')?.dirty && form.get('username')?.invalid" class="p-error">Korisničko ime se
+          već koristi</small>
       </div>
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="email" id="email" pInputText formControlName="email">
+            <input formControlName="email" id="email" pInputText type="email">
             <label for="email">Email *</label>
         </span>
-        <small class="p-error" *ngIf="form.get('email')?.dirty && form.get('email')?.invalid">Email adresa se već koristi</small>
+        <small *ngIf="form.get('email')?.dirty && form.get('email')?.invalid" class="p-error">Email adresa se već
+          koristi</small>
       </div>
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-password inputId="password" id="password" [feedback]="false" formControlName="password"></p-password>
+            <p-password [feedback]="false" formControlName="password" id="password" inputId="password"></p-password>
             <label for="password">Zaporka *</label>
         </span>
       </div>
     </div>
 
     <ng-template pTemplate="footer">
-      <button pButton type="submit" type="submit"
-              [disabled]="!form.valid || isAuthLoading"
-              [loading]="isAuthLoading"
-              label="Registriraj se"></button>
+      <button [disabled]="!form.valid || isAuthLoading" [loading]="isAuthLoading" label="Registriraj se"
+              pButton
+              type="submit"
+              type="submit"></button>
     </ng-template>
   </p-card>
 

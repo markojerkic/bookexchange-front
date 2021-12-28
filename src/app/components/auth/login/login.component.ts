@@ -19,7 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private notificationService: NotificationService,
               private authService: AuthService,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit(): void {
     this.authService.logout();
@@ -42,7 +43,7 @@ export class LoginComponent implements OnInit {
         } else {
           this.notificationService.error('Došlo je do greške');
         }
-    });
+      });
 
   }
 }

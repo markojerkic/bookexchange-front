@@ -13,14 +13,13 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class GenreViewComponent implements OnInit {
 
-  private id!: number;
   public genre$!: Observable<Genre>;
   public authors$!: Observable<Author[]>;
   public books$!: Observable<Book[]>;
-
   public authorsLoaded: boolean;
   public booksLoaded: boolean;
   public loading: boolean;
+  private id!: number;
 
   constructor(private activatedRoute: ActivatedRoute,
               private genreService: GenreService,
@@ -41,6 +40,10 @@ export class GenreViewComponent implements OnInit {
     });
   }
 
+  public editGenre(genreId: number): void {
+    this.router.navigate([`/genre/edit/${genreId}`]);
+  }
+
   private setGenre(): void {
     this.loading = true;
     this.genre$ = this.genreService.getGenreById(this.id).pipe(
@@ -56,9 +59,5 @@ export class GenreViewComponent implements OnInit {
         this.books$ = this.bookService.getAllByGenreId(genre.id!).pipe(tap(() => this.booksLoaded = true));
         this.authors$ = this.authorService.getAllByGenreId(genre.id!).pipe(tap(() => this.authorsLoaded = true));
       }));
-  }
-
-  public editGenre(genreId: number): void {
-    this.router.navigate([`/genre/edit/${genreId}`]);
   }
 }

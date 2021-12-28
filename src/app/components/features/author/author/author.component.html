@@ -1,36 +1,36 @@
 <div class="grid flex justify-content-center p-m-4">
   <p-card [header]="id? 'Uredite autora': 'Unesite novog autora'">
-    <form class="p-fluid grid flex" [formGroup]="authorForm">
+    <form [formGroup]="authorForm" class="p-fluid grid flex">
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="text" id="firstName" pInputText formControlName="firstName">
+            <input formControlName="firstName" id="firstName" pInputText type="text">
             <label for="firstName">Ime *</label>
         </span>
       </div>
 
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="text" id="lastName" pInputText formControlName="lastName">
+            <input formControlName="lastName" id="lastName" pInputText type="text">
             <label for="lastName">Prezime *</label>
         </span>
       </div>
 
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-calendar view="year" dateFormat="yy" id="yearOfBirth"
-                        [showButtonBar]="true"
-                        appendTo="body"
-                        formControlName="yearOfBirth"></p-calendar>
+            <p-calendar [showButtonBar]="true" appendTo="body" dateFormat="yy"
+                        formControlName="yearOfBirth"
+                        id="yearOfBirth"
+                        view="year"></p-calendar>
             <label for="yearOfBirth">Godina rođenja *</label>
         </span>
       </div>
 
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <p-calendar view="year" dateFormat="yy" id="yearOfDeath"
-                        [showButtonBar]="true"
-                        appendTo="body"
-                        formControlName="yearOfDeath"></p-calendar>
+            <p-calendar [showButtonBar]="true" appendTo="body" dateFormat="yy"
+                        formControlName="yearOfDeath"
+                        id="yearOfDeath"
+                        view="year"></p-calendar>
             <label for="yearOfDeath">Godina smrti</label>
         </span>
       </div>
@@ -40,15 +40,15 @@
       <div class=" col-12 lg:col-6">
         <div class="p-field p-inputgroup">
           <span>
-            <p-button icon="pi pi-plus" (onClick)="openNewGenreDialog()" pTooltip="Dodaj novi žanr"></p-button>
+            <p-button (onClick)="openNewGenreDialog()" icon="pi pi-plus" pTooltip="Dodaj novi žanr"></p-button>
           </span>
           <span class="p-float-label">
-            <p-multiSelect formControlName="authorsGenres"
+            <p-multiSelect [filter]="true"
                            [options]="(genres$ | async)!"
-                           [filter]="true"
                            appendTo="body"
-                           id="authorsGenres"
                            dataKey="id"
+                           formControlName="authorsGenres"
+                           id="authorsGenres"
                            optionLabel="name">
             </p-multiSelect>
             <label for="authorsGenres">Žanrovi *</label>
@@ -58,10 +58,10 @@
     </form>
 
     <ng-template pTemplate="footer">
-      <button pButton type="submit" (click)="submitAuthor()"
-              [disabled]="!authorForm.valid || loading"
-              [loading]="loading"
-              label="Spremi autora"></button>
+      <button (click)="submitAuthor()" [disabled]="!authorForm.valid || loading" [loading]="loading"
+              label="Spremi autora"
+              pButton
+              type="submit"></button>
     </ng-template>
   </p-card>
 </div>

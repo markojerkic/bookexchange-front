@@ -1,24 +1,24 @@
-<form class="grid flex justify-content-center p-m-4" [formGroup]="form" (ngSubmit)="submitLogin()">
+<form (ngSubmit)="submitLogin()" [formGroup]="form" class="grid flex justify-content-center p-m-4">
   <p-card class="grid flex col-12 lg:col-6 justify-content-center" header="Prijava">
     <div class="p-fluid grid flex">
       <div class="p-field col-12">
         <span class="p-float-label">
-            <input type="text" id="username" pInputText formControlName="username">
+            <input formControlName="username" id="username" pInputText type="text">
             <label for="username">Korisničko ime *</label>
         </span>
       </div>
       <div class="p-field col-12">
         <span class="p-float-label">
-            <p-password inputId="password" id="password" [feedback]="false" formControlName="password"></p-password>
+            <p-password [feedback]="false" formControlName="password" id="password" inputId="password"></p-password>
             <label for="password">Zaporka *</label>
         </span>
       </div>
     </div>
     <ng-template pTemplate="footer">
-      <button pButton type="submit"
-              [disabled]="!form.valid || isAuthLoading"
-              [loading]="isAuthLoading"
-              label="Prijavi se"></button>
+      <button [disabled]="!form.valid || isAuthLoading" [loading]="isAuthLoading"
+              label="Prijavi se"
+              pButton
+              type="submit"></button>
     </ng-template>
   </p-card>
 

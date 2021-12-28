@@ -33,14 +33,6 @@ export class AuthorService {
     return this.saveNewAuthor(author);
   }
 
-  private saveNewAuthor(author: Author): Observable<Author> {
-    return this.httpClient.post<Author>(this.backendEndpoint, author).pipe(map(this.mapAuthor));
-  }
-
-  private updateAuthor(author: Author, id: number): Observable<Author> {
-    return this.httpClient.patch<Author>(`${this.backendEndpoint}/${id}`, author).pipe(map(this.mapAuthor));
-  }
-
   public getAuthorById(id: number): Observable<Author> {
     return this.httpClient.get<Author>(`${this.backendEndpoint}/${id}`).pipe(map(this.mapAuthor));
   }
@@ -58,7 +50,11 @@ export class AuthorService {
     return this.httpClient.delete(`${this.backendEndpoint}/${id}`);
   }
 
-  public getAllByGenreId(genreId: number): Observable<Author[]> {
-    return this.httpClient.get<Author[]>(`${this.backendEndpoint}/by-genre/${genreId}`);
+  private saveNewAuthor(author: Author): Observable<Author> {
+    return this.httpClient.post<Author>(this.backendEndpoint, author).pipe(map(this.mapAuthor));
+  }
+
+  private updateAuthor(author: Author, id: number): Observable<Author> {
+    return this.httpClient.patch<Author>(`${this.backendEndpoint}/${id}`, author).pipe(map(this.mapAuthor));
   }
 }

@@ -1,3 +1,3 @@
 export enum TransactionType {
-  BUY='BUY', LOAN='LOAN'
+  BUY = 'BUY', LOAN = 'LOAN'
 }

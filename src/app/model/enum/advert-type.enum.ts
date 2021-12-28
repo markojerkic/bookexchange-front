@@ -1,3 +1,3 @@
 export enum AdvertType {
-  LOOKING='LOOKING', ISSUING='ISSUING'
+  LOOKING = 'LOOKING', ISSUING = 'ISSUING'
 }

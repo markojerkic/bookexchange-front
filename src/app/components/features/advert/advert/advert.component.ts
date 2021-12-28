@@ -83,11 +83,11 @@ export class AdvertComponent implements OnInit, OnDestroy {
       finalize(() => this.loading = false),
       catchError((error: Error) => {
         this.notificationService.error('Greška prilikom dodavanja oglasa');
-        return throwError(() =>error);
+        return throwError(() => error);
       }),
       takeUntil(this.onDestroy$)).subscribe((savedAdvert: Advert) => {
-        this.router.navigate([`/advert/${savedAdvert.id}`]);
-        this.notificationService.success('Uspješno dodan osglas');
+      this.router.navigate([`/advert/${savedAdvert.id}`]);
+      this.notificationService.success('Uspješno dodan osglas');
     });
   }
 

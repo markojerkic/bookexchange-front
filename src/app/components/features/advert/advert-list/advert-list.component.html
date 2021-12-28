@@ -4,25 +4,25 @@
       <h2>Lista oglasa</h2>
       <p-divider></p-divider>
 
-      <form class="grid p-fluid" [formGroup]="queryForm" (ngSubmit)="submitQuery()">
+      <form (ngSubmit)="submitQuery()" [formGroup]="queryForm" class="grid p-fluid">
         <div class="p-field col-12">
           <span class="p-float-label p-input-icon-left">
             <i class="pi pi-search"></i>
-            <input type="text" formControlName="query" id="query" pInputText />
+            <input formControlName="query" id="query" pInputText type="text"/>
             <label for="query">Pretraga</label>
           </span>
         </div>
 
         <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
-              <p-dropdown formControlName="authorId"
-                          [options]="(authors$ | async)!"
+              <p-dropdown [autoDisplayFirst]="false"
                           [filter]="true"
+                          [options]="(authors$ | async)!"
                           [showClear]="true"
+                          formControlName="authorId"
                           id="author"
                           optionLabel="displayName"
-                          optionValue="id"
-                          [autoDisplayFirst]="false">
+                          optionValue="id">
               </p-dropdown>
               <label for="author">Autor</label>
           </span>
@@ -30,14 +30,14 @@
 
         <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
-              <p-dropdown formControlName="bookId"
-                          [options]="(books$ | async)!"
-                          id="book"
+              <p-dropdown [autoDisplayFirst]="false"
                           [filter]="true"
+                          [options]="(books$ | async)!"
                           [showClear]="true"
+                          formControlName="bookId"
+                          id="book"
                           optionLabel="displayName"
-                          optionValue="id"
-                          [autoDisplayFirst]="false">
+                          optionValue="id">
               </p-dropdown>
               <label for="book">Knjiga</label>
           </span>
@@ -45,14 +45,14 @@
 
         <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
-              <p-dropdown formControlName="genreId"
-                          [options]="(genres$ | async)!"
-                          id="genre"
+              <p-dropdown [autoDisplayFirst]="false"
                           [filter]="true"
+                          [options]="(genres$ | async)!"
                           [showClear]="true"
-                          optionValue="id"
+                          formControlName="genreId"
+                          id="genre"
                           optionLabel="name"
-                          [autoDisplayFirst]="false">
+                          optionValue="id">
               </p-dropdown>
               <label for="genre">Žanr</label>
           </span>
@@ -60,11 +60,11 @@
 
         <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
-              <p-dropdown formControlName="advertType"
+              <p-dropdown [autoDisplayFirst]="false"
                           [options]="advertTypes"
                           [showClear]="true"
-                          id="advertType"
-                          [autoDisplayFirst]="false">
+                          formControlName="advertType"
+                          id="advertType">
               </p-dropdown>
               <label for="advertType">Tip oglasa</label>
           </span>
@@ -72,11 +72,11 @@
 
         <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
-              <p-dropdown formControlName="transactionType"
+              <p-dropdown [autoDisplayFirst]="false"
                           [options]="transactionTypes"
                           [showClear]="true"
-                          id="transactionType"
-                          [autoDisplayFirst]="false">
+                          formControlName="transactionType"
+                          id="transactionType">
               </p-dropdown>
               <label for="transactionType">Tip transakcije</label>
           </span>
@@ -84,7 +84,7 @@
 
         <div class="p-field lg:col-3 md:col-6 col-12">
           <span class="p-float-label">
-            <input type="text" formControlName="isbn" id="isbn" pInputText />
+            <input formControlName="isbn" id="isbn" pInputText type="text"/>
             <label for="isbn">ISBN</label>
           </span>
         </div>
@@ -92,15 +92,16 @@
         <div class="lg:col-3 md:col-6 col-12 grid">
           <div class="p-field col-6">
             <span class="p-float-label">
-              <p-inputNumber mode="currency" currency="HRK" class="ng-dirty"
-                             locale="hr-HR" inputId="fromPrice" id="fromPrice" formControlName="fromPrice"></p-inputNumber>
+              <p-inputNumber class="ng-dirty" currency="HRK" formControlName="fromPrice"
+                             id="fromPrice" inputId="fromPrice" locale="hr-HR"
+                             mode="currency"></p-inputNumber>
               <label for="fromPrice">Od cijene</label>
             </span>
           </div>
           <div class="p-field col-6">
             <span class="p-float-label">
-              <p-inputNumber mode="currency" currency="HRK"
-                             locale="hr-HR" id="toPrice" formControlName="toPrice"></p-inputNumber>
+              <p-inputNumber currency="HRK" formControlName="toPrice"
+                             id="toPrice" locale="hr-HR" mode="currency"></p-inputNumber>
               <label for="toPrice">Do cijene</label>
             </span>
 
@@ -108,7 +109,7 @@
         </div>
 
         <div class="col-12 flex justify-content-end">
-          <p-button type="submit" label="Pretraži po filterima"></p-button>
+          <p-button label="Pretraži po filterima" type="submit"></p-button>
         </div>
 
       </form>
@@ -120,5 +121,5 @@
     <p-progressSpinner *ngIf="advertLoading"></p-progressSpinner>
   </div>
   <app-advert-preview [adverts]="(adverts$ | async)!"></app-advert-preview>
-  <p-paginator [rows]="10" [totalRecords]="totalAdverts" (onPageChange)="loadAdvertPage($event)"></p-paginator>
+  <p-paginator (onPageChange)="loadAdvertPage($event)" [rows]="10" [totalRecords]="totalAdverts"></p-paginator>
 </p-card>

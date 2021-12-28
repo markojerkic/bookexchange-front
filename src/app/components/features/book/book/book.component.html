@@ -1,37 +1,38 @@
 <div class="grid flex justify-content-center p-m-4">
   <p-card [header]="id? 'Uredite knjigu': 'Unesite novu knjigu'">
-    <form class="p-fluid grid flex" [formGroup]="bookForm">
+    <form [formGroup]="bookForm" class="p-fluid grid flex">
       <!-- Naslov knjige -->
       <div class="p-field col-12 lg:col-6">
         <span class="p-float-label">
-            <input type="text" id="title" pInputText formControlName="title">
+            <input formControlName="title" id="title" pInputText type="text">
             <label for="title">Naslov knjige *</label>
         </span>
       </div>
 
       <div class="p-field col-12 lg:col-6">
           <span class="p-float-label">
-            <input type="text" formControlName="isbn" id="isbn" pInputText />
+            <input formControlName="isbn" id="isbn" pInputText type="text"/>
             <label for="isbn">ISBN *</label>
           </span>
-        <small class="p-error" *ngIf="bookForm.get('isbn')?.dirty && bookForm.get('isbn')?.invalid">ISBN se već koristi</small>
+        <small *ngIf="bookForm.get('isbn')?.dirty && bookForm.get('isbn')?.invalid" class="p-error">ISBN se već
+          koristi</small>
       </div>
 
       <div class=" col-12 lg:col-6">
         <div class="p-field p-inputgroup" formGroupName="bookAuthor">
           <span>
-            <p-button icon="pi pi-plus" (onClick)="openNewAuthorDialog()" pTooltip="Dodaj novog autora"></p-button>
+            <p-button (onClick)="openNewAuthorDialog()" icon="pi pi-plus" pTooltip="Dodaj novog autora"></p-button>
           </span>
           <span class="p-float-label">
-            <p-dropdown formControlName="id"
-                        [options]="(authors$ | async)!"
+            <p-dropdown [autoDisplayFirst]="false"
                         [filter]="true"
+                        [options]="(authors$ | async)!"
                         [showClear]="true"
                         appendTo="body"
+                        formControlName="id"
                         id="author"
                         optionLabel="displayName"
-                        optionValue="id"
-                        [autoDisplayFirst]="false">
+                        optionValue="id">
             </p-dropdown>
             <label for="author">Autor *</label>
           </span>
@@ -41,15 +42,15 @@
       <div class=" col-12 lg:col-6">
         <div class="p-field p-inputgroup">
           <span>
-            <p-button icon="pi pi-plus" (onClick)="openNewGenreDialog()" pTooltip="Dodaj novi žanr"></p-button>
+            <p-button (onClick)="openNewGenreDialog()" icon="pi pi-plus" pTooltip="Dodaj novi žanr"></p-button>
           </span>
           <span class="p-float-label">
-            <p-multiSelect formControlName="genres"
+            <p-multiSelect [filter]="true"
                            [options]="(genres$ | async)!"
-                           [filter]="true"
                            appendTo="body"
-                           id="genres"
                            dataKey="id"
+                           formControlName="genres"
+                           id="genres"
                            optionLabel="name">
             </p-multiSelect>
             <label for="genres">Žanrovi *</label>
@@ -59,10 +60,10 @@
     </form>
 
     <ng-template pTemplate="footer">
-      <button pButton type="submit" (click)="submitBook()"
-              [disabled]="!bookForm.valid || loading"
-              [loading]="loading"
-              label="Spremi knjigu"></button>
+      <button (click)="submitBook()" [disabled]="!bookForm.valid || loading" [loading]="loading"
+              label="Spremi knjigu"
+              pButton
+              type="submit"></button>
     </ng-template>
   </p-card>
 </div>

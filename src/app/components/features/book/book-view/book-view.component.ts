@@ -13,7 +13,6 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class BookViewComponent implements OnInit {
 
-  private id!: number;
   public book$!: Observable<Book>;
   public loading: boolean;
   public images = [
@@ -36,6 +35,7 @@ export class BookViewComponent implements OnInit {
       numVisible: 1
     }
   ];
+  private id!: number;
 
   constructor(private activatedRoute: ActivatedRoute,
               private bookService: BookService,
@@ -52,6 +52,10 @@ export class BookViewComponent implements OnInit {
     });
   }
 
+  public editBook(bookId: number): void {
+    this.router.navigate([`/book/edit/${bookId}`]);
+  }
+
   private setBook(): void {
     this.loading = true;
     this.book$ = this.bookService.getBookById(this.id).pipe(
@@ -64,9 +68,5 @@ export class BookViewComponent implements OnInit {
         }
         return throwError(() => error);
       }));
-  }
-
-  public editBook(bookId: number): void {
-    this.router.navigate([`/book/edit/${bookId}`]);
   }
 }

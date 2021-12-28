@@ -67,18 +67,18 @@ export class BookComponent implements OnInit {
     this.bookService.saveBook(book, this.id).pipe(
       finalize(() => this.loading = false),
       tap((savedBook: Book) => {
-      this.notificationService.success(`Knjiga ${savedBook.title} uspješno spremljena`);
-      if (this.dialogRef) {
-        this.dialogRef.close(savedBook);
-      } else {
-        this.router.navigate([`/book/${savedBook.id}`]);
-      }
-    }, (error: HttpErrorResponse) => {
+        this.notificationService.success(`Knjiga ${savedBook.title} uspješno spremljena`);
+        if (this.dialogRef) {
+          this.dialogRef.close(savedBook);
+        } else {
+          this.router.navigate([`/book/${savedBook.id}`]);
+        }
+      }, (error: HttpErrorResponse) => {
         if (error.status === 400) {
           this.bookForm.controls['isbn'].setErrors({'used': true});
         }
         this.notificationService.error('Greška prilikom spremanja knjige');
-    })).subscribe();
+      })).subscribe();
   }
 
   public openNewAuthorDialog(): void {

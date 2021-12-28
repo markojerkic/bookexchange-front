@@ -13,7 +13,6 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class AdvertViewComponent implements OnInit {
 
-  private id!: number;
   public advert$!: Observable<Advert>;
   public loading: boolean;
   public images = [
@@ -36,6 +35,7 @@ export class AdvertViewComponent implements OnInit {
       numVisible: 1
     }
   ];
+  private id!: number;
 
   constructor(private activatedRoute: ActivatedRoute,
               private advertService: AdvertService,

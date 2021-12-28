@@ -1,10 +1,10 @@
-<p-card [header]="genre.name"
-        *ngIf="(genre$ | async)! as genre"
+<p-card *ngIf="(genre$ | async)! as genre"
+        [header]="genre.name"
         class="grid flex justify-content-center">
   <ng-template pTemplate="subtitle">
-    <p-button label="Uredite žanr" icon="pi pi-pencil"
-              *ngIf="(authService.isUserAdmin$ | async)"
-              (onClick)="editGenre(genre.id!)"></p-button>
+    <p-button (onClick)="editGenre(genre.id!)" *ngIf="(authService.isUserAdmin$ | async)"
+              icon="pi pi-pencil"
+              label="Uredite žanr"></p-button>
   </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
@@ -13,28 +13,33 @@
         <h4>Naslov</h4>
         <p>{{genre.name}}</p>
       </div>
-      <div class="col-12" *ngIf="genre.description">
+      <div *ngIf="genre.description" class="col-12">
         <h4>Opis</h4>
         <p>{{genre.description}}</p>
       </div>
-      <div class="col-6 grid" *ngIf="authorsLoaded">
-        <h4 class="col-12">Autori koji su pisali</h4>
-        <div class="col-12"
-             *ngFor="let author of (authors$ | async)!">
-          <p style="cursor: pointer;" class="underline link-text"
-             pTooltip="Pogledajte autora"
-             [routerLink]="'/author/' + author.id">{{author.displayName}}</p>
-        </div>
-      </div>
-      <div class="col-6 grid" *ngIf="booksLoaded">
-        <h4 class="col-12">Knjige</h4>
-        <div class="col-12"
-             *ngFor="let book of (books$ | async)!">
-          <p style="cursor: pointer;" class="underline link-text"
-             pTooltip="Pogledajte autora"
-             [routerLink]="'/book/' + book.id">{{book.displayName}}</p>
-        </div>
-      </div>
+
+      <p-tabView class="col-12">
+        <p-tabPanel header="Autori koji su pisali žanr"><!--
+          <h4 class="col-12">Autori koji su pisali</h4>
+          <div class="col-12"
+               *ngFor="let author of (authors$ | async)!">
+            <p style="cursor: pointer;" class="underline link-text"
+               pTooltip="Pogledajte autora"
+               [routerLink]="'/author/' + author.id">{{author.displayName}}</p>
+          </div>-->
+          <app-author-list [genreId]="genre.id!"></app-author-list>
+        </p-tabPanel>
+        <p-tabPanel header="Knjige koje su pisane u žanru">
+          <!--<h4 class="col-12">Knjige</h4>
+          <div class="col-12"
+               *ngFor="let book of (books$ | async)!">
+            <p style="cursor: pointer;" class="underline link-text"
+               pTooltip="Pogledajte autora"
+               [routerLink]="'/book/' + book.id">{{book.displayName}}</p>
+          </div>-->
+          <app-book-list [genreId]="genre.id!"></app-book-list>
+        </p-tabPanel>
+      </p-tabView>
 
     </div>
   </ng-template>

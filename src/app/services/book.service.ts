@@ -56,20 +56,16 @@ export class BookService {
     }));
   }
 
+  public deleteBook(bookId: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${bookId}`);
+  }
+
   private updateBook(book: any, id: number): Observable<Book> {
     return this.httpClient.patch<Book>(`${this.backendEndpoint}/${id}`, book);
   }
 
   private saveNewBook(book: Book): Observable<Book> {
     return this.httpClient.post<Book>(this.backendEndpoint, book);
-  }
-
-  public deleteBook(bookId: number): Observable<Object> {
-    return this.httpClient.delete(`${this.backendEndpoint}/${bookId}`);
-  }
-
-  public getAllByGenreId(genreId: number): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`${this.backendEndpoint}/by-genre/${genreId}`);
   }
 
 }
