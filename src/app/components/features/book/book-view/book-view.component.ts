@@ -1,4 +1,10 @@
 import {Component, OnInit} from '@angular/core';
+import {Observable, throwError} from "rxjs";
+import {Book} from "../../../../model";
+import {ActivatedRoute, Params} from "@angular/router";
+import {BookService, NotificationService} from "../../../../services";
+import {catchError, finalize} from "rxjs/operators";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-book-view',
@@ -7,9 +13,54 @@ import {Component, OnInit} from '@angular/core';
 })
 export class BookViewComponent implements OnInit {
 
-  constructor() { }
+  private id!: number;
+  public book$!: Observable<Book>;
+  public loading: boolean;
+  public images = [
+    'https://plchldr.co/i/500x250',
+    'https://plchldr.co/i/500x250',
+    'https://plchldr.co/i/500x250',
+    'https://plchldr.co/i/500x250',
+  ];
+  public responsiveOptions: any[] = [
+    {
+      breakpoint: '1024px',
+      numVisible: 5
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 3
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1
+    }
+  ];
 
-  ngOnInit(): void {
+  constructor(private activatedRoute: ActivatedRoute,
+              private bookService: BookService,
+              private notificationService: NotificationService) {
+    this.loading = false;
   }
 
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe((params: Params) => {
+      this.id = params['id'];
+      this.setBook();
+    });
+  }
+
+  private setBook(): void {
+    this.loading = true;
+    this.book$ = this.bookService.getBookById(this.id).pipe(
+      finalize(() => this.loading = false),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.notificationService.error(`Knjiga s id-om ${this.id} ne postoji`);
+        } else {
+          this.notificationService.error('Greška prilikom dohvata oglasa');
+        }
+        return throwError(() => error);
+      }));
+  }
 }

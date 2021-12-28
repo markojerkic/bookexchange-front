@@ -1,1 +1,48 @@
-<p>book-view works!</p>
+<p-card [header]="book.title"
+        *ngIf="(book$ | async)! as book"
+        class="grid flex justify-content-center">
+  <!--<ng-template pTemplate="subtitle">
+    <h3>Objavio korisnik <span class="font-bold font-italic">{{book.!.username}}</span></h3>
+  </ng-template>-->
+  <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+  <ng-template pTemplate="content">
+    <p-galleria [value]="images" [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{'max-width': '90vw'}" [numVisible]="5">
+      <ng-template pTemplate="item" let-item>
+        <img [src]="item" style="width: 100%;" />
+      </ng-template>
+      <ng-template pTemplate="thumbnail" let-item>
+        <div class="grid p-nogutter flex justify-content-center">
+          <img [src]="item" style="display: block; height: 100px;" />
+        </div>
+      </ng-template>
+    </p-galleria>
+
+    <div class="grid">
+      <div class="col-6">
+        <h4>Naslov</h4>
+        <p>{{book.title}}</p>
+      </div>
+      <div class="col-6">
+        <h4>ISBN</h4>
+        <p>{{book.isbn}}</p>
+      </div>
+      <div class="col-6">
+        <h4>Autor knjige</h4>
+        <p style="cursor: pointer;" class="underline link-text"
+           pTooltip="Pogledajte autora"
+           [routerLink]="'/author/' + book.bookAuthor!.id">{{book.bookAuthor!.displayName}}</p>
+      </div>
+      <div class="col-6 grid">
+        <h4 class="col-12">Žanrovi knjige</h4>
+        <div class="col-12"
+             *ngFor="let genre of book.genres!">
+          <p style="cursor: pointer;" class="underline link-text"
+             pTooltip="Pogledajte žanr"
+             [routerLink]="'/genre/' + genre.id">{{genre.name}}</p>
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
+</p-card>
