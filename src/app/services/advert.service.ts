@@ -5,6 +5,7 @@ import {Advert, Page} from "../model";
 import {Observable} from "rxjs";
 import {AuthorService} from "./author.service";
 import {map} from "rxjs/operators";
+import {ImageUtil} from "../util";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class AdvertService {
     httpParams = httpParams.append('page', String(pageNumber)).append('size', '10')
       .append('sort', 'lastModified,DESC');
 
-    return this.httpClient.get<Page<Advert>>(this.backendEndpoint, {params: httpParams});
+    return this.httpClient.get<Page<Advert>>(this.backendEndpoint, {params: httpParams}).pipe(map(this.mapAdvertImageUrl));
   }
 
   public getAdvertById(id: number): Observable<Advert> {
@@ -36,5 +37,17 @@ export class AdvertService {
       advert.advertisedBook!.bookAuthor = this.authorService.mapAuthor(advert.advertisedBook!.bookAuthor!);
       return advert;
     }));
+  }
+
+  private mapAdvertImageUrl(advertPage: Page<Advert>): Page<Advert> {
+    advertPage.content = advertPage.content.map((advert: Advert) => {
+      advert.advertImages.map(ImageUtil.setImageUrl);
+      return advert;
+    });
+    return advertPage;
+  }
+
+  public deleteAdvert(advertId: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${advertId}`);
   }
 }

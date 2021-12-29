@@ -1,9 +1,9 @@
 import {Component, OnInit, Optional} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {Author, Book, Genre} from "../../../../model";
 import {AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {finalize, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthorComponent} from "../../author";
 import {GenreComponent} from "../../genre";
@@ -116,7 +116,12 @@ export class BookComponent implements OnInit {
 
   private setBook(id: number): void {
     this.loading = true;
-    this.bookService.getBookById(id).pipe(finalize(() => this.loading = false)).subscribe((book: Book) => {
+    this.bookService.getBookById(id).pipe(
+      finalize(() => this.loading = false),
+      catchError((error: Error) => {
+        this.notificationService.error(`Greška prilikom dohvata knjige ${id}`);
+        return throwError(() => error);
+      })).subscribe((book: Book) => {
       this.bookForm.patchValue({
         title: book.title,
         isbn: book.isbn,
@@ -125,8 +130,6 @@ export class BookComponent implements OnInit {
           id: book.bookAuthor!.id
         }
       });
-    }, () => {
-      this.notificationService.error(`Greška prilikom dohvata knjige ${id}`);
     });
   }
 }

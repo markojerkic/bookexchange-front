@@ -11,7 +11,7 @@ import {
   NotificationService
 } from "../../../../services";
 import {catchError, finalize, takeUntil, tap} from "rxjs/operators";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {DialogService} from "primeng/dynamicdialog";
 import {BookComponent} from "../../book";
 import {HttpErrorResponse} from "@angular/common/http";
@@ -36,6 +36,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
   public advertTypes: { label: string, value: AdvertType }[];
   public transactionTypes: { label: string, value: TransactionType }[];
   private onDestroy$: Subject<void>;
+  public id?: number;
 
   constructor(private formBuilder: FormBuilder,
               private authorService: AuthorService,
@@ -45,7 +46,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
               private notificationService: NotificationService,
               private router: Router,
               private dialogService: DialogService,
-              private imageService: ImageService) {
+              private imageService: ImageService,
+              private activatedRoute: ActivatedRoute) {
     this.onDestroy$ = new Subject();
     this.loading = false;
 
@@ -78,6 +80,14 @@ export class AdvertComponent implements OnInit, OnDestroy {
       transactionType: [null, Validators.required],
       price: [null],
       advertImages: []
+    });
+
+    this.activatedRoute.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (id) {
+        this.id = id;
+        this.setAdvert(id);
+      }
     });
 
     this.authors = this.authorService.getAllAuthors();
@@ -136,5 +146,26 @@ export class AdvertComponent implements OnInit, OnDestroy {
 
   private mapImageToUUID(image: Image): {uuid: string} {
     return {uuid: image.uuid!};
+  }
+
+  private setAdvert(advertId: number): void {
+    this.loading = true;
+    this.advertService.getAdvertById(advertId).pipe(
+      finalize(() => this.loading = false),
+      catchError((error: Error) => {
+        this.notificationService.error(`Greška prilikom dohvata oglasa ${advertId}`);
+        return throwError(() => error);
+      })).subscribe((advert: Advert) => {
+      this.form.patchValue({
+        title: advert.title,
+        description: advert.description,
+        advertisedBook: advert.advertisedBook,
+        advertType: advert.advertType,
+        transactionType: advert.transactionType,
+        price: advert.price,
+        advertImages: advert.advertImages
+      });
+    });
+
   }
 }

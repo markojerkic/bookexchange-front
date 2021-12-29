@@ -5,8 +5,12 @@ export class ImageUtil {
 
   public static getImageUrl(image: Image): string {
     const backendEndpoint = `${environment.BACKEND_ENDPOINT}/image`;
-    console.log(image);
-    console.log(`${backendEndpoint}/${image.uuid!}`)
     return `${backendEndpoint}/${image.uuid!}`;
+  }
+
+  public static setImageUrl(image: Image): Image {
+    const backendEndpoint = `${environment.BACKEND_ENDPOINT}/image`;
+    image.imageUrl = `${backendEndpoint}/${image.uuid!}`;
+    return image;
   }
 }

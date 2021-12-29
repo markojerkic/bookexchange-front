@@ -31,4 +31,7 @@ export class AdvertPreviewComponent implements OnInit {
     this.router.navigate([`/advert/${advertId}`]);
   }
 
+  public previewImageUrl(advert: Advert): string {
+    return advert.advertImages.length > 0? advert.advertImages[0].imageUrl!: '/assets/no-image-available-2.jpg';
+  }
 }

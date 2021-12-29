@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Observable, throwError} from "rxjs";
-import {Advert} from "../../../../model";
-import {AdvertService, ImageService, NotificationService} from "../../../../services";
-import {catchError, finalize, tap} from "rxjs/operators";
+import {Advert, LoggedInUser} from "../../../../model";
+import {AdvertService, AuthService, NotificationService} from "../../../../services";
+import {catchError, finalize, map, tap} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ImageUtil} from "../../../../util";
 
@@ -16,6 +16,7 @@ export class AdvertViewComponent implements OnInit {
 
   public advert$!: Observable<Advert>;
   public loading: boolean;
+  public advertIsDeleting: boolean;
   public images?: string[];
   public responsiveOptions: any[] = [
     {
@@ -32,12 +33,15 @@ export class AdvertViewComponent implements OnInit {
     }
   ];
   private id!: number;
+  public username$!: Observable<string | undefined>;
 
   constructor(private activatedRoute: ActivatedRoute,
               private advertService: AdvertService,
               private notificationService: NotificationService,
-              private imageService: ImageService) {
+              private router: Router,
+              private authService: AuthService) {
     this.loading = false;
+    this.advertIsDeleting = false;
   }
 
   ngOnInit(): void {
@@ -45,6 +49,13 @@ export class AdvertViewComponent implements OnInit {
       this.id = params['id'];
       this.setAdvert();
     });
+
+    this.username$ = this.authService.userToken$.pipe(map((token: LoggedInUser | undefined) => {
+      if (!token) {
+        return undefined;
+      }
+      return token.username;
+    }))
   }
 
   private setAdvert(): void {
@@ -58,6 +69,23 @@ export class AdvertViewComponent implements OnInit {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }), tap(console.log), tap((advert: Advert) => this.images = advert.advertImages.map(ImageUtil.getImageUrl)));
+      }), tap((advert: Advert) => this.images = advert.advertImages.map(ImageUtil.getImageUrl)));
+  }
+
+  public editAdvert(advertId: number): void {
+    this.router.navigate([`/advert/edit/${advertId}`]);
+  }
+
+  public deleteAdvert(advertId: number): void {
+    this.advertIsDeleting = true;
+    this.advertService.deleteAdvert(advertId).pipe(finalize(() => this.advertIsDeleting = false),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 403) {
+         this.notificationService.warn('Nemate pravo izbrisati ovaj oglas');
+        } else {
+          this.notificationService.error('Greška prilikom brisanja oglasa');
+        }
+        return throwError(() => error);
+      })).subscribe();
   }
 }

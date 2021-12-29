@@ -34,6 +34,11 @@ const routes: Routes = [
     component: AdvertViewComponent
   },
   {
+    path: 'advert/edit/:id',
+    component: AdvertComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'adverts',
     component: AdvertListComponent
   },

@@ -11,11 +11,16 @@
       <div class="advert-list-item">
         <!--<p-image src="https://plchldr.co/i/500x250" [preview]="true" width="150" alt="Image"></p-image>-->
         <!--<img src="https://plchldr.co/i/500x250"/>-->
-        <p-image [preview]="true" src="https://plchldr.co/i/500x250" ></p-image>
+        <p-image [preview]="true" [src]="previewImageUrl(advert)" ></p-image>
         <div class="advert-list-detail">
           <div class="advert-name" style="cursor: pointer;"
                [routerLink]="'/advert/' + advert.id!">{{advert.title}}</div>
           <div class="advert-description">{{advert.description}}</div>
+          <h4 class="advert-description">Knjiga:
+            <span [routerLink]="'/book/' + advert.advertisedBook!.id" class="underline link-text"
+                 pTooltip="Pogledajte knjigu"
+                 style="cursor: pointer;">{{advert.advertisedBook!.title}}</span>
+          </h4>
           <!--<p-rating [ngModel]="advert.rating" [readonly]="true" [cancel]="false"></p-rating>-->
           <i class="pi pi-tag advert-category-icon"></i>
           <span class="advert-category">{{advert.advertType === 'LOOKING' ? 'Tražim' : 'Nudim'}}</span>
@@ -46,6 +51,12 @@
           <div class="info-container">
             <div class="advert-name">{{advert.title}}</div>
             <div class="advert-description">{{advert.description}}</div>
+            <div class="col-6">
+              <h4>Knjiga</h4>
+              <p [routerLink]="'/book/' + advert.advertisedBook!.id" class="underline link-text"
+                 pTooltip="Pogledajte knjigu"
+                 style="cursor: pointer;">{{advert.advertisedBook!.title}}</p>
+            </div>
           </div>
           <!--<p-rating [ngModel]="advert.rating" [readonly]="true" [cancel]="false"></p-rating>-->
         </div>

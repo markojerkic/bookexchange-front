@@ -3,6 +3,12 @@
         class="grid flex justify-content-center">
   <ng-template pTemplate="subtitle">
     <h3>Objavio korisnik <span class="font-bold font-italic">{{advert.userCreated!.username}}</span></h3>
+    <p-button (onClick)="editAdvert(advert.id!)" *ngIf="(username$ | async) === advert.userCreated.username"
+              icon="pi pi-pencil"
+              label="Uredi oglas"></p-button>
+    <p-button (onClick)="deleteAdvert(advert.id!)" *ngIf="(username$ | async) === advert.userCreated.username"
+              icon="pi pi-trash"
+              label="Izbriši oglas"></p-button>
   </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
