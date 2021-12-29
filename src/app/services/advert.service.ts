@@ -25,7 +25,8 @@ export class AdvertService {
     if (!httpParams) {
       httpParams = new HttpParams();
     }
-    httpParams = httpParams.append('page', String(pageNumber)).append('size', '10');
+    httpParams = httpParams.append('page', String(pageNumber)).append('size', '10')
+      .append('sort', 'lastModified,DESC');
 
     return this.httpClient.get<Page<Advert>>(this.backendEndpoint, {params: httpParams});
   }
