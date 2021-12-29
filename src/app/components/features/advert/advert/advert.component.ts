@@ -76,7 +76,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
       }),
       advertType: [null, Validators.required],
       transactionType: [null, Validators.required],
-      price: [null]
+      price: [null],
+      advertImages: []
     });
 
     this.authors = this.authorService.getAllAuthors();
@@ -121,12 +122,18 @@ export class AdvertComponent implements OnInit, OnDestroy {
   }
 
   public uploadImages(images: File[]): void {
-    this.imageService.uploadImages(images).pipe(catchError((error: HttpErrorResponse) => {
+    this.fileUpload.uploading = true;
+    this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+      catchError((error: HttpErrorResponse) => {
       this.notificationService.error('Greška prilikom prijenosa slika');
       return throwError(() => error);
     })).subscribe((images: Image[]) => {
-      console.log(images);
       this.fileUpload.clear();
+      this.form.patchValue({advertImages: images});
     });
+  }
+
+  private mapImageToUUID(image: Image): {uuid: string} {
+    return {uuid: image.uuid!};
   }
 }

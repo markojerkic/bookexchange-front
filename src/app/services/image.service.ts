@@ -18,7 +18,6 @@ export class ImageService {
   public uploadImages(imagesEvent: any): Observable<Image[]> {
     const images: File[] = imagesEvent.files;
     const formData = new FormData();
-    console.log(images)
     images.forEach((image: File) => {
       formData.append('images', image, image.name);
     });
