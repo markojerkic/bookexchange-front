@@ -58,6 +58,23 @@ export class AdvertViewComponent implements OnInit {
     }))
   }
 
+  public editAdvert(advertId: number): void {
+    this.router.navigate([`/advert/edit/${advertId}`]);
+  }
+
+  public deleteAdvert(advertId: number): void {
+    this.advertIsDeleting = true;
+    this.advertService.deleteAdvert(advertId).pipe(finalize(() => this.advertIsDeleting = false),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 403) {
+          this.notificationService.warn('Nemate pravo izbrisati ovaj oglas');
+        } else {
+          this.notificationService.error('Greška prilikom brisanja oglasa');
+        }
+        return throwError(() => error);
+      })).subscribe(() => this.router.navigate(['/']));
+  }
+
   private setAdvert(): void {
     this.loading = true;
     this.advert$ = this.advertService.getAdvertById(this.id).pipe(
@@ -70,22 +87,5 @@ export class AdvertViewComponent implements OnInit {
         }
         return throwError(() => error);
       }), tap((advert: Advert) => this.images = advert.advertImages.map(ImageUtil.getImageUrl)));
-  }
-
-  public editAdvert(advertId: number): void {
-    this.router.navigate([`/advert/edit/${advertId}`]);
-  }
-
-  public deleteAdvert(advertId: number): void {
-    this.advertIsDeleting = true;
-    this.advertService.deleteAdvert(advertId).pipe(finalize(() => this.advertIsDeleting = false),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 403) {
-         this.notificationService.warn('Nemate pravo izbrisati ovaj oglas');
-        } else {
-          this.notificationService.error('Greška prilikom brisanja oglasa');
-        }
-        return throwError(() => error);
-      })).subscribe();
   }
 }

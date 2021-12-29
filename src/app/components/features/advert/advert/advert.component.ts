@@ -10,12 +10,13 @@ import {
   ImageService,
   NotificationService
 } from "../../../../services";
-import {catchError, finalize, takeUntil, tap} from "rxjs/operators";
+import {catchError, finalize, map, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {DialogService} from "primeng/dynamicdialog";
 import {BookComponent} from "../../book";
 import {HttpErrorResponse} from "@angular/common/http";
 import {FileUpload} from "primeng/fileupload";
+import {ImageUtil} from "../../../../util";
 
 @Component({
   selector: 'app-advert',
@@ -37,6 +38,9 @@ export class AdvertComponent implements OnInit, OnDestroy {
   public transactionTypes: { label: string, value: TransactionType }[];
   private onDestroy$: Subject<void>;
   public id?: number;
+  public formImages$!: Observable<Image[]>;
+
+  public imageIsDeleting: Map<string, boolean>;
 
   constructor(private formBuilder: FormBuilder,
               private authorService: AuthorService,
@@ -50,6 +54,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute) {
     this.onDestroy$ = new Subject();
     this.loading = false;
+    this.imageIsDeleting = new Map();
 
     this.advertTypes = [
       {
@@ -82,6 +87,8 @@ export class AdvertComponent implements OnInit, OnDestroy {
       advertImages: []
     });
 
+    this.setFormImages();
+
     this.activatedRoute.params.subscribe((params: Params) => {
       const id = params['id'];
       if (id) {
@@ -95,6 +102,11 @@ export class AdvertComponent implements OnInit, OnDestroy {
     this.books = this.bookService.getAllBooks();
   }
 
+  private setFormImages(): void {
+    this.formImages$ = this.form.valueChanges.pipe(map((value) => value.advertImages as Image[]),
+      map((advertImages: Image[]) => advertImages.map(ImageUtil.setImageUrl)));
+  }
+
   ngOnDestroy() {
     this.onDestroy$.next();
     this.onDestroy$.unsubscribe();
@@ -103,15 +115,15 @@ export class AdvertComponent implements OnInit, OnDestroy {
   public submitAdvert(): void {
     const advert: Advert = this.form.value;
     this.loading = true;
-    this.advertService.saveAdvert(advert).pipe(
+    this.advertService.saveAdvert(advert, this.id).pipe(
       finalize(() => this.loading = false),
       catchError((error: Error) => {
-        this.notificationService.error('Greška prilikom dodavanja oglasa');
+        this.notificationService.error('Greška prilikom spremanja oglasa');
         return throwError(() => error);
       }),
       takeUntil(this.onDestroy$)).subscribe((savedAdvert: Advert) => {
       this.router.navigate([`/advert/${savedAdvert.id}`]);
-      this.notificationService.success('Uspješno dodan osglas');
+      this.notificationService.success('Uspješno spremljen oglas');
     });
   }
 
@@ -140,12 +152,10 @@ export class AdvertComponent implements OnInit, OnDestroy {
         return throwError(() => error);
       })).subscribe((images: Image[]) => {
       this.fileUpload.clear();
-      this.form.patchValue({advertImages: images});
+      const currentImages: Image[] = this.form.get('advertImages')!.value;
+      images.map(ImageUtil.setImageUrl).forEach((image: Image) => currentImages.push(image));
+      this.form.patchValue({advertImages: currentImages});
     });
-  }
-
-  private mapImageToUUID(image: Image): {uuid: string} {
-    return {uuid: image.uuid!};
   }
 
   private setAdvert(advertId: number): void {
@@ -167,5 +177,19 @@ export class AdvertComponent implements OnInit, OnDestroy {
       });
     });
 
+  }
+
+  public removeImage(imageUuid: string): void {
+    this.imageIsDeleting.set(imageUuid, true);
+    this.imageService.deleteImage(imageUuid).pipe(finalize(() => this.imageIsDeleting.set(imageUuid, false)),
+      catchError((error: Error) => {
+        this.notificationService.error(`Greška prilikom birsanja slike ${imageUuid}`);
+        return throwError(() => error);
+      }))
+      .subscribe(() => {
+        let currentImages: Image[] = this.form.get('advertImages')!.value;
+        currentImages = currentImages.filter((image: Image) => image.uuid !== imageUuid);
+        this.form.patchValue({advertImages: currentImages});
+      });
   }
 }

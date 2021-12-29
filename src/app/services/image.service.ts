@@ -23,4 +23,9 @@ export class ImageService {
     });
     return this.httpClient.post<Image[]>(this.backendEndpoint, formData);
   }
+
+  public deleteImage(imageUuid: string): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${imageUuid}`);
+
+  }
 }

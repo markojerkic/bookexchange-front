@@ -18,8 +18,11 @@ export class AdvertService {
     this.backendEndpoint = `${environment.BACKEND_ENDPOINT}/advert`;
   }
 
-  public saveAdvert(advert: Advert): Observable<Advert> {
-    return this.httpClient.post<Advert>(this.backendEndpoint, advert);
+  public saveAdvert(advert: Advert, id: number | undefined): Observable<Advert> {
+    if (id) {
+      return this.updateAdvert(advert, id);
+    }
+    return this.saveNewAdvert(advert);
   }
 
   public getAdvertPage(pageNumber: number, httpParams?: HttpParams): Observable<Page<Advert>> {
@@ -39,6 +42,10 @@ export class AdvertService {
     }));
   }
 
+  public deleteAdvert(advertId: number): Observable<Object> {
+    return this.httpClient.delete(`${this.backendEndpoint}/${advertId}`);
+  }
+
   private mapAdvertImageUrl(advertPage: Page<Advert>): Page<Advert> {
     advertPage.content = advertPage.content.map((advert: Advert) => {
       advert.advertImages.map(ImageUtil.setImageUrl);
@@ -47,7 +54,11 @@ export class AdvertService {
     return advertPage;
   }
 
-  public deleteAdvert(advertId: number): Observable<Object> {
-    return this.httpClient.delete(`${this.backendEndpoint}/${advertId}`);
+  private saveNewAdvert(advert: Advert): Observable<Advert> {
+    return this.httpClient.post<Advert>(this.backendEndpoint, advert);
+  }
+
+  private updateAdvert(advert: Advert, id: number) {
+    return this.httpClient.patch<Advert>(`${this.backendEndpoint}/${id}`, advert);
   }
 }

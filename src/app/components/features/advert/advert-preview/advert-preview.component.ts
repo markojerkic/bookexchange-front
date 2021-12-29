@@ -32,6 +32,6 @@ export class AdvertPreviewComponent implements OnInit {
   }
 
   public previewImageUrl(advert: Advert): string {
-    return advert.advertImages.length > 0? advert.advertImages[0].imageUrl!: '/assets/no-image-available-2.jpg';
+    return advert.advertImages.length > 0 ? advert.advertImages[0].imageUrl! : '/assets/no-image-available-2.jpg';
   }
 }

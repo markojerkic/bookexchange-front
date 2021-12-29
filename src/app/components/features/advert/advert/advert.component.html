@@ -80,13 +80,30 @@
                     name="images[]"
                     uploadLabel="Prenesi"></p-fileUpload>
 
+      <div class="col-12" *ngIf="(formImages$ | async)! as formImages">
+        <h3 *ngIf="formImages.length > 0">Prenešene slike</h3>
+        <div *ngFor="let image of formImages"
+             class="grid flex justify-content-center lg:justify-content-between
+             md:justify-content-between align-items-center">
+          <p-divider class="col-12"></p-divider>
+          <img [src]="image.imageUrl!" style="width: 10rem;" class="col-12 lg:col-4 md:col-4 align-self-center">
+          <div class="col-12 lg:col-4 md:col-4">{{image.uuid!}}</div>
+          <p-button class="col-12 lg:col-4 md:col-4" icon="pi pi-times"
+                    (onClick)="removeImage(image.uuid!)"
+                    [loading]="imageIsDeleting.get(image.uuid!)!"
+                    [disabled]="imageIsDeleting.get(image.uuid!)!"
+                    label="Ukloni sliku"></p-button>
+        </div>
+      </div>
+
     </form>
 
     <ng-template pTemplate="footer">
-      <button (click)="submitAdvert()" [disabled]="!form.valid || loading" [loading]="loading"
-              label="Predaj oglas"
-              pButton
-              type="submit"></button>
+      <button (click)="submitAdvert()"
+              [disabled]="!form.valid || loading || fileUpload.files.length > 0"
+              [loading]="loading"
+              [label]="id? 'Uredi oglas': 'Predaj oglas'"
+              pButton></button>
     </ng-template>
   </p-card>
 </div>
