@@ -12,7 +12,7 @@ export interface Advert {
   advertType: AdvertType;
   transactionType: TransactionType;
   advertStatus: AdvertStatus;
-  userCreated?: User;
-  advertisedBook?: Book;
-  advertImages?: Image[];
+  userCreated: User;
+  advertisedBook: Book;
+  advertImages: Image[];
 }

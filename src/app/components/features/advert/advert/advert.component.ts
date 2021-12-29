@@ -59,7 +59,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
     ];
     this.transactionTypes = [
       {
-        label: 'Kupovina', value: TransactionType.BUY
+        label: 'Kupovina/Prodaja', value: TransactionType.BUY
       },
       {
         label: 'Posudba', value: TransactionType.LOAN
@@ -111,7 +111,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
       width: '70%'
     });
 
-    ref.onClose.subscribe((savedBook: Book) => {
+    ref.onClose.pipe(takeUntil(this.onDestroy$)).subscribe((savedBook: Book) => {
       if (!savedBook) {
         return;
       }
@@ -124,10 +124,11 @@ export class AdvertComponent implements OnInit, OnDestroy {
   public uploadImages(images: File[]): void {
     this.fileUpload.uploading = true;
     this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+      takeUntil(this.onDestroy$),
       catchError((error: HttpErrorResponse) => {
-      this.notificationService.error('Greška prilikom prijenosa slika');
-      return throwError(() => error);
-    })).subscribe((images: Image[]) => {
+        this.notificationService.error('Greška prilikom prijenosa slika');
+        return throwError(() => error);
+      })).subscribe((images: Image[]) => {
       this.fileUpload.clear();
       this.form.patchValue({advertImages: images});
     });

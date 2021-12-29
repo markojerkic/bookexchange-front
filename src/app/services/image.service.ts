@@ -21,6 +21,6 @@ export class ImageService {
     images.forEach((image: File) => {
       formData.append('images', image, image.name);
     });
-    return this.httpClient.post<Image[]>(`${this.backendEndpoint}`, formData);
+    return this.httpClient.post<Image[]>(this.backendEndpoint, formData);
   }
 }

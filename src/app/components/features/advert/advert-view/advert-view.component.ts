@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Observable, throwError} from "rxjs";
 import {Advert} from "../../../../model";
-import {AdvertService, NotificationService} from "../../../../services";
-import {catchError, finalize} from "rxjs/operators";
+import {AdvertService, ImageService, NotificationService} from "../../../../services";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ImageUtil} from "../../../../util";
 
 @Component({
   selector: 'app-advert-view',
@@ -15,12 +16,7 @@ export class AdvertViewComponent implements OnInit {
 
   public advert$!: Observable<Advert>;
   public loading: boolean;
-  public images = [
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-  ];
+  public images?: string[];
   public responsiveOptions: any[] = [
     {
       breakpoint: '1024px',
@@ -39,7 +35,8 @@ export class AdvertViewComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private advertService: AdvertService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private imageService: ImageService) {
     this.loading = false;
   }
 
@@ -61,6 +58,6 @@ export class AdvertViewComponent implements OnInit {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }));
+      }), tap(console.log), tap((advert: Advert) => this.images = advert.advertImages.map(ImageUtil.getImageUrl)));
   }
 }
