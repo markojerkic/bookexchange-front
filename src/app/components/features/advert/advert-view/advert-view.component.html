@@ -57,6 +57,15 @@
            style="cursor: pointer;">{{advert.advertisedBook!.bookAuthor!.displayName}}</p>
       </div>
 
+      <p-divider class="col-12"></p-divider>
+
+      <h3>Dodajte svoju recenziju</h3>
+
+      <app-review (onSubmit)="submitReview($event, advert.id!)"
+                  [disabled]="!(authService.isAuthenticated$ | async)!"
+                  [loading]="reviewSubmitLoading"
+                  class="col-12"></app-review>
+
     </div>
   </ng-template>
 </p-card>

@@ -5,3 +5,4 @@ export * from './author.service';
 export * from './book.service';
 export * from './advert.service';
 export * from './image.service';
+export * from './review.service';

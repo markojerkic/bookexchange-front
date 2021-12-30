@@ -21,7 +21,9 @@ import {
   HomeComponent,
   LoginComponent,
   ProfileComponent,
-  RegisterComponent
+  RegisterComponent,
+  ReviewComponent,
+  ReviewListComponent
 } from './components';
 import {MenubarModule} from 'primeng/menubar';
 import {ButtonModule} from 'primeng/button';
@@ -53,6 +55,7 @@ import {DataViewModule} from "primeng/dataview";
 import {GalleriaModule} from "primeng/galleria";
 import {TabViewModule} from "primeng/tabview";
 import {FileUploadModule} from "primeng/fileupload";
+import {RatingModule} from "primeng/rating";
 
 @NgModule({
   declarations: [
@@ -73,7 +76,9 @@ import {FileUploadModule} from "primeng/fileupload";
     BookViewComponent,
     GenreViewComponent,
     AuthorViewComponent,
-    AdvertViewComponent
+    AdvertViewComponent,
+    ReviewComponent,
+    ReviewListComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +112,8 @@ import {FileUploadModule} from "primeng/fileupload";
     DataViewModule,
     GalleriaModule,
     TabViewModule,
-    FileUploadModule
+    FileUploadModule,
+    RatingModule
   ],
   providers: [
     MessageService,

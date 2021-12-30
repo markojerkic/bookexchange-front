@@ -1,0 +1,23 @@
+<div [formGroup]="reviewForm" class="grid">
+  <div class="col-12">
+    <label for="reviewGrade">Recenzija</label>
+    <p-rating [cancel]="false"
+              [disabled]="disabled!"
+              formControlName="reviewGrade"
+              id="reviewGrade"></p-rating>
+  </div>
+  <div class="col-12 p-field ">
+    <span class="p-float-label">
+      <textarea [disabled]="disabled!"
+                [pTooltip]="disabled? 'Prijavite se': ''"
+                formControlName="description"
+                id="description"
+                pInputTextarea
+                rows="3" style="width: 100%;"></textarea>
+      <label for="description">Opis recenzije</label>
+    </span>
+  </div>
+
+  <p-button (onClick)="submitReview()" [disabled]="reviewForm.invalid || disabled! || loading!"
+            [loading]="loading!" label="Dodaj recenziju"></p-button>
+</div>

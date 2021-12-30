@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {Observable, throwError} from "rxjs";
-import {Advert, LoggedInUser} from "../../../../model";
-import {AdvertService, AuthService, NotificationService} from "../../../../services";
-import {catchError, finalize, map, tap} from "rxjs/operators";
+import {Observable, Subject, throwError} from "rxjs";
+import {Advert, LoggedInUser, Review} from "../../../../model";
+import {AdvertService, AuthService, NotificationService, ReviewService} from "../../../../services";
+import {catchError, finalize, map, takeUntil, tap} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ImageUtil} from "../../../../util";
 
@@ -12,10 +12,14 @@ import {ImageUtil} from "../../../../util";
   templateUrl: './advert-view.component.html',
   styleUrls: ['./advert-view.component.scss']
 })
-export class AdvertViewComponent implements OnInit {
+export class AdvertViewComponent implements OnInit, OnDestroy {
+
+  public reviewSubmitLoading: boolean;
 
   public advert$!: Observable<Advert>;
   public loading: boolean;
+  public reviewsLoading: boolean;
+  private ngDestroy$: Subject<void>;
   public advertIsDeleting: boolean;
   public images?: string[];
   public responsiveOptions: any[] = [
@@ -39,13 +43,23 @@ export class AdvertViewComponent implements OnInit {
               private advertService: AdvertService,
               private notificationService: NotificationService,
               private router: Router,
-              private authService: AuthService) {
+              private reviewService: ReviewService,
+              public authService: AuthService) {
     this.loading = false;
+    this.reviewsLoading = false;
+    this.reviewSubmitLoading = false;
     this.advertIsDeleting = false;
+
+    this.ngDestroy$ = new Subject();
+  }
+
+  ngOnDestroy() {
+    this.ngDestroy$.next();
+    this.ngDestroy$.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe((params: Params) => {
+    this.activatedRoute.params.pipe(takeUntil(this.ngDestroy$)).subscribe((params: Params) => {
       this.id = params['id'];
       this.setAdvert();
     });
@@ -65,6 +79,7 @@ export class AdvertViewComponent implements OnInit {
   public deleteAdvert(advertId: number): void {
     this.advertIsDeleting = true;
     this.advertService.deleteAdvert(advertId).pipe(finalize(() => this.advertIsDeleting = false),
+      takeUntil(this.ngDestroy$),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 403) {
           this.notificationService.warn('Nemate pravo izbrisati ovaj oglas');
@@ -87,5 +102,15 @@ export class AdvertViewComponent implements OnInit {
         }
         return throwError(() => error);
       }), tap((advert: Advert) => this.images = advert.advertImages.map(ImageUtil.getImageUrl)));
+  }
+
+  public submitReview(review: Review, advertId: number): void {
+    this.reviewSubmitLoading = true;
+    this.reviewService.addAdvertReview(review, advertId).pipe(finalize(() => this.reviewSubmitLoading = false),
+      takeUntil(this.ngDestroy$),
+      catchError((error: HttpErrorResponse) => {
+        this.notificationService.error('Greška prilikom dodavanja recenzije');
+        return throwError(() => error);
+      })).subscribe(console.log);
   }
 }
