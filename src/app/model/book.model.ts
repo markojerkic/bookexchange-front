@@ -7,10 +7,10 @@ export interface Book {
   id?: number;
   title: string;
   isbn: string;
-  reviews?: Review[];
-  genres?: Genre[];
-  bookImages?: Image[];
-  bookAuthor?: Author;
+  reviews: Review[];
+  genres: Genre[];
+  bookImages: Image[];
+  bookAuthor: Author;
 
   displayName?: string;
 }

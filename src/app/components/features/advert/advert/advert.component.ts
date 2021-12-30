@@ -152,7 +152,10 @@ export class AdvertComponent implements OnInit, OnDestroy {
         return throwError(() => error);
       })).subscribe((images: Image[]) => {
       this.fileUpload.clear();
-      const currentImages: Image[] = this.form.get('advertImages')!.value;
+      let currentImages: Image[] = this.form.get('advertImages')!.value;
+      if (!currentImages) {
+        currentImages = [];
+      }
       images.map(ImageUtil.setImageUrl).forEach((image: Image) => currentImages.push(image));
       this.form.patchValue({advertImages: currentImages});
     });
@@ -176,7 +179,6 @@ export class AdvertComponent implements OnInit, OnDestroy {
         advertImages: advert.advertImages
       });
     });
-
   }
 
   public removeImage(imageUuid: string): void {

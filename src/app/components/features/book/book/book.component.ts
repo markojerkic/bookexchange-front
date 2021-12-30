@@ -1,14 +1,23 @@
-import {Component, OnInit, Optional} from '@angular/core';
+import {Component, OnDestroy, OnInit, Optional, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Observable, throwError} from "rxjs";
-import {Author, Book, Genre} from "../../../../model";
-import {AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {catchError, finalize, tap} from "rxjs/operators";
+import {Observable, Subject, throwError} from "rxjs";
+import {Author, Book, Genre, Image} from "../../../../model";
+import {
+  AuthorService,
+  AuthService,
+  BookService,
+  GenreService,
+  ImageService,
+  NotificationService
+} from "../../../../services";
+import {catchError, finalize, map, takeUntil, tap} from "rxjs/operators";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {AuthorComponent} from "../../author";
 import {GenreComponent} from "../../genre";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
+import {FileUpload} from "primeng/fileupload";
+import {ImageUtil} from "../../../../util";
 
 @Component({
   selector: 'app-book',
@@ -16,7 +25,10 @@ import {HttpErrorResponse} from "@angular/common/http";
   styleUrls: ['./book.component.scss'],
   providers: [DialogService]
 })
-export class BookComponent implements OnInit {
+export class BookComponent implements OnInit, OnDestroy {
+
+  @ViewChild('fileUpload')
+  private fileUpload!: FileUpload;
 
   public bookForm!: FormGroup;
 
@@ -25,6 +37,10 @@ export class BookComponent implements OnInit {
 
   public loading: boolean;
   public id?: number;
+  public formImages$!: Observable<Image[]>;
+  private onDestroy$: Subject<void>;
+
+  public imageIsDeleting: Map<string, boolean>;
 
   constructor(private formBuilder: FormBuilder,
               private authorService: AuthorService,
@@ -32,10 +48,14 @@ export class BookComponent implements OnInit {
               private bookService: BookService,
               private notificationService: NotificationService,
               private dialogService: DialogService,
-              @Optional() private dialogRef: DynamicDialogRef,
+              @Optional() public dialogRef: DynamicDialogRef,
               private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private imageService: ImageService,
+              public authService: AuthService) {
     this.loading = false;
+    this.imageIsDeleting = new Map<string, boolean>();
+    this.onDestroy$ = new Subject();
   }
 
   ngOnInit(): void {
@@ -45,8 +65,11 @@ export class BookComponent implements OnInit {
       genres: [null, Validators.required],
       bookAuthor: this.formBuilder.group({
         id: [null, Validators.required]
-      })
+      }),
+      bookImages: []
     });
+
+    this.setFormImages();
 
     this.activatedRoute.params.subscribe((params: Params) => {
       const id = params['id'];
@@ -60,12 +83,30 @@ export class BookComponent implements OnInit {
     this.genres$ = this.genreService.getAllGenres();
   }
 
+  ngOnDestroy() {
+    this.onDestroy$.next();
+    this.onDestroy$.unsubscribe();
+  }
+
+  private setFormImages(): void {
+    this.formImages$ = this.bookForm.valueChanges.pipe(map((value) => value.bookImages as Image[]),
+      map((bookImages: Image[]) => bookImages.map(ImageUtil.setImageUrl)));
+  }
+
   public submitBook(): void {
     const book: Book = this.bookForm.value;
 
     this.loading = true;
     this.bookService.saveBook(book, this.id).pipe(
       finalize(() => this.loading = false),
+      takeUntil(this.onDestroy$),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.bookForm.controls['isbn'].setErrors({'used': true});
+        }
+        this.notificationService.error('Greška prilikom spremanja knjige');
+        return throwError(() => error);
+      }),
       tap((savedBook: Book) => {
         this.notificationService.success(`Knjiga ${savedBook.title} uspješno spremljena`);
         if (this.dialogRef) {
@@ -73,11 +114,6 @@ export class BookComponent implements OnInit {
         } else {
           this.router.navigate([`/book/${savedBook.id}`]);
         }
-      }, (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          this.bookForm.controls['isbn'].setErrors({'used': true});
-        }
-        this.notificationService.error('Greška prilikom spremanja knjige');
       })).subscribe();
   }
 
@@ -127,9 +163,42 @@ export class BookComponent implements OnInit {
         isbn: book.isbn,
         genres: book.genres,
         bookAuthor: {
-          id: book.bookAuthor!.id
-        }
+          id: book.bookAuthor.id
+        },
+        bookImages: book.bookImages
       });
+    });
+  }
+
+  public removeImage(imageUuid: string): void {
+    this.imageIsDeleting.set(imageUuid, true);
+    this.imageService.deleteImage(imageUuid).pipe(finalize(() => this.imageIsDeleting.set(imageUuid, false)),
+      catchError((error: Error) => {
+        this.notificationService.error(`Greška prilikom birsanja slike ${imageUuid}`);
+        return throwError(() => error);
+      }))
+      .subscribe(() => {
+        let currentImages: Image[] = this.bookForm.get('bookImages')!.value;
+        currentImages = currentImages.filter((image: Image) => image.uuid !== imageUuid);
+        this.bookForm.patchValue({bookImages: currentImages});
+      });
+  }
+
+  public uploadImages(images: File[]): void {
+    this.fileUpload.uploading = true;
+    this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+      takeUntil(this.onDestroy$),
+      catchError((error: HttpErrorResponse) => {
+        this.notificationService.error('Greška prilikom prijenosa slika');
+        return throwError(() => error);
+      })).subscribe((images: Image[]) => {
+      this.fileUpload.clear();
+      let currentImages: Image[] = this.bookForm.get('bookImages')!.value!;
+      if (!currentImages) {
+        currentImages = [];
+      }
+      images.map(ImageUtil.setImageUrl).forEach((image: Image) => currentImages.push(image));
+      this.bookForm.patchValue({bookImages: currentImages});
     });
   }
 }
