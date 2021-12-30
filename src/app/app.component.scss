@@ -1,4 +1,13 @@
 :host::ng-deep {
+
+  @media screen and (min-width: 576px) {
+    p-galleria.p-element {
+      max-width: 50rem;
+      min-width: 35rem;
+      display: inline-block;
+    }
+  }
+
   input .p-dropdown-filter {
     width: 100%;
   }
