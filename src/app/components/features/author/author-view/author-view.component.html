@@ -9,7 +9,8 @@
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
     <p-galleria [containerStyle]="{'max-width': '90vw'}" [numVisible]="5"
-                [responsiveOptions]="responsiveOptions" [value]="images">
+                *ngIf="author.authorImages.length > 0"
+                [responsiveOptions]="responsiveOptions" [value]="images!">
       <ng-template let-item pTemplate="item">
         <img [src]="item" style="width: 100%;"/>
       </ng-template>

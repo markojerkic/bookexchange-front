@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable, throwError} from "rxjs";
+import {Observable, tap, throwError} from "rxjs";
 import {Author} from "../../../../model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AuthorService, AuthService, NotificationService} from "../../../../services";
 import {catchError, finalize} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ImageUtil} from "../../../../util";
 
 @Component({
   selector: 'app-author-view',
@@ -15,12 +16,7 @@ export class AuthorViewComponent implements OnInit {
 
   public author$!: Observable<Author>;
   public loading: boolean;
-  public images = [
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-  ];
+  public images?: string[];
   public responsiveOptions: any[] = [
     {
       breakpoint: '1024px',
@@ -67,6 +63,6 @@ export class AuthorViewComponent implements OnInit {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }));
+      }), tap((author: Author) => this.images = author.authorImages.map(ImageUtil.getImageUrl)));
   }
 }

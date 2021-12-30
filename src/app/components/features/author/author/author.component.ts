@@ -1,12 +1,15 @@
-import {Component, OnInit, Optional} from '@angular/core';
+import {Component, OnDestroy, OnInit, Optional, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthorService, GenreService, NotificationService} from "../../../../services";
+import {AuthorService, AuthService, GenreService, ImageService, NotificationService} from "../../../../services";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
-import {Author, Genre} from "../../../../model";
-import {finalize, tap} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {Author, Genre, Image} from "../../../../model";
+import {catchError, finalize, map, takeUntil, tap} from "rxjs/operators";
+import {Observable, Subject, throwError} from "rxjs";
 import {GenreComponent} from "../../genre";
 import {ActivatedRoute, Params, Router} from '@angular/router';
+import {HttpErrorResponse} from "@angular/common/http";
+import {ImageUtil} from "../../../../util";
+import {FileUpload} from "primeng/fileupload";
 
 @Component({
   selector: 'app-author',
@@ -14,12 +17,18 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
   styleUrls: ['./author.component.scss'],
   providers: [DialogService]
 })
-export class AuthorComponent implements OnInit {
+export class AuthorComponent implements OnInit, OnDestroy {
+
+  public formImages$!: Observable<Image[]>;
 
   public authorForm!: FormGroup;
   public loading: boolean;
 
   public id?: number;
+  public imageIsDeleting: Map<string, boolean>;
+  @ViewChild('fileUpload')
+  private fileUpload!: FileUpload;
+  private onDestroy$: Subject<void>;
 
   public genres$!: Observable<Genre[]>;
 
@@ -27,11 +36,20 @@ export class AuthorComponent implements OnInit {
               private authorService: AuthorService,
               private genreService: GenreService,
               private notificationService: NotificationService,
-              @Optional() private dialogRef: DynamicDialogRef,
+              @Optional() public dialogRef: DynamicDialogRef,
               private dialogService: DialogService,
               private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private imageService: ImageService,
+              public authService: AuthService) {
     this.loading = false;
+    this.onDestroy$ = new Subject<void>();
+    this.imageIsDeleting = new Map<string, boolean>();
+  }
+
+  ngOnDestroy() {
+    this.onDestroy$.next();
+    this.onDestroy$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -40,8 +58,11 @@ export class AuthorComponent implements OnInit {
       lastName: [null, Validators.required],
       yearOfBirth: [null, Validators.required],
       yearOfDeath: [null],
-      authorsGenres: [null]
+      authorsGenres: [null],
+      authorImages: []
     });
+
+    this.setFormImages();
 
     this.activatedRoute.params.subscribe((params: Params) => {
       const id = params['id'];
@@ -87,6 +108,38 @@ export class AuthorComponent implements OnInit {
 
   }
 
+  public removeImage(imageUuid: string): void {
+    this.imageIsDeleting.set(imageUuid, true);
+    this.imageService.deleteImage(imageUuid).pipe(finalize(() => this.imageIsDeleting.set(imageUuid, false)),
+      catchError((error: Error) => {
+        this.notificationService.error(`Greška prilikom birsanja slike ${imageUuid}`);
+        return throwError(() => error);
+      }))
+      .subscribe(() => {
+        let currentImages: Image[] = this.authorForm.get('authorImages')!.value;
+        currentImages = currentImages.filter((image: Image) => image.uuid !== imageUuid);
+        this.authorForm.patchValue({authorImages: currentImages});
+      });
+  }
+
+  public uploadImages(images: File[]): void {
+    this.fileUpload.uploading = true;
+    this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+      takeUntil(this.onDestroy$),
+      catchError((error: HttpErrorResponse) => {
+        this.notificationService.error('Greška prilikom prijenosa slika');
+        return throwError(() => error);
+      })).subscribe((images: Image[]) => {
+      this.fileUpload.clear();
+      let currentImages: Image[] = this.authorForm.get('authorImages')!.value!;
+      if (!currentImages) {
+        currentImages = [];
+      }
+      images.map(ImageUtil.setImageUrl).forEach((image: Image) => currentImages.push(image));
+      this.authorForm.patchValue({authorImages: currentImages});
+    });
+  }
+
   private setAuthor(id: number) {
     this.loading = true;
     this.authorService.getAuthorById(id).pipe(finalize(() => this.loading = false)).subscribe((author: Author) => {
@@ -95,10 +148,17 @@ export class AuthorComponent implements OnInit {
         lastName: author.lastName,
         yearOfBirth: author.yearOfBirth,
         yearOfDeath: author.yearOfDeath,
-        authorsGenres: author.authorsGenres
+        authorsGenres: author.authorsGenres,
+        authorImages: author.authorImages
       });
     }, () => {
       this.notificationService.error(`Greška prilikom dohvata autora ${id}`);
     });
+  }
+
+  private setFormImages(): void {
+    this.formImages$ = this.authorForm.valueChanges.pipe(map((value) => value.authorImages as Image[]),
+      map((images: Image[]) => (!images) ? [] : images),
+      map((authorImages: Image[]) => authorImages.map(ImageUtil.setImageUrl)));
   }
 }

@@ -90,6 +90,7 @@ export class BookComponent implements OnInit, OnDestroy {
 
   private setFormImages(): void {
     this.formImages$ = this.bookForm.valueChanges.pipe(map((value) => value.bookImages as Image[]),
+      map((images: Image[]) => (!images) ? [] : images),
       map((bookImages: Image[]) => bookImages.map(ImageUtil.setImageUrl)));
   }
 

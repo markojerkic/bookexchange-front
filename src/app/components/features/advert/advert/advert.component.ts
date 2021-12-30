@@ -102,9 +102,21 @@ export class AdvertComponent implements OnInit, OnDestroy {
     this.books = this.bookService.getAllBooks();
   }
 
-  private setFormImages(): void {
-    this.formImages$ = this.form.valueChanges.pipe(map((value) => value.advertImages as Image[]),
-      map((advertImages: Image[]) => advertImages.map(ImageUtil.setImageUrl)));
+  public removeImage(imageUuid: string): void {
+    this.imageIsDeleting.set(imageUuid, true);
+    this.imageService.deleteImage(imageUuid).pipe(finalize(() => this.imageIsDeleting.set(imageUuid, false)),
+      catchError((error: Error) => {
+        this.notificationService.error(`Greška prilikom birsanja slike ${imageUuid}`);
+        return throwError(() => error);
+      }))
+      .subscribe(() => {
+        let currentImages: Image[] = this.form.get('advertImages')!.value;
+        if (!currentImages) {
+          currentImages = [];
+        }
+        currentImages = currentImages.filter((image: Image) => image.uuid !== imageUuid);
+        this.form.patchValue({advertImages: currentImages});
+      });
   }
 
   ngOnDestroy() {
@@ -181,17 +193,9 @@ export class AdvertComponent implements OnInit, OnDestroy {
     });
   }
 
-  public removeImage(imageUuid: string): void {
-    this.imageIsDeleting.set(imageUuid, true);
-    this.imageService.deleteImage(imageUuid).pipe(finalize(() => this.imageIsDeleting.set(imageUuid, false)),
-      catchError((error: Error) => {
-        this.notificationService.error(`Greška prilikom birsanja slike ${imageUuid}`);
-        return throwError(() => error);
-      }))
-      .subscribe(() => {
-        let currentImages: Image[] = this.form.get('advertImages')!.value;
-        currentImages = currentImages.filter((image: Image) => image.uuid !== imageUuid);
-        this.form.patchValue({advertImages: currentImages});
-      });
+  private setFormImages(): void {
+    this.formImages$ = this.form.valueChanges.pipe(map((value) => value.advertImages as Image[]),
+      map((images: Image[]) => (!images) ? [] : images),
+      map((advertImages: Image[]) => advertImages.map(ImageUtil.setImageUrl)));
   }
 }

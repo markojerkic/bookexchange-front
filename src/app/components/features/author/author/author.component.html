@@ -55,6 +55,33 @@
           </span>
         </div>
       </div>
+
+      <p-fileUpload #fileUpload (uploadHandler)="uploadImages($event)" *ngIf="!dialogRef && (authService.isUserAdmin$ | async)"
+                    [customUpload]="true"
+                    [maxFileSize]="2000000" [multiple]="true" accept="image/*"
+                    cancelLabel="Otkaži"
+                    chooseLabel="Odaberi"
+                    class="col-12"
+                    invalidFileSizeMessageDetail="maksimalna dozvoljena veličina {0}."
+                    invalidFileSizeMessageSummary="{0}: Prevelika datoteka, "
+                    name="images[]"
+                    uploadLabel="Prenesi"></p-fileUpload>
+
+      <div *ngIf="(formImages$ | async)! as formImages" class="col-12">
+        <h3 *ngIf="formImages.length > 0">Prenešene slike</h3>
+        <div *ngFor="let image of formImages"
+             class="grid flex justify-content-center lg:justify-content-between
+             md:justify-content-between align-items-center">
+          <p-divider class="col-12"></p-divider>
+          <img [src]="image.imageUrl!" class="col-12 lg:col-4 md:col-4 align-self-center" style="width: 10rem;">
+          <div class="col-12 lg:col-4 md:col-4">{{image.uuid!}}</div>
+          <p-button (onClick)="removeImage(image.uuid!)" [disabled]="imageIsDeleting.get(image.uuid!)! || !(authService.isUserAdmin$ | async)"
+                    [loading]="imageIsDeleting.get(image.uuid!)!"
+                    class="col-12 lg:col-4 md:col-4"
+                    icon="pi pi-times"
+                    label="Ukloni sliku"></p-button>
+        </div>
+      </div>
     </form>
 
     <ng-template pTemplate="footer">
