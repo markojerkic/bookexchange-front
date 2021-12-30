@@ -3,8 +3,9 @@ import {Observable, throwError} from "rxjs";
 import {Book} from "../../../../model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AuthService, BookService, NotificationService} from "../../../../services";
-import {catchError, finalize} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ImageUtil} from "../../../../util";
 
 @Component({
   selector: 'app-book-view',
@@ -15,12 +16,7 @@ export class BookViewComponent implements OnInit {
 
   public book$!: Observable<Book>;
   public loading: boolean;
-  public images = [
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-    'https://plchldr.co/i/500x250',
-  ];
+  public images?: string[];
   public responsiveOptions: any[] = [
     {
       breakpoint: '1024px',
@@ -67,6 +63,6 @@ export class BookViewComponent implements OnInit {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }));
+      }), tap((book: Book) => this.images = book.bookImages.map(ImageUtil.getImageUrl)));
   }
 }
