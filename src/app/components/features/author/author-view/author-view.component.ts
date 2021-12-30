@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable, tap, throwError} from "rxjs";
-import {Author} from "../../../../model";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject, tap, throwError} from "rxjs";
+import {Author, Review} from "../../../../model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {AuthorService, AuthService, NotificationService} from "../../../../services";
-import {catchError, finalize} from "rxjs/operators";
+import {AuthorService, AuthService, NotificationService, ReviewService} from "../../../../services";
+import {catchError, finalize, takeUntil} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ImageUtil} from "../../../../util";
 
@@ -12,7 +12,13 @@ import {ImageUtil} from "../../../../util";
   templateUrl: './author-view.component.html',
   styleUrls: ['./author-view.component.scss']
 })
-export class AuthorViewComponent implements OnInit {
+export class AuthorViewComponent implements OnInit, OnDestroy {
+
+  public reviewSubmitLoading: boolean;
+  public loadReviews$: Subject<number>;
+  public clearReviewForm$: Subject<void>;
+
+  private onDestroy$: Subject<void>;
 
   public author$!: Observable<Author>;
   public loading: boolean;
@@ -37,8 +43,15 @@ export class AuthorViewComponent implements OnInit {
               private authorService: AuthorService,
               private notificationService: NotificationService,
               public authService: AuthService,
+              private reviewService: ReviewService,
               private router: Router) {
     this.loading = false;
+
+    this.clearReviewForm$ = new Subject();
+    this.loadReviews$ = new Subject();
+    this.reviewSubmitLoading = false;
+
+    this.onDestroy$ = new Subject();
   }
 
   ngOnInit(): void {
@@ -46,6 +59,13 @@ export class AuthorViewComponent implements OnInit {
       this.id = params['id'];
       this.setAuthor();
     });
+  }
+
+  ngOnDestroy() {
+    this.onDestroy$.next();
+    this.onDestroy$.unsubscribe();
+    this.loadReviews$.unsubscribe();
+    this.clearReviewForm$.unsubscribe();
   }
 
   public editAuthor(authorId: number): void {
@@ -63,6 +83,22 @@ export class AuthorViewComponent implements OnInit {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }), tap((author: Author) => this.images = author.authorImages.map(ImageUtil.getImageUrl)));
+      }), tap((author: Author) => {
+        this.loadReviews$.next(author.id!);
+        this.images = author.authorImages.map(ImageUtil.getImageUrl);
+      }));
+  }
+
+  public submitReview(review: Review, bookId: number): void {
+    this.reviewSubmitLoading = true;
+    this.reviewService.addAuthorReview(review, bookId).pipe(finalize(() => this.reviewSubmitLoading = false),
+      takeUntil(this.onDestroy$),
+      catchError((error: HttpErrorResponse) => {
+        this.notificationService.error('Greška prilikom dodavanja recenzije');
+        return throwError(() => error);
+      })).subscribe((review: Review) => {
+      this.clearReviewForm$.next();
+      this.loadReviews$.next(review.id!);
+    });
   }
 }

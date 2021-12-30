@@ -1,4 +1,4 @@
-<div style="width: 100%;" *ngIf="averageReview !== -1">
+<div style="width: 100%;" [style]="{'display': (averageReview !== -1)? 'block': 'none'}">
 
   <p-progressSpinner *ngIf="reviewsLoading"></p-progressSpinner>
 

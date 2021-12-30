@@ -11,9 +11,9 @@ import {HttpParams} from "@angular/common/http";
   styleUrls: ['./review-list.component.scss']
 })
 export class ReviewListComponent implements OnChanges {
-  public reviewType!: ReviewType;
+  private reviewType!: ReviewType;
   @Input()
-  public loadReviewsEvent!: boolean;
+  public loadReviewsEvent!: number;
   @Input()
   public advertId!: number;
 
