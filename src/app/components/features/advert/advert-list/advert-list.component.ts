@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {Advert, AdvertType, Author, Book, Genre, Page, TransactionType} from "../../../../model";
 import {AdvertService, AuthorService, BookService, GenreService, NotificationService} from "../../../../services";
-import {finalize, map, tap} from "rxjs/operators";
+import {catchError, finalize, map, tap} from "rxjs/operators";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 
@@ -86,15 +86,16 @@ export class AdvertListComponent implements OnInit {
     this.advertLoading = true;
     this.adverts$ = this.advertService.getAdvertPage(pageRequest.page, httpParams).pipe(
       finalize(() => this.advertLoading = false),
-      tap((page: Page<Advert>) => {
-        this.currentPage = page.pageable.pageNumber;
-        this.totalAdverts = page.totalElements;
-      }, () => {
+      catchError((error: Error) => {
         this.currentPage = 0;
         this.totalAdverts = 0;
         this.notificationService.error('Došlo je do greške prilikom dohvata pitanja');
+        return throwError(() => error);
       }),
-      map((page: Page<Advert>) => page.content)
+      tap((page: Page<Advert>) => {
+        this.currentPage = page.pageable.pageNumber;
+        this.totalAdverts = page.totalElements;
+      }), map((page: Page<Advert>) => page.content)
     );
 
   }

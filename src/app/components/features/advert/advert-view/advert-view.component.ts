@@ -15,8 +15,8 @@ import {ImageUtil} from "../../../../util";
 export class AdvertViewComponent implements OnInit, OnDestroy {
 
   public reviewSubmitLoading: boolean;
+  public loadReviews$: Subject<boolean>;
   public clearReviewForm$: Subject<void>;
-  public reviews$!: Observable<Review[]>;
 
   public advert$!: Observable<Advert>;
   public loading: boolean;
@@ -52,6 +52,7 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
     this.reviewSubmitLoading = false;
     this.advertIsDeleting = false;
     this.clearReviewForm$ = new Subject();
+    this.loadReviews$ = new Subject();
     this.ngDestroy$ = new Subject();
   }
 
@@ -106,7 +107,7 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
         return throwError(() => error);
       }), tap((advert: Advert) => {
         this.images = advert.advertImages.map(ImageUtil.getImageUrl);
-        this.loadReviews(advert.id!);
+        this.loadReviews$.next(true);
       }));
   }
 
@@ -119,16 +120,7 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
         return throwError(() => error);
       })).subscribe(() => {
         this.clearReviewForm$.next();
-        this.loadReviews(advertId);
+        this.loadReviews$.next(true);
     });
-  }
-
-  private loadReviews(advertId: number): void {
-    this.reviewsLoading = true;
-    this.reviews$ = this.reviewService.getAdvertReviews(advertId).pipe(finalize(() => this.reviewsLoading = false),
-      catchError((error: Error) => {
-        this.notificationService.error('Greška prilikom dohvata recenzija');
-        return throwError(() => error);
-      }))
   }
 }

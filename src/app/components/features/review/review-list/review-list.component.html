@@ -1,8 +1,19 @@
-<div style="width: 100%;">
+<div style="width: 100%;" *ngIf="averageReview !== -1">
 
-  <div *ngFor="let review of reviews">
-    {{review.reviewGrade}}
-    {{review.description}}
+  <p-progressSpinner *ngIf="reviewsLoading"></p-progressSpinner>
+
+  <p-divider class="col-12"></p-divider>
+  <h3>Recenzije</h3>
+
+  <div>
+    <p *ngIf="averageReview"><span class="font-bold">Prosječna ocjena: </span>{{(averageReview | number: '1.0-1')!}}/5</p>
+
+    <div *ngFor="let review of (reviews$ | async)!">
+      {{review.reviewGrade}}
+      {{review.description}}
+    </div>
   </div>
+
+  <p-paginator (onPageChange)="loadReviewPage($event)" [rows]="10" [totalRecords]="totalReviews!"></p-paginator>
 
 </div>

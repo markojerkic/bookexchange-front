@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {Review} from "../model";
+import {Review, ReviewPage, ReviewType} from "../model";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -19,31 +19,48 @@ export class ReviewService {
     return this.httpClient.post<Review>(`${this.backendEndpoint}/advert/${advertId}`, review);
   }
 
-  public getAdvertReviews(advertId: number): Observable<Review[]> {
-    return this.httpClient.get<Review[]>(`${this.backendEndpoint}/advert/${advertId}`);
-  }
-
   public addBookReview(review: Review, bookId: number): Observable<Review> {
     return this.httpClient.post<Review>(`${this.backendEndpoint}/book/${bookId}`, review);
-  }
-
-  public getBookReviews(bookId: number): Observable<Review[]> {
-    return this.httpClient.get<Review[]>(`${this.backendEndpoint}/book/${bookId}`);
   }
 
   public addAuthorReview(review: Review, authorId: number): Observable<Review> {
     return this.httpClient.post<Review>(`${this.backendEndpoint}/author/${authorId}`, review);
   }
 
-  public getAuthorReviews(authorId: number): Observable<Review[]> {
-    return this.httpClient.get<Review[]>(`${this.backendEndpoint}/author/${authorId}`);
-  }
-
   public addUserReview(review: Review, userId: number): Observable<Review> {
     return this.httpClient.post<Review>(`${this.backendEndpoint}/user/${userId}`, review);
   }
 
-  public getUserReviews(userId: number): Observable<Review[]> {
-    return this.httpClient.get<Review[]>(`${this.backendEndpoint}/user/${userId}`);
+  public getReviews(id: number | string, reviewType: ReviewType, httpParams: HttpParams): Observable<ReviewPage> {
+    switch (reviewType) {
+      case ReviewType.ADVERT:
+        return this.getAdvertReviews(<number>id, reviewType, httpParams);
+      case ReviewType.AUTHOR:
+        return this.getAuthorReviews(<number>id, reviewType, httpParams);
+      case ReviewType.BOOK:
+        return this.getBookReviews(<number>id, reviewType, httpParams);
+      case ReviewType.USER:
+        return this.getUserReviews(<string>id, reviewType, httpParams);
+    }
+  }
+
+  public getUserReviews(username: string, reviewType: ReviewType, httpParams: HttpParams): Observable<ReviewPage> {
+    httpParams = httpParams.append('username', username).append('reviewType', reviewType);
+    return this.httpClient.get<ReviewPage>(this.backendEndpoint, {params: httpParams});
+  }
+
+  public getBookReviews(bookId: number, reviewType: ReviewType, httpParams: HttpParams): Observable<ReviewPage> {
+    httpParams = httpParams.append('bookId', bookId).append('reviewType', reviewType);
+    return this.httpClient.get<ReviewPage>(this.backendEndpoint, {params: httpParams});
+  }
+
+  public getAuthorReviews(authorId: number, reviewType: ReviewType, httpParams: HttpParams): Observable<ReviewPage> {
+    httpParams = httpParams.append('authorId', authorId).append('reviewType', reviewType);
+    return this.httpClient.get<ReviewPage>(this.backendEndpoint, {params: httpParams});
+  }
+
+  public getAdvertReviews(advertId: number, reviewType: ReviewType, httpParams: HttpParams): Observable<ReviewPage> {
+    httpParams = httpParams.append('advertId', advertId).append('reviewType', reviewType);
+    return this.httpClient.get<ReviewPage>(this.backendEndpoint, {params: httpParams});
   }
 }
