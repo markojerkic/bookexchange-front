@@ -15,6 +15,7 @@ import {ImageUtil} from "../../../../util";
 export class AdvertViewComponent implements OnInit, OnDestroy {
 
   public reviewSubmitLoading: boolean;
+  public clearReviewForm$: Subject<void>;
 
   public advert$!: Observable<Advert>;
   public loading: boolean;
@@ -49,13 +50,14 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
     this.reviewsLoading = false;
     this.reviewSubmitLoading = false;
     this.advertIsDeleting = false;
-
+    this.clearReviewForm$ = new Subject();
     this.ngDestroy$ = new Subject();
   }
 
   ngOnDestroy() {
     this.ngDestroy$.next();
     this.ngDestroy$.unsubscribe();
+    this.clearReviewForm$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -111,6 +113,9 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
       catchError((error: HttpErrorResponse) => {
         this.notificationService.error('Greška prilikom dodavanja recenzije');
         return throwError(() => error);
-      })).subscribe(console.log);
+      })).subscribe((review: Review) => {
+        this.clearReviewForm$.next();
+        console.log(review);
+    });
   }
 }

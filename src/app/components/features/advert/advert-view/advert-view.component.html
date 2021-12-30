@@ -62,6 +62,7 @@
       <h3>Dodajte svoju recenziju</h3>
 
       <app-review (onSubmit)="submitReview($event, advert.id!)"
+                  [clearForm]="clearReviewForm$!"
                   [disabled]="!(authService.isAuthenticated$ | async)!"
                   [loading]="reviewSubmitLoading"
                   class="col-12"></app-review>
