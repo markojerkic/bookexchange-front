@@ -16,6 +16,7 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
 
   public reviewSubmitLoading: boolean;
   public clearReviewForm$: Subject<void>;
+  public reviews$!: Observable<Review[]>;
 
   public advert$!: Observable<Advert>;
   public loading: boolean;
@@ -103,7 +104,10 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
           this.notificationService.error('Greška prilikom dohvata oglasa');
         }
         return throwError(() => error);
-      }), tap((advert: Advert) => this.images = advert.advertImages.map(ImageUtil.getImageUrl)));
+      }), tap((advert: Advert) => {
+        this.images = advert.advertImages.map(ImageUtil.getImageUrl);
+        this.loadReviews(advert.id!);
+      }));
   }
 
   public submitReview(review: Review, advertId: number): void {
@@ -113,9 +117,18 @@ export class AdvertViewComponent implements OnInit, OnDestroy {
       catchError((error: HttpErrorResponse) => {
         this.notificationService.error('Greška prilikom dodavanja recenzije');
         return throwError(() => error);
-      })).subscribe((review: Review) => {
+      })).subscribe(() => {
         this.clearReviewForm$.next();
-        console.log(review);
+        this.loadReviews(advertId);
     });
+  }
+
+  private loadReviews(advertId: number): void {
+    this.reviewsLoading = true;
+    this.reviews$ = this.reviewService.getAdvertReviews(advertId).pipe(finalize(() => this.reviewsLoading = false),
+      catchError((error: Error) => {
+        this.notificationService.error('Greška prilikom dohvata recenzija');
+        return throwError(() => error);
+      }))
   }
 }

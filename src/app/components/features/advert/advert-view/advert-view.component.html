@@ -67,6 +67,11 @@
                   [loading]="reviewSubmitLoading"
                   class="col-12"></app-review>
 
+      <p-divider class="col-12"></p-divider>
+      <h3>Recenzije</h3>
+      <app-review-list [reviews]="(reviews$ | async)!"
+                       class="col-12"></app-review-list>
+
     </div>
   </ng-template>
 </p-card>
