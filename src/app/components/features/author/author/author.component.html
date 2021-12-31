@@ -65,7 +65,13 @@
                     invalidFileSizeMessageDetail="maksimalna dozvoljena veličina {0}."
                     invalidFileSizeMessageSummary="{0}: Prevelika datoteka, "
                     name="images[]"
-                    uploadLabel="Prenesi"></p-fileUpload>
+                    uploadLabel="Prenesi">
+        <ng-template pTemplate="toolbar">
+          <div class="flex justify-content-center" *ngIf="imageIsUploading">
+            <p-progressSpinner></p-progressSpinner>
+          </div>
+        </ng-template>
+      </p-fileUpload>
 
       <div *ngIf="(formImages$ | async)! as formImages" class="col-12">
         <h3 *ngIf="formImages.length > 0">Prenešene slike</h3>

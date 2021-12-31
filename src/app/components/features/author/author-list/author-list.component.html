@@ -29,11 +29,11 @@
                 pTooltip="Novi autor"></button>
       </th>
       <th>
-        <input #firstName (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
+        <input (input)="table.filter($any($event.target).value, 'firstName', 'equals')"
                class="p-column-filter" pInputText placeholder="Unesite ime"/>
       </th>
       <th>
-        <input #lastName (input)="table.filter($any($event.target).value, 'lastName', 'equals')"
+        <input (input)="table.filter($any($event.target).value, 'lastName', 'equals')"
                class="p-column-filter" pInputText placeholder="Unesite prezime"/>
       </th>
       <th>

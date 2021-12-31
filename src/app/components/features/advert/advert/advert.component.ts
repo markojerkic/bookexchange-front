@@ -31,6 +31,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
 
   public form!: FormGroup;
   public loading: boolean;
+  public imageIsUploading: boolean;
   public genres!: Observable<Genre[]>;
   public authors!: Observable<Author[]>;
   public books!: Observable<Book[]>;
@@ -55,6 +56,7 @@ export class AdvertComponent implements OnInit, OnDestroy {
     this.onDestroy$ = new Subject();
     this.loading = false;
     this.imageIsDeleting = new Map();
+    this.imageIsUploading = false;
 
     this.advertTypes = [
       {
@@ -156,8 +158,12 @@ export class AdvertComponent implements OnInit, OnDestroy {
   }
 
   public uploadImages(images: File[]): void {
-    this.fileUpload.uploading = true;
-    this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+    this.fileUpload.disabled = true;
+    this.imageIsUploading = true;
+    this.imageService.uploadImages(images).pipe(finalize(() => {
+        this.fileUpload.disabled = false;
+        this.imageIsUploading = false;
+      }),
       takeUntil(this.onDestroy$),
       catchError((error: HttpErrorResponse) => {
         this.notificationService.error('Greška prilikom prijenosa slika');

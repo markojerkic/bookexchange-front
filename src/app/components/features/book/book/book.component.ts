@@ -36,6 +36,7 @@ export class BookComponent implements OnInit, OnDestroy {
   public genres$!: Observable<Genre[]>;
 
   public loading: boolean;
+  public imageIsUploading: boolean;
   public id?: number;
   public formImages$!: Observable<Image[]>;
   private onDestroy$: Subject<void>;
@@ -56,6 +57,7 @@ export class BookComponent implements OnInit, OnDestroy {
     this.loading = false;
     this.imageIsDeleting = new Map<string, boolean>();
     this.onDestroy$ = new Subject();
+    this.imageIsUploading = false;
   }
 
   ngOnInit(): void {
@@ -186,8 +188,12 @@ export class BookComponent implements OnInit, OnDestroy {
   }
 
   public uploadImages(images: File[]): void {
-    this.fileUpload.uploading = true;
-    this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+    this.fileUpload.disabled = true;
+    this.imageIsUploading = true;
+    this.imageService.uploadImages(images).pipe(finalize(() => {
+        this.fileUpload.disabled = false;
+        this.imageIsUploading = false;
+      }),
       takeUntil(this.onDestroy$),
       catchError((error: HttpErrorResponse) => {
         this.notificationService.error('Greška prilikom prijenosa slika');

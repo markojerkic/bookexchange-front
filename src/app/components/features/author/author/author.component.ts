@@ -26,6 +26,7 @@ export class AuthorComponent implements OnInit, OnDestroy {
 
   public id?: number;
   public imageIsDeleting: Map<string, boolean>;
+  public imageIsUploading: boolean;
   @ViewChild('fileUpload')
   private fileUpload!: FileUpload;
   private onDestroy$: Subject<void>;
@@ -45,6 +46,7 @@ export class AuthorComponent implements OnInit, OnDestroy {
     this.loading = false;
     this.onDestroy$ = new Subject<void>();
     this.imageIsDeleting = new Map<string, boolean>();
+    this.imageIsUploading = false;
   }
 
   ngOnDestroy() {
@@ -123,8 +125,13 @@ export class AuthorComponent implements OnInit, OnDestroy {
   }
 
   public uploadImages(images: File[]): void {
-    this.fileUpload.uploading = true;
-    this.imageService.uploadImages(images).pipe(finalize(() => this.fileUpload.uploading = false),
+    this.fileUpload.disabled = true;
+    this.imageIsUploading = true;
+    this.imageService.uploadImages(images).pipe(
+      finalize(() => {
+        this.fileUpload.disabled = false;
+        this.imageIsUploading = false;
+      }),
       takeUntil(this.onDestroy$),
       catchError((error: HttpErrorResponse) => {
         this.notificationService.error('Greška prilikom prijenosa slika');

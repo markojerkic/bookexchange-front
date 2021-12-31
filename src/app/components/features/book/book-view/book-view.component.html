@@ -8,18 +8,20 @@
   </ng-template>
   <p-progressSpinner *ngIf="loading"></p-progressSpinner>
   <ng-template pTemplate="content">
-    <p-galleria [containerStyle]="{'max-width': '90vw'}" [numVisible]="5"
-                *ngIf="book.bookImages.length > 0"
-                [responsiveOptions]="responsiveOptions" [value]="images!">
-      <ng-template let-item pTemplate="item">
-        <img [src]="item" style="width: 100%;"/>
-      </ng-template>
-      <ng-template let-item pTemplate="thumbnail">
-        <div class="grid p-nogutter flex justify-content-center">
-          <img [src]="item" style="display: block; height: 100px;"/>
-        </div>
-      </ng-template>
-    </p-galleria>
+    <div class="flex justify-content-center">
+      <p-galleria [containerStyle]="{'max-width': '90vw'}" [numVisible]="5"
+                  *ngIf="book.bookImages.length > 0"
+                  [responsiveOptions]="responsiveOptions" [value]="images!">
+        <ng-template let-item pTemplate="item">
+          <img [src]="item" style="width: 100%;"/>
+        </ng-template>
+        <ng-template let-item pTemplate="thumbnail">
+          <div class="grid p-nogutter flex justify-content-center">
+            <img [src]="item" style="display: block; height: 100px;"/>
+          </div>
+        </ng-template>
+      </p-galleria>
+    </div>
 
     <div class="grid">
       <div class="col-6">
