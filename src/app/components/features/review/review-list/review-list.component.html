@@ -8,9 +8,16 @@
   <div>
     <p *ngIf="averageReview"><span class="font-bold">Prosječna ocjena: </span>{{(averageReview | number: '1.0-1')!}}/5</p>
 
-    <div *ngFor="let review of (reviews$ | async)!">
-      {{review.reviewGrade}}
-      {{review.description}}
+    <div *ngFor="let review of (reviews$ | async)!" class="review">
+      <p><span class="font-bold">Ocjena: </span>{{review.reviewGrade}}/5</p>
+      <p *ngIf="review.description"><span class="font-bold">Opis recenzije: </span>{{review.description}}</p>
+      <p><span class="font-bold">Dodao korisnik: </span>
+        <span class="underline link-text"
+              style="cursor: pointer;"
+              pTooltip="Pogledajte korisnika"
+              [routerLink]="'/user/'+review.userCreated.username">{{review.userCreated.username}}</span>
+      </p>
+      <p><span class="font-bold">Dodano: </span>{{review.lastModified | date: 'dd.MM.yyyy. HH:mm'}}</p>
     </div>
   </div>
 
