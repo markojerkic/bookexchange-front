@@ -45,10 +45,6 @@
                 pTooltip="Pogledajte žanr">{{genre.name}}</span>; </p>
       </div>
 
-      <p-divider class="col-12"></p-divider>
-
-      <h3>Dodajte svoju recenziju</h3>
-
       <app-review (onSubmit)="submitReview($event, book.id!)"
                   [clearForm]="clearReviewForm$!"
                   [disabled]="!(authService.isAuthenticated$ | async)!"
@@ -56,9 +52,8 @@
                   class="col-12"></app-review>
       <app-review-list reviewType="BOOK"
                        [loadReviewsEvent]="(loadReviews$ | async)!"
-                       [advertId]="book.id!"
+                       [reviewEntityId]="book.id!"
                        class="col-12"></app-review-list>
-
     </div>
   </ng-template>
 </p-card>

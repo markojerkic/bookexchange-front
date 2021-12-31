@@ -47,10 +47,6 @@
                 pTooltip="Pogledajte žanr">{{genre.name}}</span>; </p>
       </div>
 
-      <p-divider class="col-12"></p-divider>
-
-      <h3>Dodajte svoju recenziju</h3>
-
       <app-review (onSubmit)="submitReview($event, author.id!)"
                   [clearForm]="clearReviewForm$!"
                   [disabled]="!(authService.isAuthenticated$ | async)!"
@@ -58,7 +54,7 @@
                   class="col-12"></app-review>
       <app-review-list reviewType="AUTHOR"
                        [loadReviewsEvent]="(loadReviews$ | async)!"
-                       [advertId]="author.id!"
+                       [reviewEntityId]="author.id!"
                        class="col-12"></app-review-list>
 
     </div>

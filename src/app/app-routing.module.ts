@@ -106,6 +106,10 @@ const routes: Routes = [
     component: GenreListComponent
   },
   {
+    path: 'user/:username',
+    component: ProfileComponent
+  },
+  {
     path: 'auth',
     children: [
       {

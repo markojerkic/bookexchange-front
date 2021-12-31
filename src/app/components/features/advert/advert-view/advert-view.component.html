@@ -2,7 +2,10 @@
         [header]="advert.title"
         class="grid flex justify-content-center">
   <ng-template pTemplate="subtitle">
-    <h3>Objavio korisnik <span class="font-bold font-italic">{{advert.userCreated!.username}}</span></h3>
+    <h3>Objavio korisnik
+      <span class="font-bold font-italic underline link-text"
+            [routerLink]="'/user/' + advert.userCreated.username"
+            pTooltip="Pogledajte korisnika">{{advert.userCreated!.username}}</span></h3>
     <p-button (onClick)="editAdvert(advert.id!)" *ngIf="(username$ | async) === advert.userCreated.username"
               icon="pi pi-pencil"
               label="Uredi oglas"></p-button>
@@ -59,10 +62,6 @@
            style="cursor: pointer;">{{advert.advertisedBook!.bookAuthor!.displayName}}</p>
       </div>
 
-      <p-divider class="col-12"></p-divider>
-
-      <h3>Dodajte svoju recenziju</h3>
-
       <app-review (onSubmit)="submitReview($event, advert.id!)"
                   [clearForm]="clearReviewForm$!"
                   [disabled]="!(authService.isAuthenticated$ | async)!"
@@ -70,7 +69,7 @@
                   class="col-12"></app-review>
       <app-review-list reviewType="ADVERT"
                        [loadReviewsEvent]="(loadReviews$ | async)!"
-                       [advertId]="advert.id!"
+                       [reviewEntityId]="advert.id!"
                        class="col-12"></app-review-list>
 
     </div>

@@ -1,11 +1,34 @@
-<p-card header="Informacije o prijavljenom korisniku">
+<p-card [header]="'Informacije o ' + (username? 'korisniku ' + username!: 'prijavljenom korisniku')">
   <div class="flex justify-content-center">
     <p-progressSpinner *ngIf="userDataIsLoading"></p-progressSpinner>
   </div>
-  <div class="flex flex-column">
-    <p>
-      <span class="p-text-bold">Ime: </span>
-      <span>{{(user$ | async)?.firstName}}</span>
-    </p>
+  <div class="grid" *ngIf="(user$ | async)! as user">
+    <div class="col-6">
+      <h4>Ime</h4>
+      <p>{{user.firstName}}</p>
+    </div>
+    <div class="col-6">
+      <h4>Prezime</h4>
+      <p>{{user.lastName}}</p>
+    </div>
+    <div class="col-6">
+      <h4>Korisničko ime</h4>
+      <p>{{user.username}}</p>
+    </div>
+    <div class="col-6">
+      <h4>E-pošta</h4>
+      <p>{{user.email}}</p>
+    </div>
+
+    <app-review (onSubmit)="submitReview($event, user.id!)"
+                *ngIf="(user.username !== (authService.userToken$ | async)?.username)"
+                [clearForm]="clearReviewForm$!"
+                [disabled]="!(authService.isAuthenticated$ | async)!"
+                [loading]="reviewSubmitLoading"
+                class="col-12"></app-review>
+    <app-review-list reviewType="USER"
+                     [loadReviewsEvent]="(loadReviews$ | async)!"
+                     [reviewEntityId]="user.username"
+                     class="col-12"></app-review-list>
   </div>
 </p-card>

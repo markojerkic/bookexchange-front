@@ -12,10 +12,15 @@ import {Router} from "@angular/router";
 export class AuthService {
 
   private readonly loggedInUser$!: Subject<LoggedInUser | undefined>;
+  private readonly backendAuthEndpoint: string;
+  private readonly backendUserEndpoint: string;
 
   constructor(private http: HttpClient,
               private router: Router) {
-    this.loggedInUser$ = new BehaviorSubject<LoggedInUser | undefined>(JSON.parse(<string>localStorage.getItem('user')));
+    this.loggedInUser$ = new BehaviorSubject<LoggedInUser | undefined>(JSON
+      .parse(<string>localStorage.getItem('user')));
+    this.backendAuthEndpoint = `${environment.BACKEND_ENDPOINT}/auth`;
+    this.backendUserEndpoint = `${environment.BACKEND_ENDPOINT}/user`;
   }
 
   public get userToken(): LoggedInUser {
@@ -40,11 +45,11 @@ export class AuthService {
   }
 
   public register(userData: User): Observable<User> {
-    return this.http.post<User>(`${environment.BACKEND_ENDPOINT}/user`, userData);
+    return this.http.post<User>(this.backendUserEndpoint, userData);
   }
 
   public login(loginRequest: LoginRequest): Observable<LoggedInUser> {
-    return this.http.put<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth`, loginRequest)
+    return this.http.put<LoggedInUser>(this.backendAuthEndpoint, loginRequest)
       .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
   }
 
@@ -52,7 +57,7 @@ export class AuthService {
     if (!this.isAuthenticated) {
       return throwError(() => 'Token je istekao');
     }
-    return this.http.get<LoggedInUser>(`${environment.BACKEND_ENDPOINT}/auth/refresh/${this.userToken.refreshToken}`)
+    return this.http.get<LoggedInUser>(`${this.backendAuthEndpoint}/refresh/${this.userToken.refreshToken}`)
       .pipe(tap((user: LoggedInUser) => this.handleNewLogin(user)));
   }
 
@@ -63,11 +68,15 @@ export class AuthService {
   }
 
   public getCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${environment.BACKEND_ENDPOINT}/auth`);
+    return this.http.get<User>(this.backendAuthEndpoint);
   }
 
   private handleNewLogin(user: LoggedInUser): void {
     localStorage.setItem('user', JSON.stringify(user));
     this.loggedInUser$.next(user);
+  }
+
+  public getUserByUsername(username: string): Observable<User> {
+    return this.http.get<User>(`${this.backendUserEndpoint}/${username}`);
   }
 }

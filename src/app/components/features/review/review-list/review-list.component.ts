@@ -15,7 +15,7 @@ export class ReviewListComponent implements OnChanges {
   @Input()
   public loadReviewsEvent!: number;
   @Input()
-  public advertId!: number;
+  public reviewEntityId!: number | string;
 
   public totalReviews: number;
   public currentPage?: number;
@@ -36,7 +36,7 @@ export class ReviewListComponent implements OnChanges {
   private loadReviews(page: number): void {
     this.reviewsLoading = true;
     const httpParams = new HttpParams().append('page', page).append('size', '10');
-    this.reviews$ = this.reviewService.getReviews(this.advertId, this.reviewType, httpParams).pipe(
+    this.reviews$ = this.reviewService.getReviews(this.reviewEntityId, this.reviewType, httpParams).pipe(
       finalize(() => this.reviewsLoading = false),
       catchError((error: Error) => {
         this.notificationService.error('Greška prilikom dohvata recenzija');
