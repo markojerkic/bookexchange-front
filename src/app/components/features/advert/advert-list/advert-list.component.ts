@@ -15,6 +15,8 @@ export class AdvertListComponent implements OnInit {
 
   @Input()
   public genreId?: number;
+  @Input()
+  public userCreatedUsername?: string;
 
   public adverts$!: Observable<Advert[]>;
   public currentPage: number;
@@ -67,7 +69,8 @@ export class AdvertListComponent implements OnInit {
       fromPrice: [],
       toPrice: [],
       isbn: [],
-      query: []
+      query: [],
+      user: []
     });
 
     this.authors$ = this.authorService.getAllAuthors();
@@ -76,6 +79,9 @@ export class AdvertListComponent implements OnInit {
 
     if (this.genreId) {
       this.queryForm.patchValue({genreId: this.genreId});
+      this.submitQuery();
+    } else if (this.userCreatedUsername) {
+      this.queryForm.patchValue({user: this.userCreatedUsername});
       this.submitQuery();
     } else {
       this.loadAdvertPage({page: this.currentPage, rows: 10});

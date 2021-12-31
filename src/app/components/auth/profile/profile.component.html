@@ -20,6 +20,10 @@
       <p>{{user.email}}</p>
     </div>
 
+    <p-divider class="col-12"></p-divider>
+    <h3 class="col-12">Oglasi koje je korisnik objavio</h3>
+    <app-advert-list class="col-12" [userCreatedUsername]="user.username"></app-advert-list>
+
     <app-review (onSubmit)="submitReview($event, user.id!)"
                 *ngIf="(user.username !== (authService.userToken$ | async)?.username)"
                 [clearForm]="clearReviewForm$!"
