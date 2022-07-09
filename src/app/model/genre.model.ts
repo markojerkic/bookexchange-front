@@ -1,10 +1,11 @@
-import {Author} from "./author.model";
-import {Book} from "./book.model";
+import { z } from "zod";
+import { bookValidator } from "./book.model";
 
-export interface Genre {
-  id?: number;
-  name: string;
-  description?: string;
-  authors?: Author[];
-  books?: Book[];
-}
+export const GenreValidator = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  books: bookValidator.array().optional()
+});
+
+export type Genre = z.infer<typeof GenreValidator>;

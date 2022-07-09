@@ -1,9 +1,10 @@
 import {Review} from "./review.model";
-import {Genre} from "./genre.model";
-import {Image} from "./image.model";
-import {Author} from "./author.model";
+import {Genre, genreValidator} from "./genre.model";
+import {Image, imageValidator} from "./image.model";
+import {Author, authorValidator} from "./author.model";
+import { z } from "zod";
 
-export interface Book {
+interface Book {
   id?: number;
   title: string;
   isbn: string;
@@ -14,3 +15,15 @@ export interface Book {
 
   displayName?: string;
 }
+
+const bookValidator = z.object({
+  id: z.number().optional(),
+  title: z.string(),
+  isbn: z.string(),
+  genres: genreValidator.array(),
+  bookAuthor: authorValidator,
+  bookImages: imageValidator.array(),
+  displayName: z.string().optional(),
+});
+
+export { Book, bookValidator }

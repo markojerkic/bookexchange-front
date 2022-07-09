@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Genre, Page} from "../model";
-import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { Genre, GenreValidator, Page } from "../model";
+import { parseResponse } from '../util/validator.rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,10 @@ export class GenreService {
     this.backendEndpoint = `${environment.BACKEND_ENDPOINT}/genre`;
   }
 
-  public getAllGenres(): Observable<Genre[]> {
-    return this.httpClient.get<Genre[]>(`${this.backendEndpoint}/all`);
+  public getAllGenres() {
+    return this.httpClient.get(`${this.backendEndpoint}/all`).pipe(
+      parseResponse(GenreValidator)
+    );
   }
 
   public saveGenre(genre: Genre, id: number | undefined): Observable<Genre> {
